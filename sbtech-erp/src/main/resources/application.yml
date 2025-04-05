@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: sbtech_erp
+  config:
+    import: "optional:file:.env"
+  datasource:
+    url: ${MYSQL_URL}
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+logging:
+  level:
+    org.springframework.security: ERROR
+    org.springframework.client.RestTemplate: DEBUG
+    org.springframework.web.reactive.function.client: DEBUG
+
+
+server:
+  port: 30300
