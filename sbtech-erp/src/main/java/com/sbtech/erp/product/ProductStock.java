@@ -1,9 +1,13 @@
-package com.sbtech.erp.domain.product;
+package com.sbtech.erp.product;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
-
+@Entity @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductStock {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

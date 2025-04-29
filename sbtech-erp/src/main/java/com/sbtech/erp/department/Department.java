@@ -1,14 +1,18 @@
-package com.sbtech.erp.domain.department;
+package com.sbtech.erp.department;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Department {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
     private Long departmentId;  // 부서 고유 ID (기본키)
 
