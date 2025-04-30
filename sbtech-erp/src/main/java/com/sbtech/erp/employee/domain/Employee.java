@@ -15,15 +15,12 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
-    @Schema(description = "직원 ID (PK)", example = "1")
     private Long id;
 
     @Column(name = "employee_name")
-    @Schema(description = "직원 이름", example = "홍길동")
     private String name;
 
     @Column(name = "employee_login_id", unique = true, nullable = false)
-    @Schema(description = "로그인 ID (고유값)", example = "hong123")
     private String loginId;
 
     @Column(name = "employee_password", nullable = false)
@@ -31,17 +28,14 @@ public class Employee {
 
     @ManyToOne
     @JoinColumn(name = "position_id")
-    @Schema(description = "직급", example = "대리")
     private Position position;
 
     // 시스템 내의 권한 , 관리자, 승인자, 요청자
     @Column(name = "employee_role")
-    @Schema(description = "역할 (MANAGER, APPROVER, REQUESTER)", example = "MANAGER")
     private EmployeeRole employeeRole;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "department_id")
-    @Schema(description = "소속 부서 (Department 엔티티 참조)")
     private Department department;
 
     public static Employee create(String name, String loginId, String password, Position position, EmployeeRole employeeRole, Department department) {

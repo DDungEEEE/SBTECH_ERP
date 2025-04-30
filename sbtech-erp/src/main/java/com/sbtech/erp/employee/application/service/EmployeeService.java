@@ -15,6 +15,7 @@ public class EmployeeService implements EmployeeUseCase {
 
     @Override
     public Employee register(EmployeeCreateReq req) {
-        return null;
+        Employee reqEmployee = EmployeeMapper.toEntity(req, null, null);
+        return employeeRepository.save(reqEmployee);
     }
 }
