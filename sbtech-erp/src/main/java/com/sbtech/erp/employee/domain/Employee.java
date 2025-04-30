@@ -57,6 +57,14 @@ public class Employee extends BaseTimeEntity {
         this.role = role;
     }
 
+    public void encodedPassword(String password){
+        this.password = password;
+    }
+
+    public String getRoleName(){
+        return role != null ? role.getName() : null;
+    }
+
     @Builder(access = AccessLevel.PRIVATE)
     private Employee(String name, String loginId, String password, Position position, SystemRole role, Department department) {
         this.name = name;

@@ -28,7 +28,7 @@ public class EmployeeMapper {
         );
     }
 
-    public static void toEntity(Employee employee, Department department, Position position, SystemRole role){
+    public static void applyApprovalFields(Employee employee, Department department, Position position, SystemRole role){
         employee.approveRegistration(department, position, role);
     }
 }
