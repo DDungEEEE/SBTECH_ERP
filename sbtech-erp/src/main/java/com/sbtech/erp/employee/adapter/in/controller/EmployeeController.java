@@ -1,7 +1,7 @@
 package com.sbtech.erp.employee.adapter.in.controller;
 
-import com.sbtech.erp.common.code.ApiResponse;
 import com.sbtech.erp.common.code.SuccessCode;
+import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
 import com.sbtech.erp.employee.application.port.EmployeeUseCase;
 import com.sbtech.erp.employee.domain.Employee;
@@ -21,10 +21,14 @@ public class EmployeeController {
     private final EmployeeUseCase employeeUseCase;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Employee>> register(@RequestBody EmployeeCreateReq req){
+    public ResponseEntity<SuccessResponse<Employee>> register(@RequestBody EmployeeCreateReq req){
         Employee register = employeeUseCase.register(req);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(ApiResponse.success(register, SuccessCode.INSERT_SUCCESS));
+                .body(SuccessResponse.<Employee>builder()
+                        .data(register)
+                        .successCode(SuccessCode.INSERT_SUCCESS)
+                        .build());
     }
 }

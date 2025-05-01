@@ -2,7 +2,7 @@ package com.sbtech.erp.common;
 
 import com.sbtech.erp.auth.adapter.out.repository.JpaSystemRoleRepository;
 import com.sbtech.erp.auth.domain.SystemRole;
-import com.sbtech.erp.department.adapter.out.JpaDepartmentRepository;
+import com.sbtech.erp.department.adapter.out.repository.JpaDepartmentRepository;
 import com.sbtech.erp.department.domain.Department;
 import com.sbtech.erp.position.adapter.out.repository.JpaPositionRepository;
 import com.sbtech.erp.position.domain.Position;
