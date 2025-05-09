@@ -4,4 +4,5 @@ import com.sbtech.erp.department.domain.Department;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaDepartmentRepository extends JpaRepository<Department, Long> {
+    boolean existsByName(String name);
 }
