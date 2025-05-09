@@ -1,6 +1,6 @@
 package com.sbtech.erp.util;
 
-import com.sbtech.erp.auth.domain.SystemRole;
+import com.sbtech.erp.auth.domain.role.SystemRole;
 import com.sbtech.erp.common.BaseTimeEntity;
 import com.sbtech.erp.department.domain.Department;
 import com.sbtech.erp.employee.domain.Employee;

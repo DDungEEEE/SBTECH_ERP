@@ -1,8 +1,7 @@
 package com.sbtech.erp.employee.application.service;
 
-import com.sbtech.erp.auth.domain.SystemRole;
+import com.sbtech.erp.auth.domain.role.SystemRole;
 import com.sbtech.erp.department.domain.Department;
-import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
 import com.sbtech.erp.employee.domain.Employee;
 import com.sbtech.erp.position.domain.Position;

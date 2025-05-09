@@ -1,4 +1,4 @@
-package com.sbtech.erp.auth.domain;
+package com.sbtech.erp.auth.domain.role;
 
 
 import com.sbtech.erp.common.BaseTimeEntity;
