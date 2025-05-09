@@ -6,6 +6,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
 
+/**
+ * 사용자의 시스템 권한을 설정하는 Entity
+ * 어느정도 요구사항이 확정된 경우 ENUM 타입으로 변경될 예정이다.
+ */
 @Entity
 @Table(name = "system_role")
 @Getter
