@@ -10,12 +10,11 @@ import java.util.List;
 public interface JpaEmployeeRepository extends JpaRepository<Employee, Long> {
     @Query("""
     SELECT new com.sbtech.erp.employee.adapter.out.dto.EmployeeInfoDto(
-        e.id, e.name, d.name, p.name, r.name
+        e.id, e.name, d.name, p.name
     )
     FROM Employee e
     JOIN e.department d
     JOIN e.position p
-    JOIN e.role r
 """)
     List<EmployeeInfoDto> findAllWithDetails();
 
