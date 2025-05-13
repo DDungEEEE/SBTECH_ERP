@@ -1,8 +1,9 @@
-package com.sbtech.erp.position.domain;
+package com.sbtech.erp.organization.domain;
 
 import com.sbtech.erp.common.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -20,6 +21,7 @@ public class Position  extends BaseTimeEntity {
     private boolean isActive; // 사용 여부
 
     // 테스트 더미 데이터를 만들기 위한 생성자
+    @Builder
     public Position(String name, boolean isActive) {
         this.name = name;
         this.isActive = isActive;
