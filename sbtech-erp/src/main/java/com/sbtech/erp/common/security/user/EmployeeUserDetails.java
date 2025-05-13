@@ -15,7 +15,7 @@ public class EmployeeUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String role = employee.getRoleName();
+        String role = "ADMIN";
 
         //Spring Security에서 사용하기 위한
         String authority = "ROLE_" + role;
