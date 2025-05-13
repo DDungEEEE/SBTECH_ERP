@@ -2,9 +2,11 @@ package com.sbtech.erp.common.response;
 
 import com.sbtech.erp.common.code.SuccessCode;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.io.Serializable;
 
+@Getter
 public class SuccessResponse<T> implements Serializable {
     // API 응답 결과
     private final T data;
