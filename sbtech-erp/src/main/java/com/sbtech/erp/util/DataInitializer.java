@@ -1,9 +1,17 @@
 package com.sbtech.erp.util;
 
+import com.sbtech.erp.department.adapter.in.dto.DepartmentCreateDto;
+import com.sbtech.erp.department.application.port.DepartmentUseCase;
+import com.sbtech.erp.department.domain.Department;
+import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
+import com.sbtech.erp.employee.adapter.out.repository.JpaEmployeeRepository;
+import com.sbtech.erp.employee.application.port.EmployeeUseCase;
+import com.sbtech.erp.employee.domain.Employee;
 import com.sbtech.erp.employee.domain.Rank;
 import com.sbtech.erp.organization.application.port.PositionUseCase;
+import com.sbtech.erp.organization.domain.Position;
 import com.sbtech.erp.permission.application.port.PermissionUseCase;
-import com.sbtech.erp.permission.application.port.PositionRankPermissionUseCase;
+import com.sbtech.erp.permission.application.port.RolePermissionUseCase;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,7 +21,10 @@ import org.springframework.stereotype.Component;
 public class DataInitializer {
     private final PermissionUseCase permissionUseCase;
     private final PositionUseCase positionUseCase;
-    private final PositionRankPermissionUseCase positionRankPermissionUseCase;
+    private final RolePermissionUseCase rolePermissionUseCase;
+    private final EmployeeUseCase employeeUseCase;
+    private final DepartmentUseCase departmentUseCase;
+    private final JpaEmployeeRepository employeeRepository;
 
     @PostConstruct
     public void initAll() {
@@ -28,8 +39,8 @@ public class DataInitializer {
         permissionUseCase.createPermission("product", "DELETE", "상품 삭제");
 
         // 2. Position 생성
-        positionUseCase.createPosition("백엔드 개발자", true);    // ID = 1
-        positionUseCase.createPosition("프론트엔드 개발자", true); // ID = 2
+        Position backendDev = positionUseCase.createPosition("백엔드 개발자", true);// ID = 1
+        Position frontendDev = positionUseCase.createPosition("프론트엔드 개발자", true);// ID = 2
         positionUseCase.createPosition("iOS 개발자", true);
         positionUseCase.createPosition("Android 개발자", true);
         positionUseCase.createPosition("인사담당자", true);
@@ -39,11 +50,31 @@ public class DataInitializer {
         Long backendDevId = 1L;
         Long frontendDevId = 2L;
 
-        positionRankPermissionUseCase.grantPermission(backendDevId, Rank.STAFF, 1L);
-        positionRankPermissionUseCase.grantPermission(backendDevId, Rank.STAFF, 2L);
-        positionRankPermissionUseCase.grantPermission(backendDevId, Rank.STAFF, 3L);
-        positionRankPermissionUseCase.grantPermission(backendDevId, Rank.MANAGER, 1L);
-        positionRankPermissionUseCase.grantPermission(backendDevId, Rank.MANAGER, 2L);
-        positionRankPermissionUseCase.grantPermission(frontendDevId, Rank.DIRECTOR, 3L);
+        rolePermissionUseCase.grantPermission(backendDevId, Rank.STAFF, 1L);
+        rolePermissionUseCase.grantPermission(backendDevId, Rank.STAFF, 2L);
+        rolePermissionUseCase.grantPermission(backendDevId, Rank.STAFF, 3L);
+        rolePermissionUseCase.grantPermission(backendDevId, Rank.MANAGER, 1L);
+        rolePermissionUseCase.grantPermission(backendDevId, Rank.MANAGER, 2L);
+        rolePermissionUseCase.grantPermission(frontendDevId, Rank.DIRECTOR, 3L);
+
+        Department devDept = departmentUseCase.create(new DepartmentCreateDto("개발팀", null));
+
+        // 5. Employee 생성
+
+        Employee backendEmp = employeeUseCase.register(new EmployeeCreateReq("백엔드직원",
+                "backend1",
+                "1234"));
+
+        backendEmp.approveRegistration(devDept, backendDev,Rank.STAFF);
+
+
+        Employee frontendEmp = employeeUseCase.register(new EmployeeCreateReq("프론트직원",
+                "frontend1",
+                "1234"));
+        frontendEmp.approveRegistration(devDept, frontendDev, Rank.DIRECTOR);
+        employeeRepository.save(backendEmp);
+        employeeRepository.save(frontendEmp);
+
     }
+
 }
