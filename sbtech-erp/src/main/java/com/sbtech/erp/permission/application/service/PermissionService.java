@@ -1,6 +1,6 @@
 package com.sbtech.erp.permission.application.service;
 
-import com.sbtech.erp.permission.adapter.out.repository.JpaPermissionRepository;
+import com.sbtech.erp.permission.adapter.out.persistence.JpaPermissionRepository;
 import com.sbtech.erp.permission.application.port.PermissionUseCase;
 import com.sbtech.erp.permission.domain.Permission;
 import lombok.RequiredArgsConstructor;
