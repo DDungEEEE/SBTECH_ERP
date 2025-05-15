@@ -1,4 +1,4 @@
-package com.sbtech.erp.permission.adapter.out.repository;
+package com.sbtech.erp.permission.adapter.out.persistence;
 
 import com.sbtech.erp.permission.domain.Permission;
 import org.springframework.data.jpa.repository.JpaRepository;
