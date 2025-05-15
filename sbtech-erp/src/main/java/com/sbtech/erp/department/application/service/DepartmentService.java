@@ -26,10 +26,15 @@ public class DepartmentService implements DepartmentUseCase {
         }
 
         Long parentDepartmentId = dto.parentDepartmentId();
-        Department parentDepartment = departmentRepository.findById(parentDepartmentId).orElse(null);
+        if(dto.parentDepartmentId() != null){
+            Department parentDepartment = departmentRepository.findById(parentDepartmentId).orElse(null);
 
-        Department department = DepartmentMapper.toEntity(dto.name(), parentDepartment);
-        return departmentRepository.save(department);
+            Department department = DepartmentMapper.toEntity(dto.name(), parentDepartment);
+            return departmentRepository.save(department);
+        }else{
+            Department department = DepartmentMapper.toEntity(dto.name(), null);
+            return departmentRepository.save(department);
+        }
     }
 
     @Override

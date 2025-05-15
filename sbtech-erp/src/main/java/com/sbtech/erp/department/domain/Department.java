@@ -25,7 +25,7 @@ public class Department extends BaseTimeEntity {
     @JoinColumn(name = "parent_department_id")
     private Department parentDepartment; // 상위 부서 (루트 부서의 경우 null)
 
-    @OneToMany(mappedBy = "parentDepartment")
+    @OneToMany(mappedBy = "parentDepartment", fetch = FetchType.EAGER)
     private List<Department> subDepartments = new ArrayList<>(); // 하위 부서 목록 (1:N 관계로 자식 부서들)
 
     public static Department create(String name, Department parentDepartment){
