@@ -47,14 +47,14 @@ public class JwtProvider {
         return false;
     }
 
-    public String generateAccessToken(Long employeeId){
-        log.info("{} ------------  AccessToken Generation", employeeId);
+    public String generateAccessToken(String loginId){
+        log.info("{} ------------  AccessToken Generation", loginId);
         Instant now = Instant.now();
         long ACCESS_TOKEN_EXPIRED = 20 * 60 * 1000L;
         Instant expiredTime = now.plusMillis(ACCESS_TOKEN_EXPIRED);
 
         return Jwts.builder()
-                .setSubject(String.valueOf(employeeId))
+                .setSubject(loginId)
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiredTime))
                 .signWith(key, signatureAlgorithm)

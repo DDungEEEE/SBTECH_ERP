@@ -17,7 +17,9 @@ public class EmployeeUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
         Optional<Employee> findEmployee = employeeRepository.findByLoginId(username);
+
         if(findEmployee.isEmpty()){
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }else{

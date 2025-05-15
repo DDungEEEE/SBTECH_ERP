@@ -1,8 +1,11 @@
 package com.sbtech.erp.security.aspect;
 
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.employee.domain.Employee;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.nio.file.AccessDeniedException;
 
 @Aspect
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class PermissionCheckAspect {
@@ -27,7 +31,8 @@ public class PermissionCheckAspect {
         Employee employee = ((EmployeeUserDetails) authentication.getPrincipal()).getEmployee();
 
         if (!permissionChecker.hasPermission(employee.getId(), requiredPermissionCode)) {
-            throw new ("권한이 없습니다: " + requiredPermissionCode);
+            log.error(ErrorCode.NO_PERMISSION_ERROR.getReason() + " : " + requiredPermissionCode);
+            throw new CustomException(ErrorCode.NO_PERMISSION_ERROR);
         }
 
         return joinPoint.proceed();

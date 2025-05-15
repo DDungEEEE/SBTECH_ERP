@@ -71,13 +71,14 @@ public class SecurityConfig {
                                                 "/swagger-ui.html",
                                                 "/swagger-ui/**",
                                                 "/v3/api-docs/**",
+                                                "/v3/api-docs.yaml",
                                                 "/swagger-resources/**",
                                                 "/webjars/**"
                                         ).permitAll()
-                                        .requestMatchers(HttpMethod.POST, "/api/v1/user/login").permitAll()
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
-//                                .anyRequest().authenticated()
-                                        .requestMatchers("/**").permitAll()
+                                .anyRequest().authenticated()
+
                 );
 
         httpSecurity.addFilterBefore(jwtAuthenticationFilter(), LoginAuthenticationFilter.class);

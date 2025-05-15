@@ -1,5 +1,7 @@
 package com.sbtech.erp.common.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.sbtech.erp.common.code.ErrorCode;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
+@JsonInclude(Include.NON_NULL)
 public class ErrorResponse {
     private List<ValidationError> errors; // Validation 검증 오류
     private String divisionCode; // ErrorCode 구분 코드

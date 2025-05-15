@@ -30,7 +30,6 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
-
             UserLoginDto userLoginDto = new ObjectMapper().readValue(request.getInputStream(), UserLoginDto.class);
 
             log.error(userLoginDto.toString());
@@ -51,7 +50,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         EmployeeUserDetails userDetails = (EmployeeUserDetails) authentication.getPrincipal();
 
         Employee employee = userDetails.getEmployee();
-        String accessToken = jwtProvider.generateAccessToken(employee.getId());
+        String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
 
         JwtToken jwtToken = JwtToken.builder()
                 .accessToken(accessToken)
