@@ -26,17 +26,21 @@ public class Employee extends BaseTimeEntity {
     @Column(name = "employee_password", nullable = false)
     private String password;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id")
     private Position position;
 
     // 직급
+    @Enumerated(EnumType.STRING)
     @Column(name = "employee_rank")
     private Rank rank;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
     private Department department;
+
+    @Enumerated(EnumType.STRING)
+    private EmployeeStatus employeeStatus;
 
     public static Employee create(String name, String loginId, String password, Position position, Department department) {
         return Employee.builder()
@@ -52,6 +56,7 @@ public class Employee extends BaseTimeEntity {
         this.department = department;
         this.position = position;
         this.rank = rank;
+        this.employeeStatus = EmployeeStatus.ACTIVE;
     }
 
     public void encodedPassword(String password){
