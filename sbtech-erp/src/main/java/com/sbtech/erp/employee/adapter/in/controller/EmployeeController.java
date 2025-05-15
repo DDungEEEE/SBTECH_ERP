@@ -5,13 +5,13 @@ import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
 import com.sbtech.erp.employee.application.port.EmployeeUseCase;
 import com.sbtech.erp.employee.domain.Employee;
+import com.sbtech.erp.security.aspect.CheckPermission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmployeeController {
     private final EmployeeUseCase employeeUseCase;
 
+    @CheckPermission("EMPLOYEE_VIEW")
     @PostMapping
     public ResponseEntity<SuccessResponse<Employee>> register(@RequestBody EmployeeCreateReq req){
         Employee register = employeeUseCase.register(req);
@@ -29,6 +30,17 @@ public class EmployeeController {
                 .body(SuccessResponse.<Employee>builder()
                         .data(register)
                         .successCode(SuccessCode.INSERT_SUCCESS)
+                        .build());
+    }
+
+    @CheckPermission("EMPLOYEE_VIEW")
+    @GetMapping
+    public ResponseEntity<SuccessResponse<List<Employee>>> findAll(){
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.<List<Employee>>builder()
+                        .data(employeeUseCase.findAllEmployees())
+                        .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());
     }
 }

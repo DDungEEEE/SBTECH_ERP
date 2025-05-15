@@ -12,6 +12,9 @@ import com.sbtech.erp.util.FindEntityHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +24,7 @@ public class EmployeeService implements EmployeeUseCase {
     private final PasswordEncoder passwordEncoder;
 
 
+    @Transactional
     @Override
     public Employee register(EmployeeCreateReq req) {
         Employee reqEmployee = EmployeeMapper.toEntity(req, null, null);
@@ -28,6 +32,7 @@ public class EmployeeService implements EmployeeUseCase {
         return employeeRepository.save(reqEmployee);
     }
 
+    @Transactional
     @Override
     public Employee approveEmployeeRegistration(EmployeeApprovalReq req, Long employeeId) {
         Employee findEmployee = findEntityHelper.findEmployeeElseThrow404(employeeId);
@@ -41,5 +46,8 @@ public class EmployeeService implements EmployeeUseCase {
         return employeeRepository.save(findEmployee);
     }
 
-
+    @Override
+    public List<Employee> findAllEmployees() {
+        return employeeRepository.findAll();
+    }
 }

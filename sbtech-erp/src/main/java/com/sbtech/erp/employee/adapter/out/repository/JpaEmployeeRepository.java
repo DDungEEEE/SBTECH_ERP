@@ -6,16 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface JpaEmployeeRepository extends JpaRepository<Employee, Long> {
-    @Query("""
-    SELECT new com.sbtech.erp.employee.adapter.out.dto.EmployeeInfoDto(
-        e.id, e.name, d.name, p.name
-    )
-    FROM Employee e
-    JOIN e.department d
-    JOIN e.position p
-""")
-    List<EmployeeInfoDto> findAllWithDetails();
+   Optional<Employee> findByLoginId(String loginId);
 
 }
