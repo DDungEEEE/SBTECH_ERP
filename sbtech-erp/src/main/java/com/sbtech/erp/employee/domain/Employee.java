@@ -71,4 +71,9 @@ public class Employee extends BaseTimeEntity {
         this.position = position;
         this.department = department;
     }
+
+    @PrePersist
+    private void setEmployeePendingApproval(){
+        this.employeeStatus = EmployeeStatus.PENDING_APPROVAL;
+    }
 }

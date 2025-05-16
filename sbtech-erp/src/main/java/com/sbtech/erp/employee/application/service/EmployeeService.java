@@ -34,8 +34,8 @@ public class EmployeeService implements EmployeeUseCase {
 
     @Transactional
     @Override
-    public Employee approveEmployeeRegistration(EmployeeApprovalReq req, Long employeeId) {
-        Employee findEmployee = findEntityHelper.findEmployeeElseThrow404(employeeId);
+    public Employee approveEmployeeRegistration(EmployeeApprovalReq req) {
+        Employee findEmployee = findEntityHelper.findEmployeeElseThrow404(req.employeeId());
 
         Department department = findEntityHelper.findDepartmentElseThrow404(req.departmentId());
 
