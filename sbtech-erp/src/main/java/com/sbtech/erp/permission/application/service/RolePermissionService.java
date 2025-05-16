@@ -20,21 +20,22 @@ public class RolePermissionService implements RolePermissionUseCase {
     private final RolePermissionRepository mappingRepository;
 
     @Override
-    public void grantPermission(Long positionId, Rank rank, Long permissionId) {
+    public RolePermission grantPermission(Long positionId, String rank, Long permissionId) {
         Position findPosition = findEntityHelper.findPositionElseThrow404(positionId);
         Permission findPermission = findEntityHelper.findPermissionElseThrow404(permissionId);
 
-        if(mappingRepository.hasPermission(findPosition, rank, findPermission.getCode())){
-            return;
+
+        if(mappingRepository.hasPermission(findPosition, Rank.from(rank), findPermission.getCode())){
+            return null;
         }
 
         RolePermission mapping =RolePermission.builder()
                 .position(findPosition)
-                .rank(rank)
+                .rank(Rank.from(rank))
                 .permission(findPermission)
                 .build();
 
-        mappingRepository.save(mapping);
+       return mappingRepository.save(mapping);
     }
 
     @Override
