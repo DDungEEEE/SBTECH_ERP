@@ -12,6 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PermissionService implements PermissionUseCase {
     private final JpaPermissionRepository jpaPermissionRepository;
+
     @Override
     public List<Permission> getAllPermissions() {
         return jpaPermissionRepository.findAll();
