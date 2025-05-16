@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
         System.out.println(requestURI);
         // 로그인 요청은 LoginAuthenticationFilter에게 위임
-        if ("/api/v1/auth/login".equals(requestURI) ||isSwaggerRequest(requestURI)) {
+        if ("/api/v1/auth/login".equals(requestURI) ||isSwaggerRequest(requestURI) || "/api/v1/employee/register".equals(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }

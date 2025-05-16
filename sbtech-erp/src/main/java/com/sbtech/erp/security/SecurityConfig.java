@@ -76,7 +76,7 @@ public class SecurityConfig {
                                                 "/webjars/**"
                                         ).permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                                        .requestMatchers(HttpMethod.POST, "/api/v1/user").permitAll()
+                                        .requestMatchers(HttpMethod.POST, "/api/v1/employee/register").permitAll()
                                 .anyRequest().authenticated()
 
                 );
