@@ -9,5 +9,5 @@ import java.util.List;
 public interface EmployeeUseCase {
     Employee register(EmployeeCreateReq req);
     List<Employee> findAllEmployees();
-    Employee approveEmployeeRegistration(EmployeeApprovalReq req);
+    Employee approveEmployeeRegistration(EmployeeApprovalReq req, Long approvalId);
 }

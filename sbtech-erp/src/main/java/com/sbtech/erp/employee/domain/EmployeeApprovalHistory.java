@@ -2,6 +2,7 @@ package com.sbtech.erp.employee.domain;
 
 import com.sbtech.erp.employee.domain.Employee;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,4 +27,10 @@ public class EmployeeApprovalHistory {
     private LocalDateTime approvedAt;
 
     private String memo; // 메모 (선택)
+
+    @Builder
+    private EmployeeApprovalHistory(Employee targetEmployee, Employee approvedBy) {
+        this.targetEmployee = targetEmployee;
+        this.approvedBy = approvedBy;
+    }
 }

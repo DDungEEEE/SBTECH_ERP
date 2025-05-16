@@ -57,6 +57,7 @@ public class EmployeeController {
     public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
                                                                            @AuthenticationPrincipal EmployeeUserDetails userDetails){
         Long approvalId = userDetails.getEmployee().getId();
+
         Employee approvedEmployee = employeeUseCase.approveEmployeeRegistration(employeeApprovalReq);
 
         return ResponseEntity
