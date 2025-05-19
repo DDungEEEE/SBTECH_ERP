@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 @Getter
 public enum Action{
-    CREATE("생성"), EDIT("수정"), DELETE("삭제"), VIEW("조회");
+    CREATE("생성"), EDIT("수정"), DELETE("삭제"), READ("조회");
     private final String description;
 
     public static Action from(String action){
