@@ -3,10 +3,7 @@ package com.sbtech.erp.permission.adapter.in.controller;
 import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.permission.adapter.out.dto.PermissionGroupResDto;
-import com.sbtech.erp.permission.application.port.PermissionUseCase;
 import com.sbtech.erp.permission.application.service.PermissionGroupService;
-import com.sbtech.erp.permission.domain.core.Permission;
-import com.sbtech.erp.security.aspect.CheckPermission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@RequestMapping("/api/v1/permission-group")
 @RequiredArgsConstructor
-@RestController("/api/v1/permission")
-public class PermissionController {
-    private final PermissionUseCase permissionUseCase;
+@RestController
+public class PermissionGroupController {
+    private final PermissionGroupService permissionGroupService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<Permission>>> getAllPermissions(){
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.<List<Permission>>builder()
-                        .data(permissionUseCase.getAllPermissions())
+    public ResponseEntity<SuccessResponse<List<PermissionGroupResDto>>> getAllPermissionGroups(){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse
+                        .<List<PermissionGroupResDto>>builder()
+                        .data(PermissionGroupResDto.from(permissionGroupService.getAllPermissionGroups()))
                         .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());
     }
+
+
 }

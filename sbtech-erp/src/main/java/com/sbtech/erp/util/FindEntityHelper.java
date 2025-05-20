@@ -4,7 +4,9 @@ import com.sbtech.erp.common.BaseTimeEntity;
 import com.sbtech.erp.department.domain.Department;
 import com.sbtech.erp.employee.domain.Employee;
 import com.sbtech.erp.organization.domain.Position;
-import com.sbtech.erp.permission.domain.Permission;
+import com.sbtech.erp.permission.domain.core.Permission;
+import com.sbtech.erp.permission.domain.group.PermissionGroup;
+import com.sbtech.erp.permission.domain.role.RolePermissionGroup;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,5 +35,13 @@ public record FindEntityHelper(EntityManager em, ServiceErrorHelper errorHelper)
     }
     public Department findDepartmentElseThrow404(Long id) throws ResponseStatusException{
         return findElseThrow404(Department.class, id);
+    }
+
+    public RolePermissionGroup findRolePermissionGroup404(Long id) throws ResponseStatusException{
+        return findElseThrow404(RolePermissionGroup.class, id);
+    }
+
+    public PermissionGroup findPermissionGroupElseThrow404(Long id) throws ResponseStatusException{
+        return findElseThrow404(PermissionGroup.class, id);
     }
 }

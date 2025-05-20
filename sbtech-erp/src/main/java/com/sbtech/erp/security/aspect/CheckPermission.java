@@ -1,10 +1,13 @@
 package com.sbtech.erp.security.aspect;
 
+import com.sbtech.erp.permission.domain.core.Action;
+
 import java.lang.annotation.*;
 
 @Target({ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface CheckPermission {
-    String value();
+    String resource();
+    Action action();
 }

@@ -1,6 +1,6 @@
 package com.sbtech.erp.security.user;
 
-import com.sbtech.erp.employee.adapter.out.repository.JpaEmployeeRepository;
+import com.sbtech.erp.employee.adapter.out.dto.repository.JpaEmployeeRepository;
 import com.sbtech.erp.employee.domain.Employee;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;

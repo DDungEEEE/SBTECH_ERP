@@ -1,4 +1,4 @@
-package com.sbtech.erp.employee.adapter.out.repository;
+package com.sbtech.erp.employee.adapter.out.dto.repository;
 
 import com.sbtech.erp.employee.adapter.out.dto.EmployeeInfoDto;
 import com.sbtech.erp.employee.domain.Employee;
