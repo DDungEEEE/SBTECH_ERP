@@ -31,9 +31,17 @@ public class PermissionService implements PermissionUseCase {
     }
 
     @Override
+    public List<Permission> findByResource(String resource) {
+        return jpaPermissionRepository.findAllByResource(resource);
+    }
+
+    @Override
     public List<Action> getActions() {
         return Arrays.stream(Action.values()).toList();
     }
 
-
+    @Override
+    public List<Permission> findAll() {
+        return jpaPermissionRepository.findAll();
+    }
 }

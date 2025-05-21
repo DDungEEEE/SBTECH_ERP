@@ -3,6 +3,7 @@ package com.sbtech.erp.employee.domain;
 import com.sbtech.erp.common.BaseTimeEntity;
 import com.sbtech.erp.department.domain.Department;
 import com.sbtech.erp.organization.domain.Position;
+import com.sbtech.erp.permission.domain.role.SystemRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -39,6 +40,11 @@ public class Employee extends BaseTimeEntity {
     @JoinColumn(name = "department_id")
     private Department department;
 
+    @Column
+    @Enumerated(EnumType.STRING)
+    private SystemRole systemRole;
+
+    @Column(name = "employee_status")
     @Enumerated(EnumType.STRING)
     private EmployeeStatus employeeStatus;
 

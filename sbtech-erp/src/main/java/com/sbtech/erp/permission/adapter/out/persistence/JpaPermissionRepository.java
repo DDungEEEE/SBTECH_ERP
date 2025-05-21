@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface JpaPermissionRepository extends JpaRepository<Permission, Long> {
     List<Permission> findByIdIn(List<Long> permissionIds);
+    List<Permission> findAllByResource(String resource);
 }

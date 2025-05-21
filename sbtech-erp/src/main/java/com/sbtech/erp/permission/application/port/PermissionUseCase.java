@@ -9,4 +9,6 @@ public interface PermissionUseCase {
     List<Permission> getAllPermissions();
     Permission createPermission(String domain, Action action, String description);
     List<Action> getActions();
+    List<Permission> findByResource(String resource);
+    List<Permission> findAll();
 }
