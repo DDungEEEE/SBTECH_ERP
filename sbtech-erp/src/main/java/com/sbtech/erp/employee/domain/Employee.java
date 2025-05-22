@@ -3,7 +3,7 @@ package com.sbtech.erp.employee.domain;
 import com.sbtech.erp.common.BaseTimeEntity;
 import com.sbtech.erp.department.domain.Department;
 import com.sbtech.erp.organization.domain.Position;
-import com.sbtech.erp.permission.domain.role.SystemRole;
+import com.sbtech.erp.permission.model.SystemRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;

@@ -2,7 +2,9 @@ package com.sbtech.erp.permission.model;
 
 import com.sbtech.erp.employee.domain.Rank;
 import com.sbtech.erp.organization.domain.Position;
+import lombok.Getter;
 
+@Getter
 public class RolePermissionGroup {
     private final Position position;
     private final Rank rank;
@@ -13,8 +15,4 @@ public class RolePermissionGroup {
         this.rank = rank;
         this.permissionGroup = permissionGroup;
     }
-
-    public Position getPosition() { return position; }
-    public Rank getRank() { return rank; }
-    public PermissionGroup getPermissionGroup() { return permissionGroup; }
 }

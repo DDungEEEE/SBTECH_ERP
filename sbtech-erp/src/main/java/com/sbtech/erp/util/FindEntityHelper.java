@@ -4,9 +4,9 @@ import com.sbtech.erp.common.BaseTimeEntity;
 import com.sbtech.erp.department.domain.Department;
 import com.sbtech.erp.employee.domain.Employee;
 import com.sbtech.erp.organization.domain.Position;
-import com.sbtech.erp.permission.domain.core.Permission;
-import com.sbtech.erp.permission.domain.group.PermissionGroup;
-import com.sbtech.erp.permission.domain.role.RolePermissionGroup;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionEntity;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupEntity;
+import com.sbtech.erp.permission.adapter.out.entity.RolePermissionGroupEntity;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,18 +30,18 @@ public record FindEntityHelper(EntityManager em, ServiceErrorHelper errorHelper)
     public Position findPositionElseThrow404(Long id) throws ResponseStatusException{
         return findElseThrow404(Position.class, id);
     }
-    public Permission findPermissionElseThrow404(Long id) throws ResponseStatusException{
-        return findElseThrow404(Permission.class, id);
+    public PermissionEntity findPermissionElseThrow404(Long id) throws ResponseStatusException{
+        return findElseThrow404(PermissionEntity.class, id);
     }
     public Department findDepartmentElseThrow404(Long id) throws ResponseStatusException{
         return findElseThrow404(Department.class, id);
     }
 
-    public RolePermissionGroup findRolePermissionGroup404(Long id) throws ResponseStatusException{
-        return findElseThrow404(RolePermissionGroup.class, id);
+    public RolePermissionGroupEntity findRolePermissionGroup404(Long id) throws ResponseStatusException{
+        return findElseThrow404(RolePermissionGroupEntity.class, id);
     }
 
-    public PermissionGroup findPermissionGroupElseThrow404(Long id) throws ResponseStatusException{
-        return findElseThrow404(PermissionGroup.class, id);
+    public PermissionGroupEntity findPermissionGroupElseThrow404(Long id) throws ResponseStatusException{
+        return findElseThrow404(PermissionGroupEntity.class, id);
     }
 }

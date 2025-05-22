@@ -1,29 +1,28 @@
 package com.sbtech.erp.permission.adapter.out.dto;
 
-import com.sbtech.erp.permission.domain.core.Permission;
-import com.sbtech.erp.permission.domain.group.PermissionGroup;
-import com.sbtech.erp.permission.domain.group.PermissionGroupItem;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionEntity;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupEntity;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupItemEntity;
 import lombok.Builder;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
-public record PermissionGroupResDto(Long id, String name, List<Permission> permissions) {
+public record PermissionGroupResDto(Long id, String name, List<PermissionEntity> permissionEntities) {
 
-    public static PermissionGroupResDto from(PermissionGroup permissionGroup){
+    public static PermissionGroupResDto from(PermissionGroupEntity permissionGroupEntity){
         return PermissionGroupResDto
                 .builder()
-                .id(permissionGroup.getId())
-                .name(permissionGroup.getName())
+                .id(permissionGroupEntity.getId())
+                .name(permissionGroupEntity.getName())
                 .permissions(
-                        permissionGroup.getPermissions().stream()
-                                .map(PermissionGroupItem::getPermission)
+                        permissionGroupEntity.getPermissions().stream()
+                                .map(PermissionGroupItemEntity::getPermissionEntity)
                                 .toList())
                 .build();
     }
 
-    public static List<PermissionGroupResDto> from(List<PermissionGroup> permissionGroups){
-        return permissionGroups.stream().map(PermissionGroupResDto::from).toList();
+    public static List<PermissionGroupResDto> from(List<PermissionGroupEntity> permissionGroupEntities){
+        return permissionGroupEntities.stream().map(PermissionGroupResDto::from).toList();
     }
 }

@@ -3,7 +3,7 @@ package com.sbtech.erp.security.aspect;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.employee.domain.Employee;
-import com.sbtech.erp.permission.domain.core.Action;
+import com.sbtech.erp.permission.model.Action;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -13,8 +13,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-
-import java.nio.file.AccessDeniedException;
 
 @Aspect
 @Slf4j

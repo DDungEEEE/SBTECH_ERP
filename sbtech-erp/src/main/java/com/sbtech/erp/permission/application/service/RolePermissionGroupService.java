@@ -4,8 +4,8 @@ import com.sbtech.erp.employee.domain.Rank;
 import com.sbtech.erp.organization.domain.Position;
 import com.sbtech.erp.permission.adapter.out.dto.RolePermissionResDto;
 import com.sbtech.erp.permission.adapter.out.persistence.RolePermissionGroupRepository;
-import com.sbtech.erp.permission.domain.group.PermissionGroup;
-import com.sbtech.erp.permission.domain.role.RolePermissionGroup;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupEntity;
+import com.sbtech.erp.permission.adapter.out.entity.RolePermissionGroupEntity;
 import com.sbtech.erp.util.FindEntityHelper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,14 +18,14 @@ public class RolePermissionGroupService {
 
     public RolePermissionResDto createRolePermissionGroup(Long positionId, Rank rank, Long permissionGroupId){
         Position position = findEntityHelper.findPositionElseThrow404(positionId);
-        PermissionGroup permissionGroup = findEntityHelper.findPermissionGroupElseThrow404(permissionGroupId);
+        PermissionGroupEntity permissionGroupEntity = findEntityHelper.findPermissionGroupElseThrow404(permissionGroupId);
 
-        RolePermissionGroup rolePermissionGroup = RolePermissionGroup.builder()
-                .permissionGroup(permissionGroup)
+        RolePermissionGroupEntity rolePermissionGroupEntity = RolePermissionGroupEntity.builder()
+                .permissionGroup(permissionGroupEntity)
                 .position(position)
                 .rank(rank)
                 .build();
 
-        return RolePermissionResDto.from(rolePermissionGroupRepository.save(rolePermissionGroup));
+        return RolePermissionResDto.from(rolePermissionGroupRepository.save(rolePermissionGroupEntity));
     }
 }

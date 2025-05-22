@@ -12,9 +12,9 @@ import com.sbtech.erp.organization.domain.Position;
 import com.sbtech.erp.permission.application.port.PermissionUseCase;
 import com.sbtech.erp.permission.application.service.PermissionGroupService;
 import com.sbtech.erp.permission.application.service.RolePermissionGroupService;
-import com.sbtech.erp.permission.domain.core.Action;
-import com.sbtech.erp.permission.domain.core.Permission;
-import com.sbtech.erp.permission.domain.group.PermissionGroup;
+import com.sbtech.erp.permission.model.Action;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionEntity;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupEntity;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -81,16 +81,16 @@ public class DataSeeder implements ApplicationRunner {
 
         /* 6) SYSTEM_ADMIN 그룹 생성 + 전체 권한 부여 */
         List<Long> allPermissionIds = permissionUC.findAll().stream()
-                .map(Permission::getId)
+                .map(PermissionEntity::getId)
                 .toList();
-        PermissionGroup permissionGroup = permissionGroupSvc.createPermissionGroup("SYSTEM_ADMIN", allPermissionIds);
+        PermissionGroupEntity permissionGroupEntity = permissionGroupSvc.createPermissionGroup("SYSTEM_ADMIN", allPermissionIds);
 
         /* ✅ 7) Position + Rank → SYSTEM_ADMIN 매핑 */
 
-        rolePermissionGroupService.createRolePermissionGroup(adminPosition.getId(), Rank.EXECUTIVE, permissionGroup.getId());
+        rolePermissionGroupService.createRolePermissionGroup(adminPosition.getId(), Rank.EXECUTIVE, permissionGroupEntity.getId());
         /* 8) EMPLOYEE_MANAGEMENT 그룹도 생성 */
         List<Long> employeePermIds = permissionUC.findByResource("EMPLOYEE").stream()
-                .map(Permission::getId)
+                .map(PermissionEntity::getId)
                 .toList();
         permissionGroupSvc.createPermissionGroup("EMPLOYEE_MANAGEMENT", employeePermIds);
     }

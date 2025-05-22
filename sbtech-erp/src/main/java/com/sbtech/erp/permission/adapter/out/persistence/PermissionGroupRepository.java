@@ -1,7 +1,7 @@
 package com.sbtech.erp.permission.adapter.out.persistence;
 
-import com.sbtech.erp.permission.domain.group.PermissionGroup;
+import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PermissionGroupRepository extends JpaRepository<PermissionGroup, Long> {
+public interface PermissionGroupRepository extends JpaRepository<PermissionGroupEntity, Long> {
 }

@@ -6,7 +6,7 @@ import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
 import com.sbtech.erp.employee.application.port.EmployeeUseCase;
 import com.sbtech.erp.employee.domain.Employee;
-import com.sbtech.erp.permission.domain.core.Action;
+import com.sbtech.erp.permission.model.Action;
 import com.sbtech.erp.security.aspect.CheckPermission;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
