@@ -1,11 +1,9 @@
 package com.sbtech.erp.permission.application.service;
 
-import com.sbtech.erp.permission.adapter.out.persistence.JpaPermissionRepository;
-import com.sbtech.erp.permission.application.port.PermissionUseCase;
-import com.sbtech.erp.permission.mapper.PermissionMapper;
-import com.sbtech.erp.permission.model.Action;
-import com.sbtech.erp.permission.adapter.out.entity.PermissionEntity;
-import com.sbtech.erp.permission.model.Permission;
+import com.sbtech.erp.permission.application.port.out.PermissionRepository;
+import com.sbtech.erp.permission.application.port.in.PermissionUseCase;
+import com.sbtech.erp.permission.domain.permission.model.Action;
+import com.sbtech.erp.permission.domain.permission.model.Permission;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,27 +14,23 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PermissionService implements PermissionUseCase {
 
-    private final JpaPermissionRepository jpaPermissionRepository;
+    private final PermissionRepository permissionRepository;
 
     @Override
     public List<Permission> getAllPermissions() {
-        return jpaPermissionRepository.findAll().stream()
-                .map(PermissionMapper::toDomain)
-                .toList();
+        return permissionRepository.findAll();
     }
 
     @Override
     public Permission createPermission(String resource, Action action, String description) {
-        PermissionEntity entity = PermissionMapper.toEntity(Permission.create(resource, action, description));
-        PermissionEntity saved = jpaPermissionRepository.save(entity);
-        return PermissionMapper.toDomain(saved);
+        Permission permission = Permission.create(null, resource, action, description);
+
+        return permissionRepository.save(permission);
     }
 
     @Override
     public List<Permission> findByResource(String resource) {
-        return jpaPermissionRepository.findAllByResource(resource).stream()
-                .map(PermissionMapper::toDomain)
-                .toList();
+        return permissionRepository.findAllByResource(resource);
     }
 
     @Override
@@ -44,8 +38,4 @@ public class PermissionService implements PermissionUseCase {
         return Arrays.stream(Action.values()).toList();
     }
 
-    @Override
-    public List<Permission> findAll() {
-        return getAllPermissions(); // 재사용
-    }
 }

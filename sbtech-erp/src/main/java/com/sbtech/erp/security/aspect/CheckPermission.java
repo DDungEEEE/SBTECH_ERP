@@ -1,6 +1,6 @@
 package com.sbtech.erp.security.aspect;
 
-import com.sbtech.erp.permission.model.Action;
+import com.sbtech.erp.permission.domain.permission.model.Action;
 
 import java.lang.annotation.*;
 

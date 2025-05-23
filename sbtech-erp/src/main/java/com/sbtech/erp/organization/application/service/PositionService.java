@@ -1,33 +1,27 @@
 package com.sbtech.erp.organization.application.service;
 
-import com.sbtech.erp.common.exception.CustomException;
-import com.sbtech.erp.organization.adapter.out.repository.JpaPositionRepository;
-import com.sbtech.erp.organization.application.port.PositionUseCase;
-import com.sbtech.erp.organization.domain.Position;
+import com.sbtech.erp.organization.adapter.out.persistence.repository.PositionJpaRepository;
+import com.sbtech.erp.organization.application.port.in.PositionUseCase;
+import com.sbtech.erp.organization.application.port.out.PositionRepository;
+import com.sbtech.erp.organization.domain.model.Position;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class PositionService implements PositionUseCase {
-    private final JpaPositionRepository jpaPositionRepository;
+    private final PositionRepository positionRepository;
     @Override
     public Position createPosition(String name, boolean isActive) {
-        Position reqPosition = Position.builder()
-                .name(name)
-                .isActive(isActive)
-                .build();
+        Position reqPosition = Position.create(null, name, isActive);
 
-        return jpaPositionRepository.save(reqPosition);
+        return positionRepository.save(reqPosition);
     }
 
     @Override
     public Position findByName(String name) {
-        return jpaPositionRepository.findByName(name)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+       return positionRepository.findByName(name);
     }
 }

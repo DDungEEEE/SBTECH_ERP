@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class RolePermissionGroupController {
     private final RolePermissionGroupService rolePermissionGroupService;
 
-    @PostMapping
-    public RolePermissionResDto create(@RequestBody RolePermissionGroupReq req){
-        return rolePermissionGroupService.createRolePermissionGroup(req.positionId(), req.rank(), req.permissionGroupId());
-    }
+//    @PostMapping
+//    public RolePermissionResDto create(@RequestBody RolePermissionGroupReq req){
+////        return rolePermissionGroupService.createRolePermissionGroup(req.positionId(), req.rank(), req.permissionGroupId());
+//    }
 
 }

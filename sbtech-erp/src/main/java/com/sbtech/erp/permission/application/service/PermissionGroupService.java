@@ -1,10 +1,10 @@
 package com.sbtech.erp.permission.application.service;
 
-import com.sbtech.erp.permission.adapter.out.persistence.JpaPermissionRepository;
-import com.sbtech.erp.permission.adapter.out.persistence.PermissionGroupItemRepository;
-import com.sbtech.erp.permission.adapter.out.persistence.PermissionGroupRepository;
-import com.sbtech.erp.permission.adapter.out.entity.PermissionEntity;
-import com.sbtech.erp.permission.adapter.out.entity.PermissionGroupEntity;
+import com.sbtech.erp.permission.application.port.out.PermissionGroupRepository;
+import com.sbtech.erp.permission.application.port.in.PermissionGroupUseCase;
+import com.sbtech.erp.permission.application.port.out.PermissionRepository;
+import com.sbtech.erp.permission.domain.permission.model.Permission;
+import com.sbtech.erp.permission.domain.permission.model.PermissionGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,26 +12,19 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class PermissionGroupService {
+public class PermissionGroupService implements PermissionGroupUseCase {
     private final PermissionGroupRepository permissionGroupRepository;
-    private final JpaPermissionRepository permissionRepository;
-    private final PermissionGroupItemRepository groupItemRepository;
+    private final PermissionRepository permissionRepository;
+    @Override
+    public PermissionGroup createPermissionGroup(String groupName, List<Long> permissionIdList) {
+        List<Permission> permissions = permissionRepository.findAllByIdList(permissionIdList);
+        PermissionGroup createPermissionGroup = PermissionGroup.create(null, groupName, permissions);
 
-    public PermissionGroupEntity createPermissionGroup(String groupName, List<Long> permissionIds){
-        List<PermissionEntity> findPermissionEntities = permissionRepository.findByIdIn(permissionIds);
-
-        PermissionGroupEntity permissionGroupEntity = PermissionGroupEntity.builder()
-                .name(groupName)
-                .build();
-
-        findPermissionEntities.forEach(permissionGroupEntity::addPermission);
-
-        return permissionGroupRepository.save(permissionGroupEntity);
+        return permissionGroupRepository.save(createPermissionGroup);
     }
 
-    public List<PermissionGroupEntity> getAllPermissionGroups(){
-//        List<PermissionGroup> allPermissionGroups = permissionGroupRepository.findAll();
-//        allPermissionGroups.stream().map(permissionGroup -> permissionGroup.getPermissions()).toList();
+    @Override
+    public List<PermissionGroup> getAllPermissionGroups() {
         return permissionGroupRepository.findAll();
     }
 }

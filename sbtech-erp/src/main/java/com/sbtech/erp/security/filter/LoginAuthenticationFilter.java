@@ -5,7 +5,7 @@ import com.sbtech.erp.security.JwtProvider;
 import com.sbtech.erp.security.JwtToken;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import com.sbtech.erp.security.user.UserLoginDto;
-import com.sbtech.erp.employee.domain.Employee;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.util.ResponseWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -16,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -49,12 +48,12 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         EmployeeUserDetails userDetails = (EmployeeUserDetails) authentication.getPrincipal();
 
-        Employee employee = userDetails.getEmployee();
-        String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
+        EmployeeEntity employeeEntity = userDetails.getEmployeeEntity();
+        String accessToken = jwtProvider.generateAccessToken(employeeEntity.getLoginId());
 
         JwtToken jwtToken = JwtToken.builder()
                 .accessToken(accessToken)
-                .employee(employee)
+                .employeeEntity(employeeEntity)
                 .build();
 
         responseWrapper.convertObjectToResponse(response, jwtToken);

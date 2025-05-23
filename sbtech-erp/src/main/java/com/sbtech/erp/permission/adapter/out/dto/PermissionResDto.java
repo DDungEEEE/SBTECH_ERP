@@ -1,6 +1,6 @@
 package com.sbtech.erp.permission.adapter.out.dto;
 
-import com.sbtech.erp.permission.adapter.out.entity.PermissionEntity;
+import com.sbtech.erp.permission.adapter.out.persistence.entity.PermissionEntity;
 import lombok.Builder;
 
 import java.util.List;

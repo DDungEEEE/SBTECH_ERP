@@ -4,6 +4,7 @@ import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.permission.adapter.out.dto.PermissionGroupResDto;
 import com.sbtech.erp.permission.application.service.PermissionGroupService;
+import com.sbtech.erp.permission.domain.permission.model.PermissionGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,11 @@ public class PermissionGroupController {
     private final PermissionGroupService permissionGroupService;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<PermissionGroupResDto>>> getAllPermissionGroups(){
+    public ResponseEntity<SuccessResponse<List<PermissionGroup>>> getAllPermissionGroups(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(SuccessResponse
-                        .<List<PermissionGroupResDto>>builder()
-                        .data(PermissionGroupResDto.from(permissionGroupService.getAllPermissionGroups()))
+                        .<List<PermissionGroup>>builder()
+                        .data(permissionGroupService.getAllPermissionGroups())
                         .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());
     }
