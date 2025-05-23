@@ -4,9 +4,9 @@ import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
-import com.sbtech.erp.employee.application.port.EmployeeUseCase;
-import com.sbtech.erp.employee.domain.Employee;
-import com.sbtech.erp.permission.model.Action;
+import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.permission.domain.permission.model.Action;
 import com.sbtech.erp.security.aspect.CheckPermission;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,12 +36,12 @@ public class EmployeeController {
             - 회원가입 시 상태는 기본적으로 `PENDING_APPROVAL`(승인 대기)로 설정됩니다.
             - 관리자의 승인을 받기 전까지는 로그인 및 시스템 이용이 제한됩니다.
             """
-    )    public ResponseEntity<SuccessResponse<Employee>> register(@RequestBody EmployeeCreateReq req){
-        Employee register = employeeUseCase.register(req);
+    )    public ResponseEntity<SuccessResponse<EmployeeEntity>> register(@RequestBody EmployeeCreateReq req){
+        EmployeeEntity register = employeeUseCase.register(req);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(SuccessResponse.<Employee>builder()
+                .body(SuccessResponse.<EmployeeEntity>builder()
                         .data(register)
                         .successCode(SuccessCode.INSERT_SUCCESS)
                         .build());
@@ -55,26 +55,26 @@ public class EmployeeController {
                     """
     )
     @PatchMapping("/allow-employee-register")
-    public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
-                                                                           @AuthenticationPrincipal EmployeeUserDetails userDetails){
-        Long approvalId = userDetails.getEmployee().getId();
+    public ResponseEntity<SuccessResponse<EmployeeEntity>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
+                                                                                 @AuthenticationPrincipal EmployeeUserDetails userDetails){
+        Long approvalId = userDetails.getEmployeeEntity().getId();
 
-        Employee approvedEmployee = employeeUseCase.approveEmployeeRegistration(employeeApprovalReq, approvalId);
+        EmployeeEntity approvedEmployeeEntity = employeeUseCase.approveEmployeeRegistration(employeeApprovalReq, approvalId);
 
         return ResponseEntity
                 .status(SuccessCode.UPDATE_SUCCESS.getStatus())
-                .body(SuccessResponse.<Employee>builder()
-                        .data(approvedEmployee)
+                .body(SuccessResponse.<EmployeeEntity>builder()
+                        .data(approvedEmployeeEntity)
                         .successCode(SuccessCode.INSERT_SUCCESS)
                         .build());
     }
 
     @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<Employee>>> findAll(){
+    public ResponseEntity<SuccessResponse<List<EmployeeEntity>>> findAll(){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.<List<Employee>>builder()
+                .body(SuccessResponse.<List<EmployeeEntity>>builder()
                         .data(employeeUseCase.findAllEmployees())
                         .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());

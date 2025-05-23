@@ -1,9 +1,12 @@
-package com.sbtech.erp.employee.domain;
+package com.sbtech.erp.employee.adapter.out.persistence.entity;
 
 import com.sbtech.erp.common.BaseTimeEntity;
-import com.sbtech.erp.department.domain.Department;
-import com.sbtech.erp.organization.domain.Position;
-import com.sbtech.erp.permission.model.SystemRole;
+import com.sbtech.erp.department.adapter.out.persistence.entity.DepartmentEntity;
+import com.sbtech.erp.employee.domain.model.EmployeeStatus;
+import com.sbtech.erp.employee.domain.model.Password;
+import com.sbtech.erp.employee.domain.model.Rank;
+import com.sbtech.erp.organization.adapter.out.persistence.entity.PositionEntity;
+import com.sbtech.erp.permission.domain.role.model.SystemRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 
 @Entity @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Employee extends BaseTimeEntity {
+public class EmployeeEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
@@ -25,11 +28,11 @@ public class Employee extends BaseTimeEntity {
     private String loginId;
 
     @Column(name = "employee_password", nullable = false)
-    private String password;
+    private Password password;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "position_id")
-    private Position position;
+    private PositionEntity position;
 
     // 직급
     @Enumerated(EnumType.STRING)
@@ -38,7 +41,7 @@ public class Employee extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "department_id")
-    private Department department;
+    private DepartmentEntity department;
 
     @Column
     @Enumerated(EnumType.STRING)
@@ -48,34 +51,31 @@ public class Employee extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EmployeeStatus employeeStatus;
 
-    public static Employee create(String name, String loginId, String password, Position position, Department department) {
-        return Employee.builder()
+    public static EmployeeEntity create(String name, String loginId, Password password, PositionEntity position, DepartmentEntity departmentEntity) {
+        return EmployeeEntity.builder()
                 .name(name)
                 .loginId(loginId)
                 .password(password)
                 .position(position)
-                .department(department)
+                .departmentEntity(departmentEntity)
                 .build();
     }
     // 관리자가 사용자의 회원가입을 승인할 때, 기입해주는 정보
-    public void approveRegistration(Department department, Position position, Rank rank){
-        this.department = department;
+    public void approveRegistration(DepartmentEntity departmentEntity, PositionEntity position, Rank rank){
+        this.department = departmentEntity;
         this.position = position;
         this.rank = rank;
         this.employeeStatus = EmployeeStatus.ACTIVE;
     }
 
-    public void encodedPassword(String password){
-        this.password = password;
-    }
 
     @Builder(access = AccessLevel.PRIVATE)
-    private Employee(String name, String loginId, String password, Position position, Department department) {
+    private EmployeeEntity(String name, String loginId, Password password, PositionEntity position, DepartmentEntity departmentEntity) {
         this.name = name;
         this.loginId = loginId;
         this.password = password;
         this.position = position;
-        this.department = department;
+        this.department= departmentEntity;
     }
 
     @PrePersist

@@ -1,30 +1,35 @@
 package com.sbtech.erp.employee.mapper;
 
+import com.sbtech.erp.department.domain.mapper.DepartmentMapper;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.employee.domain.model.Employee;
-import com.sbtech.erp.employee.entity.EmployeeEntity;
+import com.sbtech.erp.organization.domain.mapper.PositionMapper;
 
 public class EmployeeMapper {
+
     public static Employee toDomain(EmployeeEntity entity) {
-        return new Employee(
+
+        return Employee.create(
                 entity.getId(),
                 entity.getName(),
                 entity.getLoginId(),
                 entity.getPassword(),
-                entity.getPosition(),
+                PositionMapper.toDomain(entity.getPosition()),
                 entity.getRank(),
-                entity.getStatus()
+                DepartmentMapper.toDomainWithoutChildren(entity.getDepartment()),
+                entity.getSystemRole(),
+                entity.getEmployeeStatus()
         );
     }
 
     public static EmployeeEntity toEntity(Employee domain) {
-        return EmployeeEntity.builder()
-                .id(domain.getId())
-                .name(domain.getName())
-                .loginId(domain.getLoginId())
-                .password(domain.getPassword())
-                .position(domain.getPosition())
-                .rank(domain.getRank())
-                .status(domain.getStatus())
-                .build();
+
+        return EmployeeEntity.create(
+                domain.getName(),
+                domain.getLoginId(),
+                domain.getPassword(),
+                PositionMapper.toEntity(domain.getPosition()),
+                DepartmentMapper.toEntity(domain.getDepartment())
+        );
     }
-}
+    }

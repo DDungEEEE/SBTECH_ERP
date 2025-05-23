@@ -1,4 +1,4 @@
-package com.sbtech.erp.employee.domain;
+package com.sbtech.erp.employee.domain.model;
 
 import lombok.RequiredArgsConstructor;
 

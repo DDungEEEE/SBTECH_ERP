@@ -1,6 +1,5 @@
 package com.sbtech.erp.employee.adapter.in.dto;
 
-import com.sbtech.erp.employee.domain.EmployeeStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "사원 승인 요청 DTO")
