@@ -1,4 +1,4 @@
-package com.sbtech.erp.department.domain;
+package com.sbtech.erp.department.adapter.out.persistence.entity;
 
 import com.sbtech.erp.common.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @Entity @Getter
 @NoArgsConstructor
-public class Department extends BaseTimeEntity {
+public class DepartmentEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "department_id")
@@ -23,22 +23,22 @@ public class Department extends BaseTimeEntity {
 
     @ManyToOne
     @JoinColumn(name = "parent_department_id")
-    private Department parentDepartment; // 상위 부서 (루트 부서의 경우 null)
+    private DepartmentEntity parentDepartment; // 상위 부서 (루트 부서의 경우 null)
 
     @OneToMany(mappedBy = "parentDepartment", fetch = FetchType.EAGER)
-    private List<Department> subDepartments = new ArrayList<>(); // 하위 부서 목록 (1:N 관계로 자식 부서들)
+    private List<DepartmentEntity> subDepartmentEntities = new ArrayList<>(); // 하위 부서 목록 (1:N 관계로 자식 부서들)
 
-    public static Department create(String name, Department parentDepartment){
-        return Department
+    public static DepartmentEntity create(String name, DepartmentEntity parentDepartment){
+        return DepartmentEntity
                 .builder()
                 .name(name)
-                .parentDepartment(parentDepartment)
+                .parentDepartmentEntity(parentDepartment)
                 .build();
     }
 
     @Builder(access = AccessLevel.PRIVATE)
-    public Department(String name, Department parentDepartment) {
+    public DepartmentEntity(String name, DepartmentEntity parentDepartmentEntity) {
         this.name = name;
-        this.parentDepartment = parentDepartment;
+        this.parentDepartment = parentDepartmentEntity;
     }
 }
