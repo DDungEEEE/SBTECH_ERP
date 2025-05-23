@@ -1,7 +1,7 @@
 package com.sbtech.erp.security.user;
 
-import com.sbtech.erp.employee.domain.Employee;
-import com.sbtech.erp.employee.domain.EmployeeStatus;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.employee.domain.model.EmployeeStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,7 +12,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 public class EmployeeUserDetails implements UserDetails {
-    private final Employee employee;
+    private final EmployeeEntity employeeEntity;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -26,20 +26,20 @@ public class EmployeeUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return employee.getPassword();
+        return employeeEntity.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return employee.getLoginId();
+        return employeeEntity.getLoginId();
     }
 
-    public Employee getEmployee(){
-        return employee;
+    public EmployeeEntity getEmployeeEntity(){
+        return employeeEntity;
     }
 
     @Override
     public boolean isEnabled() {
-        return employee.getEmployeeStatus() == EmployeeStatus.ACTIVE;
+        return employeeEntity.getEmployeeStatus() == EmployeeStatus.ACTIVE;
     }
 }

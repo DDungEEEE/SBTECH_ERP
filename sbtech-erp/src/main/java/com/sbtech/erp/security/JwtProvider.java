@@ -1,6 +1,5 @@
 package com.sbtech.erp.security;
 
-import com.sbtech.erp.employee.domain.Employee;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;

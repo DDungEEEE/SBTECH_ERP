@@ -1,7 +1,7 @@
 package com.sbtech.erp.security.user;
 
-import com.sbtech.erp.employee.adapter.out.dto.repository.JpaEmployeeRepository;
-import com.sbtech.erp.employee.domain.Employee;
+import com.sbtech.erp.employee.adapter.out.persistence.repository.EmployeeJpaRepository;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,12 +13,12 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class EmployeeUserDetailsService implements UserDetailsService {
-    private final JpaEmployeeRepository employeeRepository;
+    private final EmployeeJpaRepository employeeRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        Optional<Employee> findEmployee = employeeRepository.findByLoginId(username);
+        Optional<EmployeeEntity> findEmployee = employeeRepository.findByLoginId(username);
 
         if(findEmployee.isEmpty()){
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");

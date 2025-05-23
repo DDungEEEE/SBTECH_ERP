@@ -1,6 +1,6 @@
 package com.sbtech.erp.security;
 
-import com.sbtech.erp.employee.domain.Employee;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,5 +9,5 @@ import lombok.Data;
 
 public class JwtToken {
     private String accessToken;
-    private Employee employee;
+    private EmployeeEntity employeeEntity;
 }

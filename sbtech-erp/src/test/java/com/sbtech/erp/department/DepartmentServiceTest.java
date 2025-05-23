@@ -4,10 +4,9 @@ import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.department.adapter.in.dto.DepartmentCreateDto;
 import com.sbtech.erp.department.adapter.out.repository.JpaDepartmentRepository;
-import com.sbtech.erp.department.application.port.DepartmentUseCase;
+import com.sbtech.erp.department.application.port.in.DepartmentUseCase;
 import com.sbtech.erp.department.application.service.DepartmentService;
-import com.sbtech.erp.department.domain.Department;
-import com.sbtech.erp.util.FindEntityHelper;
+import com.sbtech.erp.department.adapter.out.persistence.entity.DepartmentEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -50,11 +49,11 @@ class DepartmentServiceTest {
         when(departmentRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        Department result = useCase.create(dto);
+        DepartmentEntity result = useCase.create(dto);
 
         // then
         assertThat(result.getName()).isEqualTo("인사부");
-        assertThat(result.getParentDepartment()).isNull();
+        assertThat(result.getParentDepartmentEntity()).isNull();
     }
 
     @Test
@@ -72,15 +71,15 @@ class DepartmentServiceTest {
     @Test
     void getSubDepartments_정상_조회() {
         // given
-        Department parent = Department.create("총무부", null);
-        Department child1 = Department.create("회계팀", parent);
-        Department child2 = Department.create("시설팀", parent);
-        parent.getSubDepartments().addAll(List.of(child1, child2));
+        DepartmentEntity parent = DepartmentEntity.create("총무부", null);
+        DepartmentEntity child1 = DepartmentEntity.create("회계팀", parent);
+        DepartmentEntity child2 = DepartmentEntity.create("시설팀", parent);
+        parent.getSubDepartmentEntities().addAll(List.of(child1, child2));
 
         when(findEntityHelper.findDepartmentElseThrow404(1L)).thenReturn(parent);
 
         // when
-        List<Department> result = useCase.getSubDepartments(1L);
+        List<DepartmentEntity> result = useCase.getSubDepartments(1L);
 
         // then
         assertThat(result).hasSize(2);
