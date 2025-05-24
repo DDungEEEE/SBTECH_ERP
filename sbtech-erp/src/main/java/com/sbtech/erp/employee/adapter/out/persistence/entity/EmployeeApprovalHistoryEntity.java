@@ -1,6 +1,5 @@
-package com.sbtech.erp.employee.domain;
+package com.sbtech.erp.employee.adapter.out.persistence.entity;
 
-import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -12,6 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Table(name = "employee_approval_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmployeeApprovalHistoryEntity {
     @Id
@@ -31,15 +31,16 @@ public class EmployeeApprovalHistoryEntity {
 
     private String memo; // 메모 (선택)
 
-    @Builder
-    private EmployeeApprovalHistoryEntity(Long id, EmployeeEntity targetEmployeeEntity, EmployeeEntity approvedBy, String memo) {
+
+    private EmployeeApprovalHistoryEntity(Long id, EmployeeEntity targetEmployeeEntity, EmployeeEntity approvedBy, LocalDateTime approvedAt, String memo) {
         this.id = id;
         this.targetEmployee = targetEmployeeEntity;
         this.approvedBy = approvedBy;
         this.memo = memo;
+        this.approvedAt = approvedAt;
     }
 
-    public static EmployeeApprovalHistoryEntity create(Long id, EmployeeEntity targetEmployee, EmployeeEntity approvedBy, String memo){
-        return new EmployeeApprovalHistoryEntity(id, targetEmployee, approvedBy, memo);
+    public static EmployeeApprovalHistoryEntity create(Long id, EmployeeEntity targetEmployee, EmployeeEntity approvedBy,LocalDateTime approvedAt, String memo){
+        return new EmployeeApprovalHistoryEntity(id, targetEmployee, approvedBy,approvedAt,  memo);
     }
 }

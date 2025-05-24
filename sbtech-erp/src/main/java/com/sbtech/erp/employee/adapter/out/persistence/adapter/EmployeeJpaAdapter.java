@@ -23,7 +23,7 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
 
     @Override
     public boolean existsByLoginId(String loginId) {
-        return employeeJpaRepository.findByLoginId(loginId).isEmpty();
+        return !employeeJpaRepository.findByLoginId(loginId).isEmpty();
     }
 
     @Override

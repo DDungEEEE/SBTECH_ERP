@@ -10,5 +10,4 @@ import java.util.List;
 public interface EmployeeUseCase {
     Employee register(String name, String loginId, String password);
     List<Employee> findAllEmployees();
-    Employee approveEmployeeRegistration(Long positionId, Long departmentId, Long employeeId, Rank rank, Long approvalId);
 }

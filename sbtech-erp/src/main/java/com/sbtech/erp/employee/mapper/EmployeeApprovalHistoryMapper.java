@@ -1,17 +1,16 @@
-package com.sbtech.erp.employee.domain.model;
+package com.sbtech.erp.employee.mapper;
 
 
-import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
-import com.sbtech.erp.employee.domain.EmployeeApprovalHistoryEntity;
-import com.sbtech.erp.employee.mapper.EmployeeMapper;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeApprovalHistoryEntity;
+import com.sbtech.erp.employee.domain.model.EmployeeApprovalHistory;
 
 public class EmployeeApprovalHistoryMapper {
 
     public static EmployeeApprovalHistory toDomain(EmployeeApprovalHistoryEntity entity) {
-        if (entity == null) return null;
 
-        return new EmployeeApprovalHistory(
-                EmployeeMapper.toDomain(entity.getId()),
+        return EmployeeApprovalHistory.create(
+                entity.getId(),
+                EmployeeMapper.toDomain(entity.getTargetEmployee()),
                 EmployeeMapper.toDomain(entity.getApprovedBy()),
                 entity.getApprovedAt(),
                 entity.getMemo()
@@ -24,6 +23,7 @@ public class EmployeeApprovalHistoryMapper {
                 domain.getId(),
                 EmployeeMapper.toEntity(domain.getApprover()),
                 EmployeeMapper.toEntity(domain.getApprover()),
+                domain.getApprovedAt(),
                 domain.getMemo()
         );
     }

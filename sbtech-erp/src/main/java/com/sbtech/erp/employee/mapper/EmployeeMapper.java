@@ -9,7 +9,7 @@ public class EmployeeMapper {
 
     public static Employee toDomain(EmployeeEntity entity) {
 
-        return Employee.create(
+        return Employee.createFull(
                 entity.getId(),
                 entity.getName(),
                 entity.getLoginId(),
@@ -25,11 +25,14 @@ public class EmployeeMapper {
     public static EmployeeEntity toEntity(Employee domain) {
 
         return EmployeeEntity.create(
+                domain.getId(),
                 domain.getName(),
                 domain.getLoginId(),
                 domain.getPassword(),
                 PositionMapper.toEntity(domain.getPosition()),
-                DepartmentMapper.toEntity(domain.getDepartment())
-        );
+                DepartmentMapper.toEntity(domain.getDepartment()),
+                domain.getRank(),
+                domain.getSystemRole(),
+                domain.getStatus());
     }
     }

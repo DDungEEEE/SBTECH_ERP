@@ -4,8 +4,12 @@ import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
+import com.sbtech.erp.employee.application.port.in.ApprovalHistoryUseCase;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.domain.model.Rank;
+import com.sbtech.erp.permission.application.facade.EmployeeApprovalFacade;
 import com.sbtech.erp.permission.domain.permission.model.Action;
 import com.sbtech.erp.security.aspect.CheckPermission;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
@@ -26,6 +30,8 @@ import java.util.List;
 @RequestMapping("/api/v1/employee")
 public class EmployeeController {
     private final EmployeeUseCase employeeUseCase;
+    private final EmployeeApprovalFacade  employeeApprovalFacade;
+    private final ApprovalHistoryUseCase approvalHistoryUseCase;
 
 
     @PostMapping("/register")
@@ -36,12 +42,12 @@ public class EmployeeController {
             - 회원가입 시 상태는 기본적으로 `PENDING_APPROVAL`(승인 대기)로 설정됩니다.
             - 관리자의 승인을 받기 전까지는 로그인 및 시스템 이용이 제한됩니다.
             """
-    )    public ResponseEntity<SuccessResponse<EmployeeEntity>> register(@RequestBody EmployeeCreateReq req){
-        EmployeeEntity register = employeeUseCase.register(req);
+    )    public ResponseEntity<SuccessResponse<Employee>> register(@RequestBody EmployeeCreateReq req){
+        Employee register = employeeUseCase.register(req.name(), req.loginId(), req.password());
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(SuccessResponse.<EmployeeEntity>builder()
+                .body(SuccessResponse.<Employee>builder()
                         .data(register)
                         .successCode(SuccessCode.INSERT_SUCCESS)
                         .build());
@@ -55,26 +61,34 @@ public class EmployeeController {
                     """
     )
     @PatchMapping("/allow-employee-register")
-    public ResponseEntity<SuccessResponse<EmployeeEntity>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
+    public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
                                                                                  @AuthenticationPrincipal EmployeeUserDetails userDetails){
         Long approvalId = userDetails.getEmployeeEntity().getId();
 
-        EmployeeEntity approvedEmployeeEntity = employeeUseCase.approveEmployeeRegistration(employeeApprovalReq, approvalId);
+        Employee approvedEmployee = employeeApprovalFacade.approveEmployeeRegistration(
+                employeeApprovalReq.positionId(),
+                employeeApprovalReq.departmentId(),
+                employeeApprovalReq.employeeId(),
+                Rank.from(employeeApprovalReq.rank()),
+                approvalId,
+                null);
+
+        approvalHistoryUseCase.create(approvedEmployee.getId(), approvalId, null);
 
         return ResponseEntity
                 .status(SuccessCode.UPDATE_SUCCESS.getStatus())
-                .body(SuccessResponse.<EmployeeEntity>builder()
-                        .data(approvedEmployeeEntity)
+                .body(SuccessResponse.<Employee>builder()
+                        .data(approvedEmployee)
                         .successCode(SuccessCode.INSERT_SUCCESS)
                         .build());
     }
 
     @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<EmployeeEntity>>> findAll(){
+    public ResponseEntity<SuccessResponse<List<Employee>>> findAll(){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.<List<EmployeeEntity>>builder()
+                .body(SuccessResponse.<List<Employee>>builder()
                         .data(employeeUseCase.findAllEmployees())
                         .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());

@@ -16,7 +16,7 @@ public class EmployeeApprovalHistory {
     private final LocalDateTime approvedAt;
     private final String memo;
 
-    public static EmployeeApprovalHistory create(Long id, Employee target, Employee approver, String memo) {
-        return new EmployeeApprovalHistory(id, target, approver,null, memo);
+    public static EmployeeApprovalHistory create(Long id, Employee target, Employee approver, LocalDateTime approvedAt, String memo) {
+        return new EmployeeApprovalHistory(id, target, approver,approvedAt, memo);
     }
 }

@@ -26,7 +26,7 @@ public class EmployeeUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return employeeEntity.getPassword();
+        return employeeEntity.getPassword().getValue();
     }
 
     @Override

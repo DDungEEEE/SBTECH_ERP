@@ -1,7 +1,9 @@
 package com.sbtech.erp.department.adapter.out.persistence.adapter;
 
+import com.sbtech.erp.department.adapter.out.persistence.entity.DepartmentEntity;
 import com.sbtech.erp.department.adapter.out.persistence.repository.DepartmentJpaRepository;
 import com.sbtech.erp.department.application.port.out.DepartmentRepository;
+import com.sbtech.erp.department.domain.mapper.DepartmentMapper;
 import com.sbtech.erp.department.domain.model.Department;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -18,7 +20,9 @@ public class DepartmentJpaAdapter implements DepartmentRepository {
 
     @Override
     public Department save(Department department) {
-        return null;
+        DepartmentEntity departmentEntity = DepartmentMapper.toEntity(department);
+
+        return DepartmentMapper.toDomain(departmentJpaRepository.save(departmentEntity));
     }
 
     @Override

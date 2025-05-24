@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity @Getter
+@Table(name = "employee")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmployeeEntity extends BaseTimeEntity {
     @Id
@@ -51,31 +52,33 @@ public class EmployeeEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private EmployeeStatus employeeStatus;
 
-    public static EmployeeEntity create(String name, String loginId, Password password, PositionEntity position, DepartmentEntity departmentEntity) {
+    public static EmployeeEntity create(Long id,String name, String loginId, Password password, PositionEntity position, DepartmentEntity departmentEntity, Rank rank, SystemRole systemRole, EmployeeStatus status) {
         return EmployeeEntity.builder()
+                .id(id)
                 .name(name)
                 .loginId(loginId)
                 .password(password)
                 .position(position)
                 .departmentEntity(departmentEntity)
+                .systemRole(systemRole)
+                .rank(rank)
+                .employeeStatus(status)
                 .build();
     }
     // 관리자가 사용자의 회원가입을 승인할 때, 기입해주는 정보
-    public void approveRegistration(DepartmentEntity departmentEntity, PositionEntity position, Rank rank){
-        this.department = departmentEntity;
-        this.position = position;
-        this.rank = rank;
-        this.employeeStatus = EmployeeStatus.ACTIVE;
-    }
 
 
     @Builder(access = AccessLevel.PRIVATE)
-    private EmployeeEntity(String name, String loginId, Password password, PositionEntity position, DepartmentEntity departmentEntity) {
+    private EmployeeEntity(Long id,String name, String loginId, Password password, PositionEntity position, DepartmentEntity departmentEntity, Rank rank, SystemRole systemRole, EmployeeStatus employeeStatus) {
+        this.id = id;
         this.name = name;
         this.loginId = loginId;
         this.password = password;
         this.position = position;
         this.department= departmentEntity;
+        this.rank = rank;
+        this.systemRole = systemRole;
+        this.employeeStatus = employeeStatus;
     }
 
     @PrePersist

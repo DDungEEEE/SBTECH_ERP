@@ -18,6 +18,6 @@ public abstract class BaseTimeEntity implements Serializable {
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    protected  Timestamp updatedAt;
+    protected Timestamp updatedAt;
 
 }

@@ -5,13 +5,19 @@ import com.sbtech.erp.department.domain.model.Department;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.employee.application.port.out.EmployeeRepository;
+import com.sbtech.erp.employee.domain.model.Employee;
 import com.sbtech.erp.employee.domain.model.Rank;
 import com.sbtech.erp.organization.application.port.in.PositionUseCase;
 import com.sbtech.erp.organization.domain.model.Position;
+import com.sbtech.erp.permission.application.facade.EmployeeApprovalFacade;
 import com.sbtech.erp.permission.application.port.in.PermissionGroupUseCase;
 import com.sbtech.erp.permission.application.port.in.PermissionUseCase;
 import com.sbtech.erp.permission.domain.permission.model.Action;
 import com.sbtech.erp.permission.domain.permission.model.Permission;
+import com.sbtech.erp.permission.domain.role.model.SystemRole;
+import jakarta.annotation.PostConstruct;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.ApplicationArguments;
@@ -24,13 +30,15 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Transactional
-public class DataSeeder implements ApplicationRunner {
+public class DataSeeder implements ApplicationRunner{
 
     private final DepartmentUseCase departmentUC;
+    private final EmployeeRepository employeeRepository;
     private final PositionUseCase positionUC;
     private final EmployeeUseCase employeeUC;
     private final PermissionUseCase permissionUC;
     private final PermissionGroupUseCase permissionGroupUC;
+    private final EmployeeApprovalFacade employeeApprovalFacade;
 
     private static final List<String> POSITION_NAMES = List.of(
             "백엔드 개발자", "프론트엔드 개발자",
@@ -42,8 +50,7 @@ public class DataSeeder implements ApplicationRunner {
             "EMPLOYEE", "DEPARTMENT", "PRODUCT", "PERMISSION", "SYSTEM"
     );
 
-    @Override
-    public void run(ApplicationArguments args) {
+    public void run(ApplicationArguments args) throws Exception{
 
         /* 0) 이미 시드가 끝났다면 전체 스킵 */
 
@@ -62,18 +69,20 @@ public class DataSeeder implements ApplicationRunner {
         Position backendPos  = positionUC.findByName("백엔드 개발자");
         Position frontendPos = positionUC.findByName("프론트엔드 개발자");
 
-        EmployeeEntity backendEmp  =
-                employeeUC.register(new EmployeeCreateReq("백엔드직원", "backend1", "1234"));
-        backendEmp.approveRegistration(devDept, backendPos, Rank.STAFF);
+        Employee backendEmp  =
+                employeeUC.register("백엔드직원", "backend1", "1234");
+        employeeRepository.save(backendEmp.approveRegistration( backendPos, Rank.STAFF, devDept, SystemRole.USER));
 
-        EmployeeEntity frontendEmp =
-                employeeUC.register(new EmployeeCreateReq("프론트직원", "frontend1", "1234"));
-        frontendEmp.approveRegistration(devDept, frontendPos, Rank.DIRECTOR);
+        Employee frontendEmp =
+                employeeUC.register("프론트직원", "frontend1", "1234");
+        Employee newFrontendEmp = frontendEmp.approveRegistration(frontendPos, Rank.DIRECTOR, devDept, SystemRole.USER);
 
+        employeeRepository.save(newFrontendEmp);
         /* 4) 관리자 계정 생성 */
-        EmployeeEntity adminEmp =
-                employeeUC.register(new EmployeeCreateReq("관리자", "admin", "admin"));
-        adminEmp.approveRegistration(devDept, adminPosition, Rank.EXECUTIVE);
+        Employee adminEmp =
+                employeeUC.register("관리자", "admin", "admin");
+
+        employeeRepository.save(adminEmp.approveRegistration(adminPosition, Rank.EXECUTIVE, devDept,SystemRole.ADMIN));
 
         /* 5) Permission 생성 (idempotent) */
         RESOURCES.forEach(resource ->

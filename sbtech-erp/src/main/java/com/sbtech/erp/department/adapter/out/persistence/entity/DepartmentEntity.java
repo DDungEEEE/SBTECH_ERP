@@ -12,6 +12,7 @@ import java.util.List;
 
 @Entity @Getter
 @NoArgsConstructor
+@Table(name = "department")
 public class DepartmentEntity extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,16 +29,18 @@ public class DepartmentEntity extends BaseTimeEntity {
     @OneToMany(mappedBy = "parentDepartment", fetch = FetchType.EAGER)
     private List<DepartmentEntity> subDepartmentEntities = new ArrayList<>(); // 하위 부서 목록 (1:N 관계로 자식 부서들)
 
-    public static DepartmentEntity create(String name, DepartmentEntity parentDepartment){
+    public static DepartmentEntity create(Long id, String name, DepartmentEntity parentDepartment){
         return DepartmentEntity
                 .builder()
+                .id(id)
                 .name(name)
                 .parentDepartmentEntity(parentDepartment)
                 .build();
     }
 
     @Builder(access = AccessLevel.PRIVATE)
-    public DepartmentEntity(String name, DepartmentEntity parentDepartmentEntity) {
+    public DepartmentEntity(Long id, String name, DepartmentEntity parentDepartmentEntity) {
+        this.id = id;
         this.name = name;
         this.parentDepartment = parentDepartmentEntity;
     }

@@ -7,6 +7,7 @@ import java.util.List;
 
 public class DepartmentMapper {
     public static Department toDomain(DepartmentEntity entity) {
+        if(entity == null) return  null;
 
         List<Department> subDepartments = entity.getSubDepartmentEntities().stream()
                 .map(DepartmentMapper::toDomainWithoutChildren) // 자식의 자식은 불러오지 않음 (순환 방지)
@@ -27,6 +28,7 @@ public class DepartmentMapper {
         if (domain == null) return null;
 
         return DepartmentEntity.create(
+                domain.getId(),
                 domain.getName(),
                         toEntity(domain.getParentDepartment())
         );
@@ -35,6 +37,7 @@ public class DepartmentMapper {
 
     // Entity → Domain (자식 없이 변환)
     public static Department toDomainWithoutChildren(DepartmentEntity entity) {
+        if(entity == null) return null;
         return Department.create(entity.getId(), entity.getName(), null);
     }
 }
