@@ -1,0 +1,40 @@
+.admin-dashboard {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px;
+    font-family: sans-serif;
+}
+
+.admin-dashboard h1 {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.admin-card-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.admin-card {
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 24px;
+    width: 30%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    transition: 0.2s ease-in-out;
+}
+
+.admin-card:hover {
+    background: #eaeaea;
+}
+
+.admin-card a {
+    text-decoration: none;
+    color: black;
+}
+
+.admin-card h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+}

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>BatteryFriends 로그인</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+<div class="login-container">
+    <h1 class="logo-title">Battery<br><span class="highlight">Friends</span></h1>
+
+    <form class="login-form" id="loginForm">
+        <input type="text" name="loginId" placeholder="아이디 또는 전화번호" required />
+        <input type="password" name="password" placeholder="비밀번호" required />
+
+        <label class="remember-me">
+            <input type="checkbox" name="remember-me" />
+            로그인 상태 유지
+        </label>
+
+        <button type="submit" class="login-button">로그인</button>
+    </form>
+
+    <div class="links">
+        <span>|</span>
+        <a th:href="@{/signup}">회원가입</a>
+    </div>
+</div>
+
+<script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const loginId = document.querySelector('input[name="loginId"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        const response = await fetch('/api/v1/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ loginId, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('로그인 성공:', data);
+            // 토큰 저장 등 처리 가능
+            // localStorage.setItem('token', data.accessToken);
+
+            // ✅ 로그인 성공 후 관리자 페이지로 이동
+            location.href = '/admin';
+        } else {
+            alert('찾을 수 없는 사용자입니다.');
+        }
+    });
+</script>
+
+</body>
+</html>

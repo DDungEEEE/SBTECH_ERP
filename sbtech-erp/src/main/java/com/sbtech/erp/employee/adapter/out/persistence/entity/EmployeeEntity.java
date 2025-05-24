@@ -31,7 +31,7 @@ public class EmployeeEntity extends BaseTimeEntity {
     @Column(name = "employee_password", nullable = false)
     private Password password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id")
     private PositionEntity position;
 

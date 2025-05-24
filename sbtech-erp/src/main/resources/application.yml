@@ -1,6 +1,16 @@
 spring:
   application:
     name: sbtech_erp
+  mvc:
+    view:
+      suffix: .html
+
+  thymeleaf:
+    cache: false
+    enabled: true
+  #    prefix: classpath:/templates/
+#    check-template-location: true
+#    suffix: .html
   config:
     import: "optional:file:.env"
   datasource:
@@ -14,14 +24,14 @@ spring:
     open-in-view: false
     show-sql: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
 
 
-logging:
-  level:
-    org.springframework.security: ERROR
-    org.springframework.client.RestTemplate: DEBUG
-    org.springframework.web.reactive.function.client: DEBUG
+#logging:
+#  level:
+#    org.springframework.security: ERROR
+#    org.springframework.client.RestTemplate: DEBUG
+#    org.springframework.web.reactive.function.client: DEBUG
 
 
 server:

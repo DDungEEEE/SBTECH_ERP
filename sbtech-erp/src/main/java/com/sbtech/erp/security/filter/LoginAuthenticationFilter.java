@@ -1,6 +1,8 @@
 package com.sbtech.erp.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.mapper.EmployeeMapper;
 import com.sbtech.erp.security.JwtProvider;
 import com.sbtech.erp.security.JwtToken;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
@@ -48,12 +50,12 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         EmployeeUserDetails userDetails = (EmployeeUserDetails) authentication.getPrincipal();
 
-        EmployeeEntity employeeEntity = userDetails.getEmployeeEntity();
-        String accessToken = jwtProvider.generateAccessToken(employeeEntity.getLoginId());
+        Employee employee = EmployeeMapper.toDomain(userDetails.getEmployeeEntity());
+        String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
 
         JwtToken jwtToken = JwtToken.builder()
                 .accessToken(accessToken)
-                .employeeEntity(employeeEntity)
+                .employeeEntity(employee)
                 .build();
 
         responseWrapper.convertObjectToResponse(response, jwtToken);
