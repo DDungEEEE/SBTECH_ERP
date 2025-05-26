@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface DepartmentUseCase {
     Department create(String name, Long parentDepartmentId);
+    List<Department> getAllDepartmentList();
 }

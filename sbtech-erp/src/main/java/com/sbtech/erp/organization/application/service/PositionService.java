@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class PositionService implements PositionUseCase {
@@ -23,5 +25,10 @@ public class PositionService implements PositionUseCase {
     @Override
     public Position findByName(String name) {
        return positionRepository.findByName(name);
+    }
+
+    @Override
+    public List<Position> getAllPositions() {
+        return positionRepository.findAllPositions();
     }
 }

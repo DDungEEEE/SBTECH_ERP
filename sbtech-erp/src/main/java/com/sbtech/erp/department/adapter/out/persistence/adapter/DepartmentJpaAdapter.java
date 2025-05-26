@@ -1,5 +1,7 @@
 package com.sbtech.erp.department.adapter.out.persistence.adapter;
 
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.department.adapter.out.persistence.entity.DepartmentEntity;
 import com.sbtech.erp.department.adapter.out.persistence.repository.DepartmentJpaRepository;
 import com.sbtech.erp.department.application.port.out.DepartmentRepository;
@@ -8,6 +10,8 @@ import com.sbtech.erp.department.domain.model.Department;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class DepartmentJpaAdapter implements DepartmentRepository {
@@ -15,7 +19,7 @@ public class DepartmentJpaAdapter implements DepartmentRepository {
 
     @Override
     public boolean existsByName(String name) {
-        return false;
+        return departmentJpaRepository.existsByName(name);
     }
 
     @Override
@@ -27,6 +31,15 @@ public class DepartmentJpaAdapter implements DepartmentRepository {
 
     @Override
     public Department findById(Long id) {
-        return null;
+        return DepartmentMapper.toDomain(departmentJpaRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_RESOURCE_ERROR , "Department")
+        ));
+    }
+
+    @Override
+    public List<Department> findAll() {
+        return departmentJpaRepository.findAll()
+                .stream().map(DepartmentMapper::toDomain)
+                .toList();
     }
 }

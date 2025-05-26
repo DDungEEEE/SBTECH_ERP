@@ -10,6 +10,8 @@ import com.sbtech.erp.organization.domain.model.Position;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class PositionRepositoryAdapter implements PositionRepository {
@@ -37,5 +39,10 @@ public class PositionRepositoryAdapter implements PositionRepository {
         );
 
         return PositionMapper.toDomain(findPosition);
+    }
+
+    @Override
+    public List<Position> findAllPositions() {
+        return PositionMapper.toDomain(positionJpaRepository.findAll());
     }
 }

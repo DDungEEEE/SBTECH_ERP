@@ -8,6 +8,8 @@ import com.sbtech.erp.department.domain.model.Department;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DepartmentService implements DepartmentUseCase {
@@ -29,5 +31,8 @@ public class DepartmentService implements DepartmentUseCase {
         return departmentRepository.save(department);
     }
 
-
+    @Override
+    public List<Department> getAllDepartmentList() {
+        return departmentRepository.findAll();
+    }
 }

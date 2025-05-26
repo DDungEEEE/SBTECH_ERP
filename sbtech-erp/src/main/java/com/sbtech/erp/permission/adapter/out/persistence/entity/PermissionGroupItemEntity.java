@@ -17,11 +17,11 @@ public class PermissionGroupItemEntity {
     @Column(name = "permission_group_item_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_group_id", nullable = false)
     private PermissionGroupEntity permissionGroup;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_id", nullable = false)
     private PermissionEntity permission;
 

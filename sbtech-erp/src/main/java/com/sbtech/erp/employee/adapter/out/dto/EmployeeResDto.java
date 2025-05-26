@@ -10,6 +10,7 @@ import java.util.List;
 @Builder(access = AccessLevel.PRIVATE)
 public record EmployeeResDto(Long id, String name, String loginId, String departmentName, String positionName,
                              String rank, String employeeStatus) {
+
     public static EmployeeResDto from(Employee employee){
         return EmployeeResDto.builder()
                 .id(employee.getId())

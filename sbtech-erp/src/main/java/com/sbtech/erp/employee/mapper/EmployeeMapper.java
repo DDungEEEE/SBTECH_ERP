@@ -5,6 +5,9 @@ import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.employee.domain.model.Employee;
 import com.sbtech.erp.organization.domain.mapper.PositionMapper;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class EmployeeMapper {
 
     public static Employee toDomain(EmployeeEntity entity) {
@@ -22,6 +25,12 @@ public class EmployeeMapper {
         );
     }
 
+    public static List<Employee> toDomain(List<EmployeeEntity> employeeEntities){
+        return employeeEntities.stream()
+                .map(EmployeeMapper::toDomain)
+                .collect(Collectors.toList());
+    }
+
     public static EmployeeEntity toEntity(Employee domain) {
 
         return EmployeeEntity.create(
@@ -35,4 +44,10 @@ public class EmployeeMapper {
                 domain.getSystemRole(),
                 domain.getStatus());
     }
+
+    public static List<EmployeeEntity> toEntity(List<Employee> employeeList) {
+        return employeeList.stream()
+                .map(EmployeeMapper::toEntity)
+                .collect(Collectors.toList());
     }
+}

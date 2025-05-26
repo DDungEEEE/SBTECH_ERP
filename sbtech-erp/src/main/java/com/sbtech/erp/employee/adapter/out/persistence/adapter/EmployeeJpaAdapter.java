@@ -28,7 +28,7 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
 
     @Override
     public Employee findById(Long id) {
-        return null;
+        return EmployeeMapper.toDomain(employeeJpaRepository.findById(id).get());
     }
 
     @Override
@@ -38,6 +38,6 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
 
     @Override
     public List<Employee> findAll() {
-        return null;
+        return EmployeeMapper.toDomain(employeeJpaRepository.findAll());
     }
 }

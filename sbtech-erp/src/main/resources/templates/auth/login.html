@@ -38,13 +38,10 @@
 
         if (response.ok) {
             const data = await response.json();
-            console.log('로그인 성공:', data);
-            // 토큰 저장 등 처리 가능
-            // localStorage.setItem('token', data.accessToken);
-
-            // ✅ 로그인 성공 후 관리자 페이지로 이동
-            location.href = '/admin';
-        } else {
+            localStorage.setItem('jwt', data.accessToken); // JWT 저장
+            location.href = '/admin'; // 관리자 페이지 이동
+        }
+        else {
             alert('찾을 수 없는 사용자입니다.');
         }
     });

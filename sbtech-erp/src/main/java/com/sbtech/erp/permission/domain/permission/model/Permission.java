@@ -13,7 +13,7 @@ public class Permission {
     private final Action action;
     private final String description;
 
-    @Builder(access = AccessLevel.PROTECTED)
+    @Builder(access = AccessLevel.PRIVATE)
     public Permission(Long id, String resource, Action action, String description) {
         this.id = id;
         this.resource = resource;

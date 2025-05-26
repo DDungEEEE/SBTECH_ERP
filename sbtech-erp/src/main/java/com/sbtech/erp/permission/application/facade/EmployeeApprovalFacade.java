@@ -20,7 +20,7 @@ public class EmployeeApprovalFacade {
     private final PositionRepository positionRepository;
 
     @Transactional
-    public Employee approveEmployeeRegistration(Long positionId, Long departmentId, Long targetId, Rank rank, Long approverId, SystemRole systemRole){
+    public Employee approveEmployeeRegistration(Long positionId, Long departmentId, Long targetId, Rank rank, SystemRole systemRole){
         Employee targetEmployee = employeeRepository.findById(targetId);
         Department department = departmentRepository.findById(departmentId);
         Position position = positionRepository.findById(positionId);

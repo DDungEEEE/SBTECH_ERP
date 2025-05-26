@@ -19,7 +19,7 @@ public class RolePermissionGroupEntity extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "position_id", nullable = false)
     private PositionEntity position;
 
@@ -27,7 +27,7 @@ public class RolePermissionGroupEntity extends BaseTimeEntity {
     @Column(name = "employee_rank", nullable = false)
     private Rank rank;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_group_id", nullable = false)
     private PermissionGroupEntity permissionGroupEntity;
 

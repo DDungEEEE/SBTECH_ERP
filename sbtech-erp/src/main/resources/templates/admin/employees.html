@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>직원 관리</title>
+    <link rel="stylesheet" href="/css/admin.css" />
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f9f9f9;
+            padding: 40px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f1f5f9;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f9fafb;
+        }
+
+        .action-cell .action-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .action-row select {
+            height: 32px;
+            font-size: 14px;
+            padding: 4px 6px;
+        }
+
+        .approve-btn {
+            background-color: #3b82f6;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .approve-btn:hover {
+            background-color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+<div style="display: flex;">
+    <!-- 사이드 메뉴 -->
+    <aside style="width: 220px; background-color: #f8f9fa; padding: 20px; border-right: 1px solid #ddd;">
+        <h3 style="margin-bottom: 15px;">직원 필터</h3>
+        <ul style="list-style: none; padding: 0; font-weight: bold;">
+            <li style="margin-bottom: 10px;">
+                <a th:href="@{/admin/employees/pending}" style="text-decoration: none; color: #333;">🟡 승인 대기 중</a>
+            </li>
+            <li style="margin-bottom: 10px;">
+                <a th:href="@{/admin/employees}" style="text-decoration: none; color: #333;">👥 전체 사원</a>
+            </li>
+            <li>
+                <a th:href="@{/admin/employees/active}" style="text-decoration: none; color: #333;">✅ 재직 중</a>
+            </li>
+        </ul>
+    </aside>
+
+    <!-- 직원 테이블 -->
+    <main style="flex: 1; padding: 30px;">
+        <h1>직원 관리</h1>
+
+        <table>
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>로그인 아이디</th>
+                <th>부서</th>
+                <th>직무</th>
+                <th>직급</th>
+                <th>상태</th>
+                <th>작업</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.name}">홍길동</td>
+                <td th:text="${employee.loginId}">hong123</td>
+                <td th:text="${employee.departmentName}">개발팀</td>
+                <td th:text="${employee.positionName}">백엔드</td>
+                <td th:text="${employee.rank}">사원</td>
+                <td th:text="${employee.employeeStatus}">승인 대기</td>
+                <td class="action-cell" th:if="${employee.employeeStatus == '승인 대기'}">
+                    <div class="action-row">
+                        <select class="department-select"><option>부서 선택</option></select>
+                        <select class="position-select"><option>직무 선택</option></select>
+                        <select class="rank-select"><option>직급 선택</option></select>
+                        <select class="role-select"><option>권한 선택</option></select>
+                        <button class="approve-btn" th:attr="data-employee-id=${employee.id}">승인</button>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </main>
+</div>
+
+<!-- ✅ secureFetch 정의 -->
+<script>
+    async function secureFetch(url, options = {}) {
+        const token = localStorage.getItem("jwt");
+        if (!token) {
+            alert("로그인이 필요합니다.");
+            throw new Error("JWT 없음");
+        }
+
+        const headers = {
+            ...options.headers,
+            "Authorization": `Bearer ${token}`
+        };
+
+        return fetch(url, { ...options, headers });
+    }
+</script>
+
+<!-- ✅ 승인 옵션 렌더링 및 이벤트 처리 -->
+<script>
+    document.addEventListener("DOMContentLoaded", async () => {
+        const approveOptions = await (await secureFetch("/api/v1/employee/approve-form-data")).json();
+        const approveButtons = document.querySelectorAll(".approve-btn");
+
+        approveButtons.forEach(button => {
+            const row = button.closest("tr");
+
+            const departmentSelect = row.querySelector(".department-select");
+            const positionSelect = row.querySelector(".position-select");
+            const rankSelect = row.querySelector(".rank-select");
+            const roleSelect = row.querySelector(".role-select");
+
+            const populateOptions = (selectEl, data, labelKey, valueKey) => {
+                data.forEach(opt => {
+                    const option = document.createElement("option");
+                    option.text = labelKey ? opt[labelKey] : opt;
+                    option.value = valueKey ? opt[valueKey] : opt;
+                    selectEl.appendChild(option);
+                });
+            };
+
+            populateOptions(departmentSelect, approveOptions.data.departments, "name", "id");
+            populateOptions(positionSelect, approveOptions.data.positions, "name", "id");
+            populateOptions(rankSelect, approveOptions.data.ranks);
+            populateOptions(roleSelect, approveOptions.data.systemRoles);
+
+            button.addEventListener("click", async () => {
+                const employeeId = button.getAttribute("data-employee-id");
+                const departmentId = departmentSelect.value;
+                const positionId = positionSelect.value;
+                const rank = rankSelect.value;
+                const systemRole = roleSelect.value;
+
+                if (!departmentId || !positionId || !rank || !systemRole) {
+                    alert("모든 옵션을 선택해주세요.");
+                    return;
+                }
+
+                try {
+                    const response = await secureFetch("/api/v1/employee/approve", {
+                        method: "PATCH",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({
+                            employeeId,
+                            departmentId,
+                            positionId,
+                            rank,
+                            systemRole
+                        })
+                    });
+
+                    if (response.ok) {
+                        alert("승인 완료!");
+                        window.location.reload();
+                    } else {
+                        const error = await response.text();
+                        alert("승인 실패: " + error);
+                    }
+                } catch (err) {
+                    alert("네트워크 오류: " + err.message);
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

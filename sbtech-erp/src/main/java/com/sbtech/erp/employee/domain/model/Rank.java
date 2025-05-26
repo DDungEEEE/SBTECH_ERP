@@ -3,6 +3,8 @@ package com.sbtech.erp.employee.domain.model;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 @Getter
 @RequiredArgsConstructor
 public enum Rank {
@@ -17,7 +19,7 @@ public enum Rank {
 
     private final String label;
 
-    public static Rank from(String rank){
-        return Rank.valueOf(rank.toUpperCase());
+    public static Rank from(String description){
+        return Arrays.stream(Rank.values()).filter(rank -> rank.getLabel().equals(description)).findFirst().get();
     }
 }

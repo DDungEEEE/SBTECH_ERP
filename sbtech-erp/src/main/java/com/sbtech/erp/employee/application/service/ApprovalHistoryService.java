@@ -18,6 +18,7 @@ public class ApprovalHistoryService implements ApprovalHistoryUseCase {
     public void create(Long targetId, Long approverId, String memo) {
         Employee approverEmployee = employeeRepository.findById(approverId);
         Employee targetEmployee = employeeRepository.findById(targetId);
+
         EmployeeApprovalHistory employeeApprovalHistory = EmployeeApprovalHistory.create(null, targetEmployee, approverEmployee, null, memo);
         approvalHistoryRepository.save(employeeApprovalHistory);
     }

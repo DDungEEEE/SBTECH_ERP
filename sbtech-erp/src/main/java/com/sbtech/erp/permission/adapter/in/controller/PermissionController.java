@@ -2,6 +2,7 @@ package com.sbtech.erp.permission.adapter.in.controller;
 
 import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
+import com.sbtech.erp.permission.adapter.out.dto.PermissionResDto;
 import com.sbtech.erp.permission.application.port.in.PermissionUseCase;
 import com.sbtech.erp.permission.adapter.out.persistence.entity.PermissionEntity;
 import com.sbtech.erp.permission.domain.permission.model.Permission;
@@ -21,12 +22,12 @@ public class PermissionController {
     private final PermissionUseCase permissionUseCase;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<Permission>>> getAllPermissions(){
+    public ResponseEntity<SuccessResponse<List<PermissionResDto>>> getAllPermissions(){
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.<List<Permission>>builder()
-                        .data(permissionUseCase.getAllPermissions())
+                .body(SuccessResponse.<List<PermissionResDto>>builder()
+                        .data(PermissionResDto.from(permissionUseCase.getAllPermissions()))
                         .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());
     }

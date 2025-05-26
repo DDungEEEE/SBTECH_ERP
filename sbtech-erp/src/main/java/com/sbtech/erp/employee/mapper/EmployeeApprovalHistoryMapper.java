@@ -21,7 +21,7 @@ public class EmployeeApprovalHistoryMapper {
 
         return EmployeeApprovalHistoryEntity.create(
                 domain.getId(),
-                EmployeeMapper.toEntity(domain.getApprover()),
+                EmployeeMapper.toEntity(domain.getTarget()),
                 EmployeeMapper.toEntity(domain.getApprover()),
                 domain.getApprovedAt(),
                 domain.getMemo()
