@@ -12,4 +12,6 @@ public interface EmployeeRepository {
     Employee findById(Long id);
 
     List<Employee> findAll();
+
+    boolean isLoginIdDuplicated(String loginId);
 }

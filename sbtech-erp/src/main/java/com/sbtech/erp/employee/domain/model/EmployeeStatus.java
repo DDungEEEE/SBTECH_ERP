@@ -1,9 +1,11 @@
 package com.sbtech.erp.employee.domain.model;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
+@Getter
 @RequiredArgsConstructor
 public enum EmployeeStatus {
     PENDING_APPROVAL("승인 대기"),

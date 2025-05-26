@@ -4,6 +4,7 @@ import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
+import com.sbtech.erp.employee.adapter.out.dto.EmployeeResDto;
 import com.sbtech.erp.employee.application.port.in.ApprovalHistoryUseCase;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
@@ -83,14 +84,26 @@ public class EmployeeController {
                         .build());
     }
 
-    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
+//    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<Employee>>> findAll(){
+    public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findAll(){
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(SuccessResponse.<List<Employee>>builder()
-                        .data(employeeUseCase.findAllEmployees())
+                .body(SuccessResponse.<List<EmployeeResDto>>builder()
+                        .data(EmployeeResDto.from(employeeUseCase.findAllEmployees()))
                         .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());
+    }
+
+    @GetMapping("/check-duplicate")
+    public ResponseEntity<SuccessResponse<Boolean>> checkLoginIdDuplicate(@RequestParam String loginId){
+        System.out.println(loginId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.<Boolean>builder()
+                        .data(employeeUseCase.checkLoginIdDuplicated(loginId))
+                        .successCode(SuccessCode.SELECT_SUCCESS)
+                        .build());
+
     }
 }

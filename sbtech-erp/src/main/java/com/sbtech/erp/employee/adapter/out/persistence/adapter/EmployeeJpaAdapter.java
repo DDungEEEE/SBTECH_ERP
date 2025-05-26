@@ -32,6 +32,11 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
     }
 
     @Override
+    public boolean isLoginIdDuplicated(String loginId) {
+        return employeeJpaRepository.existsByLoginId(loginId);
+    }
+
+    @Override
     public List<Employee> findAll() {
         return null;
     }

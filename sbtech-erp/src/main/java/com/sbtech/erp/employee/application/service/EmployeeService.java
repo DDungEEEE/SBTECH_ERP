@@ -23,7 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EmployeeService implements EmployeeUseCase {
     private final EmployeeRepository employeeRepository;
-    private final ApprovalHistoryJpaRepository approvalHistoryJpaRepository;
     private final PasswordEncoder passwordEncoder;
 
 
@@ -42,5 +41,10 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public List<Employee> findAllEmployees() {
         return employeeRepository.findAll();
+    }
+
+    @Override
+    public boolean checkLoginIdDuplicated(String loginId) {
+        return employeeRepository.isLoginIdDuplicated(loginId);
     }
 }
