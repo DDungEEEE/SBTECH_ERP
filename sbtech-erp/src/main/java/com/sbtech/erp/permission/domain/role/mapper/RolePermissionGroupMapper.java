@@ -7,6 +7,8 @@ import com.sbtech.erp.permission.adapter.out.persistence.entity.RolePermissionGr
 import com.sbtech.erp.permission.domain.role.model.RolePermissionGroup;
 import com.sbtech.erp.permission.domain.permission.mapper.PermissionGroupMapper;
 
+import java.util.List;
+
 
 public class RolePermissionGroupMapper {
 
@@ -19,6 +21,12 @@ public class RolePermissionGroupMapper {
                 entity.getRank(),
                 PermissionGroupMapper.toDomain(entity.getPermissionGroupEntity())
         );
+    }
+
+    public static List<RolePermissionGroup> toDomain(List<RolePermissionGroupEntity> rolePermissionGroupEntities){
+        return rolePermissionGroupEntities.stream()
+                .map(RolePermissionGroupMapper::toDomain)
+                .toList();
     }
 
     // Domain → Entity

@@ -8,11 +8,12 @@ import com.sbtech.erp.permission.application.port.in.RolePermissionGroupUseCase;
 import com.sbtech.erp.permission.application.service.RolePermissionGroupService;
 import com.sbtech.erp.permission.domain.role.model.RolePermissionGroup;
 import lombok.RequiredArgsConstructor;
+import org.apache.coyote.Response;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/role-permission-group")
@@ -28,6 +29,17 @@ public class RolePermissionGroupController {
                 .body(SuccessResponse.<RolePermissionResDto>builder()
                         .data(RolePermissionResDto.from(rolePermissionGroup))
                         .successCode(SuccessCode.INSERT_SUCCESS)
+                        .build());
+    }
+
+    @GetMapping
+    public ResponseEntity<SuccessResponse<List<RolePermissionResDto>>> getPermissions(){
+        List<RolePermissionGroup> rolePermissionGroupList = rolePermissionGroupUseCase.getPermissions();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.<List<RolePermissionResDto>>builder()
+                        .data(RolePermissionResDto.from(rolePermissionGroupList))
+                        .successCode(SuccessCode.SELECT_SUCCESS)
                         .build());
     }
 

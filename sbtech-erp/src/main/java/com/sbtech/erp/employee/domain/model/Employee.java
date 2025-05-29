@@ -58,6 +58,10 @@ public class Employee {
         );
     }
 
+    public boolean isPendingEmployee(){
+        return this.status.equals(EmployeeStatus.PENDING_APPROVAL);
+    }
+
     /**
      * Entity -> Domain 매핑 시 모든 데이터를 담은 Model 필요
      */

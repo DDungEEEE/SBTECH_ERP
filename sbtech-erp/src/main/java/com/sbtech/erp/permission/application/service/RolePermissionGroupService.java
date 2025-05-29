@@ -12,6 +12,8 @@ import com.sbtech.erp.permission.domain.role.model.RolePermissionGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class RolePermissionGroupService implements RolePermissionGroupUseCase {
@@ -25,5 +27,10 @@ public class RolePermissionGroupService implements RolePermissionGroupUseCase {
 
         RolePermissionGroup rolePermissionGroup = RolePermissionGroup.create(null, position, rank, permissionGroup);
         return rolePermissionGroupRepository.save(rolePermissionGroup);
+    }
+
+    @Override
+    public List<RolePermissionGroup> getPermissions() {
+        return rolePermissionGroupRepository.findAll();
     }
 }

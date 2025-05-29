@@ -76,7 +76,6 @@ public class EmployeeController {
     public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
                                                                                  @AuthenticationPrincipal EmployeeUserDetails userDetails){
         Long approvalId = userDetails.getEmployeeEntity().getId();
-        System.out.println("----------------------------------------" + employeeApprovalReq.departmentId());
         Employee approvedEmployee = employeeApprovalFacade.approveEmployeeRegistration(
                 employeeApprovalReq.positionId(),
                 employeeApprovalReq.departmentId(),
@@ -84,9 +83,7 @@ public class EmployeeController {
                 Rank.from(employeeApprovalReq.rank()),
                 SystemRole.from(employeeApprovalReq.systemRole()));
 
-        log.error("approval Id : {} ------------------", approvalId);
-        log.error("employee Id: {} -----------------", approvedEmployee.getId());
-        approvalHistoryUseCase.create(approvedEmployee.getId(), approvalId, null);
+        approvalHistoryUseCase.create(approvedEmployee.getId(), approvalId, employeeApprovalReq.memo());
 
         return ResponseEntity
                 .status(SuccessCode.UPDATE_SUCCESS.getStatus())
@@ -120,15 +117,19 @@ public class EmployeeController {
     }
 
 //    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
-    @GetMapping
-    public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findAll(){
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(SuccessResponse.<List<EmployeeResDto>>builder()
-                        .data(EmployeeResDto.from(employeeUseCase.findAllEmployees()))
-                        .successCode(SuccessCode.SELECT_SUCCESS)
-                        .build());
-    }
+    @GetMapping("/employees")
+    public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findAll(@RequestParam(required = false) String status){
+        List<Employee> employees = "pending".equals(status)
+                ? employeeUseCase.getPendingEmployees()
+                : employeeUseCase.findAllEmployees();
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(SuccessResponse.<List<EmployeeResDto>>builder()
+                            .data(EmployeeResDto.from(employees))
+                            .successCode(SuccessCode.SELECT_SUCCESS).build());
+        }
+
 
     @GetMapping("/check-duplicate")
     public ResponseEntity<SuccessResponse<Boolean>> checkLoginIdDuplicate(@RequestParam String loginId){

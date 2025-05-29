@@ -18,6 +18,8 @@ public record EmployeeApprovalReq(
         )
         String rank,
 
-        String systemRole
+        String systemRole,
+
+        String memo
 ) {
 }

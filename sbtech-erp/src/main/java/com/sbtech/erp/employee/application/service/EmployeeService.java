@@ -47,4 +47,9 @@ public class EmployeeService implements EmployeeUseCase {
     public boolean checkLoginIdDuplicated(String loginId) {
         return employeeRepository.isLoginIdDuplicated(loginId);
     }
+
+    @Override
+    public List<Employee> getPendingEmployees() {
+        return findAllEmployees().stream().filter(Employee::isPendingEmployee).toList();
+    }
 }

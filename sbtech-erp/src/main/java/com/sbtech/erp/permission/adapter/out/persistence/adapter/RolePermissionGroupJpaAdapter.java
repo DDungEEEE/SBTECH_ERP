@@ -9,6 +9,7 @@ import com.sbtech.erp.permission.domain.role.model.RolePermissionGroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -25,5 +26,11 @@ public class RolePermissionGroupJpaAdapter implements RolePermissionGroupReposit
     public RolePermissionGroup save(RolePermissionGroup rolePermissionGroup) {
         RolePermissionGroupEntity rolePermissionGroupEntity = rolePermissionGroupJpaRepository.save(RolePermissionGroupMapper.toEntity(rolePermissionGroup));
         return RolePermissionGroupMapper.toDomain(rolePermissionGroupEntity);
+    }
+
+    @Override
+    public List<RolePermissionGroup> findAll() {
+        List<RolePermissionGroupEntity> allRolePermissionGroups = rolePermissionGroupJpaRepository.findAll();
+        return RolePermissionGroupMapper.toDomain(allRolePermissionGroups);
     }
 }

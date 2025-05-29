@@ -11,4 +11,5 @@ public interface EmployeeUseCase {
     Employee register(String name, String loginId, String password);
     List<Employee> findAllEmployees();
     boolean checkLoginIdDuplicated(String loginId);
+    List<Employee> getPendingEmployees();
 }
