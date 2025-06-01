@@ -16,9 +16,7 @@ public class EmployeeUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String role = String.valueOf(employeeEntity.getSystemRole());
-        String systemRole = "ROLE_" + role;
-        return List.of(new SimpleGrantedAuthority(systemRole));
+        return List.of(new SimpleGrantedAuthority(employeeEntity.getSystemRole().getAuthority()));
     }
 
     @Override

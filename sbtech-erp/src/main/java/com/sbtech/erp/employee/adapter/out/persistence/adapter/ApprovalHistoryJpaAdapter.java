@@ -8,6 +8,8 @@ import com.sbtech.erp.employee.mapper.EmployeeApprovalHistoryMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class ApprovalHistoryJpaAdapter implements ApprovalHistoryRepository {
@@ -17,5 +19,12 @@ public class ApprovalHistoryJpaAdapter implements ApprovalHistoryRepository {
     public void save(EmployeeApprovalHistory approvalHistory) {
         EmployeeApprovalHistoryEntity employeeApprovalHistoryEntity = EmployeeApprovalHistoryMapper.toEntity(approvalHistory);
         approvalHistoryJpaRepository.save(employeeApprovalHistoryEntity);
+    }
+
+    @Override
+    public List<EmployeeApprovalHistory> findAll() {
+        List<EmployeeApprovalHistoryEntity> employeeApprovalHistoryEntities =
+                approvalHistoryJpaRepository.findAll();
+        return EmployeeApprovalHistoryMapper.toDomain(employeeApprovalHistoryEntities);
     }
 }

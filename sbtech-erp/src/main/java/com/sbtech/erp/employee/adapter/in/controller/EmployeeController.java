@@ -6,12 +6,14 @@ import com.sbtech.erp.department.adapter.out.dto.DepartmentResDto;
 import com.sbtech.erp.department.application.port.in.DepartmentUseCase;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
+import com.sbtech.erp.employee.adapter.out.dto.ApprovalHistoryRes;
 import com.sbtech.erp.employee.adapter.out.dto.ApproveFormOptionsDto;
 import com.sbtech.erp.employee.adapter.out.dto.EmployeeResDto;
 import com.sbtech.erp.employee.application.port.in.ApprovalHistoryUseCase;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.domain.model.EmployeeApprovalHistory;
 import com.sbtech.erp.employee.domain.model.Rank;
 import com.sbtech.erp.organization.application.port.in.PositionUseCase;
 import com.sbtech.erp.organization.domain.model.Position;
@@ -24,8 +26,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,6 +48,19 @@ public class EmployeeController {
     private final ApprovalHistoryUseCase approvalHistoryUseCase;
     private final DepartmentUseCase departmentUseCase;
     private final PositionUseCase positionUseCase;
+
+
+    @GetMapping("/approval-history")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    public ResponseEntity<SuccessResponse<List<ApprovalHistoryRes>>> getApprovalHistories(){
+        List<EmployeeApprovalHistory> employeeApprovalHistories = approvalHistoryUseCase.getEmployeeApprovalHistories();
+
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(SuccessResponse.<List<ApprovalHistoryRes>>builder()
+                        .data(ApprovalHistoryRes.from(employeeApprovalHistories))
+                        .successCode(SuccessCode.SELECT_SUCCESS)
+                        .build());
+    }
 
 
     @PostMapping("/register")

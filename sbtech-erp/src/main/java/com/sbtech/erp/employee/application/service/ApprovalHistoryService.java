@@ -8,6 +8,8 @@ import com.sbtech.erp.employee.domain.model.EmployeeApprovalHistory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ApprovalHistoryService implements ApprovalHistoryUseCase {
@@ -21,5 +23,10 @@ public class ApprovalHistoryService implements ApprovalHistoryUseCase {
 
         EmployeeApprovalHistory employeeApprovalHistory = EmployeeApprovalHistory.create(null, targetEmployee, approverEmployee, null, memo);
         approvalHistoryRepository.save(employeeApprovalHistory);
+    }
+
+    @Override
+    public List<EmployeeApprovalHistory> getEmployeeApprovalHistories() {
+        return approvalHistoryRepository.findAll();
     }
 }
