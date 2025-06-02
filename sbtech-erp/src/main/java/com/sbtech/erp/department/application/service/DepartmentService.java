@@ -35,4 +35,9 @@ public class DepartmentService implements DepartmentUseCase {
     public List<Department> getAllDepartmentList() {
         return departmentRepository.findAll();
     }
+
+    @Override
+    public List<Department> getTopLevelDepartments() {
+        return departmentRepository.findAllByParentDepartmentIsNull();
+    }
 }

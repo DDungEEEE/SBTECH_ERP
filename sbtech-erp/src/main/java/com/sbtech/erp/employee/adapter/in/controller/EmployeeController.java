@@ -133,7 +133,7 @@ public class EmployeeController {
                         .build());
     }
 
-//    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
+    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
     @GetMapping("/employees")
     public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findAll(@RequestParam(required = false) String status){
         List<Employee> employees = "pending".equals(status)

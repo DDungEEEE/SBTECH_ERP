@@ -9,4 +9,5 @@ public interface DepartmentRepository {
     Department save(Department department);
     Department findById(Long id);
     List<Department> findAll();
+    List<Department> findAllByParentDepartmentIsNull();
 }

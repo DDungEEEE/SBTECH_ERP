@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>부서 관리</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f6f8;
+            padding: 40px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        .department-tree {
+            margin-top: 20px;
+        }
+        .department-item {
+            margin-left: 20px;
+        }
+        form {
+            margin-top: 30px;
+            background-color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+        }
+        button {
+            padding: 10px 16px;
+            background-color: #2563eb;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1e40af;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>부서 관리</h2>
+
+    <!-- 부서 트리 출력 -->
+    <div class="department-tree">
+        <ul>
+            <li th:each="dept : ${departments}">
+                <span th:text="${dept.name}"></span>
+                <ul th:if="${dept.subDepartments}">
+                    <li th:each="sub : ${dept.subDepartments}" class="department-item">
+                        <span th:text="${sub.name}"></span>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <!-- 부서 추가 폼 -->
+    <form method="post" action="/admin/departments">
+        <h3>새 부서 추가</h3>
+        <label>부서 이름</label>
+        <input type="text" name="name" required>
+
+        <label>상위 부서 (선택)</label>
+        <select name="parentId">
+            <option value="">상위 부서 없음</option>
+            <option th:each="dept : ${departments}" th:value="${dept.id}" th:text="${dept.name}"></option>
+        </select>
+
+        <button type="submit">추가하기</button>
+    </form>
+</div>
+</body>
+</html>

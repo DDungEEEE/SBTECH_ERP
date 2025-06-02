@@ -32,4 +32,6 @@ public class Department {
     public void addSubDepartment(Department subDepartment) {
         this.subDepartments.add(subDepartment);
     }
+
+    public Department updateDepartment()
 }

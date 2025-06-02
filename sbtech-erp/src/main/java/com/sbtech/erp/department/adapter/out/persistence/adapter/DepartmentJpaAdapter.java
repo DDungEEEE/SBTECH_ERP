@@ -42,4 +42,11 @@ public class DepartmentJpaAdapter implements DepartmentRepository {
                 .stream().map(DepartmentMapper::toDomain)
                 .toList();
     }
+
+    @Override
+    public List<Department>findAllByParentDepartmentIsNull() {
+        return departmentJpaRepository.findAllByParentDepartmentIsNull()
+                .stream().map(DepartmentMapper::toDomain)
+                .toList();
+    }
 }
