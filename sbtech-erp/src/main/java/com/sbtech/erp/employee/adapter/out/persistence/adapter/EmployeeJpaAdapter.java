@@ -23,7 +23,7 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
 
     @Override
     public boolean existsByLoginId(String loginId) {
-        return !employeeJpaRepository.findByLoginId(loginId).isEmpty();
+        return employeeJpaRepository.existsByLoginId(loginId);
     }
 
     @Override
@@ -31,10 +31,7 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
         return EmployeeMapper.toDomain(employeeJpaRepository.findById(id).get());
     }
 
-    @Override
-    public boolean isLoginIdDuplicated(String loginId) {
-        return employeeJpaRepository.existsByLoginId(loginId);
-    }
+
 
     @Override
     public List<Employee> findAll() {

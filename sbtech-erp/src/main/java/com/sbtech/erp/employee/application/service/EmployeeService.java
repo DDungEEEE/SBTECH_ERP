@@ -45,7 +45,7 @@ public class EmployeeService implements EmployeeUseCase {
 
     @Override
     public boolean checkLoginIdDuplicated(String loginId) {
-        return employeeRepository.isLoginIdDuplicated(loginId);
+        return employeeRepository.existsByLoginId(loginId);
     }
 
     @Override
