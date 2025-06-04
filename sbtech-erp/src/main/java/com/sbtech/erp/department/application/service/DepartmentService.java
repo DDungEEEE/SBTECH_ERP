@@ -40,4 +40,9 @@ public class DepartmentService implements DepartmentUseCase {
     public List<Department> getTopLevelDepartments() {
         return departmentRepository.findAllByParentDepartmentIsNull();
     }
+
+    @Override
+    public Department updateDepartment(String name, Long parentDepartmentId) {
+        return null;
+    }
 }

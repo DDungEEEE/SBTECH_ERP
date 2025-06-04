@@ -33,5 +33,7 @@ public class Department {
         this.subDepartments.add(subDepartment);
     }
 
-    public Department updateDepartment()
+    public Department updateDepartment(Long id, String name, Department parentDepartment){
+        return new Department(id, name, parentDepartment, new ArrayList<>());
+    }
 }
