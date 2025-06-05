@@ -15,7 +15,8 @@ public record EmployeeResDto(
         String departmentName,
         String positionName,
         String rank,
-        String employeeStatus
+        String employeeStatus,
+        String systemRole
 ) {
 
     public static EmployeeResDto from(Employee employee){
@@ -27,6 +28,7 @@ public record EmployeeResDto(
                 .positionName(employee.getPosition() != null ? employee.getPosition().getName() : null)
                 .rank(employee.getRank() != null ? employee.getRank().getLabel() : null)
                 .employeeStatus(employee.getStatus().getDescription())
+                .systemRole(employee.getSystemRole().getDescription())
                 .build();
     }
 
