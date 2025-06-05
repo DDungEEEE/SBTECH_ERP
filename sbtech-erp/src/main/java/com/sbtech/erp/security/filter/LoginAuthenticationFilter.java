@@ -18,6 +18,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -71,10 +72,11 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         log.error("로그인 실패: {}", failed.getMessage());
 
         ErrorCode errorCode = ErrorCode.USER_NOT_FOUND_ERROR;
+
         if(failed instanceof DisabledException) {
             errorCode = ErrorCode.USER_NOT_APPROVAL_ERROR;
         }
-
+        response.setStatus(HttpStatus.UNAUTHORIZED.value());
         responseWrapper.convertObjectToResponse(response, new ErrorResponse(errorCode));
     }
 }

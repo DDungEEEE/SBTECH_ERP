@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -44,6 +45,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try{
                 if(token == null || !jwtProvider.validToken(token)){
                     ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_TOKEN_ERROR);
+                    response.setStatus(HttpStatus.FORBIDDEN.value());
                     responseWrapper.convertObjectToResponse(response, errorResponse);
                     return;
                 }
