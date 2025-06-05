@@ -6,6 +6,7 @@ import com.sbtech.erp.permission.adapter.out.dto.PermissionResDto;
 import com.sbtech.erp.permission.application.port.in.PermissionUseCase;
 import com.sbtech.erp.permission.adapter.out.persistence.entity.PermissionEntity;
 import com.sbtech.erp.permission.domain.permission.model.Permission;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("/api/v1/permission")
+@RequestMapping("/api/v1/permissions")
 @RequiredArgsConstructor
 @RestController
 public class PermissionController {
     private final PermissionUseCase permissionUseCase;
 
+    @Operation(
+            summary = "권한 목록 조회",
+            description = """
+        그룹 권한 생성 시 할당할 수 있는 권한 목록을 조회합니다.
+        - 이 API를 통해 전체 권한을 불러와서, 그룹 권한 생성.
+        """
+    )
     @GetMapping
     public ResponseEntity<SuccessResponse<List<PermissionResDto>>> getAllPermissions(){
 

@@ -7,6 +7,7 @@ import com.sbtech.erp.permission.adapter.out.dto.RolePermissionResDto;
 import com.sbtech.erp.permission.application.port.in.RolePermissionGroupUseCase;
 import com.sbtech.erp.permission.application.service.RolePermissionGroupService;
 import com.sbtech.erp.permission.domain.role.model.RolePermissionGroup;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,13 @@ import java.util.List;
 public class RolePermissionGroupController {
     private final RolePermissionGroupUseCase rolePermissionGroupUseCase;
 
+    @Operation(
+            summary = "직급/직무별 권한 그룹 등록",
+            description = """
+        특정 직급 및 직무에 권한 그룹을 할당합니다.
+        - 요청 본문: positionId(직무 ID), rank(직급), permissionGroupId(권한 그룹 ID)
+        """
+    )
     @PostMapping
     public ResponseEntity<SuccessResponse<RolePermissionResDto>> create(@RequestBody RolePermissionGroupReq req){
         RolePermissionGroup rolePermissionGroup = rolePermissionGroupUseCase.createRolePermissionGroup(req.positionId(), req.rank(), req.permissionGroupId());
@@ -32,8 +40,17 @@ public class RolePermissionGroupController {
                         .build());
     }
 
+
+
+    @Operation(
+            summary = "직급/직무별 권한 그룹 목록 조회",
+            description = """
+        직급/직무별로 설정된 권한 그룹 목록을 조회합니다.
+        - 이 API는 직급/직무별 할당된 권한 그룹 구성을 확인할 때 사용됩니다.
+        """
+    )
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<RolePermissionResDto>>> getPermissions(){
+    public ResponseEntity<SuccessResponse<List<RolePermissionResDto>>> getRolePermissions(){
         List<RolePermissionGroup> rolePermissionGroupList = rolePermissionGroupUseCase.getPermissions();
 
         return ResponseEntity.status(HttpStatus.OK)

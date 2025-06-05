@@ -110,7 +110,14 @@ public class EmployeeController {
                         .build());
     }
 
-    @GetMapping("/approve-form-data")
+    @Operation(
+            summary = "사원 승인 폼 데이터 조회",
+            description = """
+        사원을 승인할 때 필요한 부서, 직무, 직급, 시스템 권한 목록을 반환합니다.
+        - 프론트엔드에서 승인 폼을 구성할 때 사용
+        """
+    )
+    @GetMapping("/approve-form")
     public ResponseEntity<SuccessResponse<ApproveFormOptionsDto>> getApproveFormData(){
 
         List<DepartmentResDto> departments = DepartmentResDto.from(departmentUseCase.getAllDepartmentList());
@@ -133,8 +140,16 @@ public class EmployeeController {
                         .build());
     }
 
+    @Operation(
+            summary = "사원 목록 조회",
+            description = """
+        사원 목록을 조회합니다.
+        - status 파라미터를 `pending`으로 주면 승인 대기 중인 사원만 반환합니다.
+        - status를 주지 않으면 전체 사원을 반환합니다.
+        """
+    )
     @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
-    @GetMapping("/employees")
+    @GetMapping("/list")
     public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findAll(@RequestParam(required = false) String status){
         List<Employee> employees = "pending".equals(status)
                 ? employeeUseCase.getPendingEmployees()
@@ -148,7 +163,15 @@ public class EmployeeController {
         }
 
 
-    @GetMapping("/check-duplicate")
+    @Operation(
+            summary = "사원 로그인 ID 중복 확인",
+            description = """
+        입력한 로그인 ID가 이미 존재하는지 확인합니다.
+        - true: 중복됨
+        - false: 사용 가능
+        """
+    )
+    @GetMapping("/check-login-id")
     public ResponseEntity<SuccessResponse<Boolean>> checkLoginIdDuplicate(@RequestParam String loginId){
 
         return ResponseEntity

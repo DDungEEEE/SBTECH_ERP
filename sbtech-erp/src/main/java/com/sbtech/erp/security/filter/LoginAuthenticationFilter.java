@@ -1,6 +1,7 @@
 package com.sbtech.erp.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sbtech.erp.employee.adapter.out.dto.EmployeeResDto;
 import com.sbtech.erp.employee.domain.model.Employee;
 import com.sbtech.erp.employee.mapper.EmployeeMapper;
 import com.sbtech.erp.security.JwtProvider;
@@ -38,7 +39,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
             return getAuthenticationManager().authenticate(
                     new UsernamePasswordAuthenticationToken(
                             userLoginDto.loginId(),
-                            userLoginDto.password(), null)
+                            userLoginDto.password())
             );
         } catch (IOException e) {
             log.error("오류남 : {}",e.getMessage());
@@ -55,7 +56,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
         JwtToken jwtToken = JwtToken.builder()
                 .accessToken(accessToken)
-                .employeeEntity(employee)
+                .employee(EmployeeResDto.from(employee))
                 .build();
 
         responseWrapper.convertObjectToResponse(response, jwtToken);
