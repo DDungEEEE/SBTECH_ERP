@@ -1,6 +1,8 @@
 package com.sbtech.erp.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.response.ErrorResponse;
 import com.sbtech.erp.employee.adapter.out.dto.EmployeeResDto;
 import com.sbtech.erp.employee.domain.model.Employee;
 import com.sbtech.erp.employee.mapper.EmployeeMapper;
@@ -16,9 +18,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -60,5 +64,17 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                 .build();
 
         responseWrapper.convertObjectToResponse(response, jwtToken);
+    }
+
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        log.error("로그인 실패: {}", failed.getMessage());
+
+        ErrorCode errorCode = ErrorCode.USER_NOT_FOUND_ERROR;
+        if(failed instanceof DisabledException) {
+            errorCode = ErrorCode.USER_NOT_APPROVAL_ERROR;
+        }
+
+        responseWrapper.convertObjectToResponse(response, new ErrorResponse(errorCode));
     }
 }

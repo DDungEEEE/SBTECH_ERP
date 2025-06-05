@@ -1,5 +1,6 @@
 package com.sbtech.erp.security;
 
+import com.sbtech.erp.security.filter.CustomAuthenticationEntryPoint;
 import com.sbtech.erp.security.filter.JwtAuthenticationFilter;
 import com.sbtech.erp.security.filter.LoginAuthenticationFilter;
 import com.sbtech.erp.security.user.EmployeeUserDetailsService;
@@ -35,6 +36,7 @@ public class SecurityConfig {
     private final ResponseWrapper responseWrapper;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final EmployeeUserDetailsService employeeUserDetailsService;
+    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
     //    private final CustomUnauthorizedHandler customUnauthorizedHandler;
 //
     @Bean
@@ -60,6 +62,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, LoginAuthenticationFilter loginAuthenticationFilter) throws Exception {
         httpSecurity
+                .exceptionHandling(exceptionHandling ->
+                        exceptionHandling.authenticationEntryPoint(authenticationEntryPoint)
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .sessionManagement(session ->
