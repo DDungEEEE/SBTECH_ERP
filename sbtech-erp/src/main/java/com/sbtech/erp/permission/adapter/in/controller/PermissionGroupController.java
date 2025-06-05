@@ -7,6 +7,7 @@ import com.sbtech.erp.permission.application.port.in.PermissionGroupUseCase;
 import com.sbtech.erp.permission.application.service.PermissionGroupService;
 import com.sbtech.erp.permission.domain.permission.model.PermissionGroup;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "그룹 권한 관리 컨트롤러")
 @RequestMapping("/api/v1/permission-group")
 @RequiredArgsConstructor
 @RestController
