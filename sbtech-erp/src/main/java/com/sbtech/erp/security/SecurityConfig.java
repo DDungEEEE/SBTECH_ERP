@@ -35,9 +35,7 @@ public class SecurityConfig {
     private final ResponseWrapper responseWrapper;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final EmployeeUserDetailsService employeeUserDetailsService;
-//    private final CustomAuthenticationEntryPoint authenticationEntryPoint;
-    //    private final CustomUnauthorizedHandler customUnauthorizedHandler;
-//
+
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -79,8 +77,7 @@ public class SecurityConfig {
                                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/v1/employee/register").permitAll()
                                         .requestMatchers("/api/v1/**").authenticated()
-                                        .requestMatchers("/**").permitAll()
-                                .anyRequest().authenticated()
+                                    .anyRequest().authenticated()
 
                 );
 

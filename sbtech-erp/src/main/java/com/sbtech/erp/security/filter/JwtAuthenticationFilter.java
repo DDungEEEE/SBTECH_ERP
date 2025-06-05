@@ -32,48 +32,61 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String token = jwtProvider.getJwtToken(request);
+        String requestURI = request.getRequestURI(); // 요청 URI 가져오기
 
-        String requestURI = request.getRequestURI();
-        System.out.println(requestURI);
-        // 로그인 요청은 LoginAuthenticationFilter에게 위임
-        if ("/api/v1/auth/login".equals(requestURI) ||isSwaggerRequest(requestURI) || "/api/v1/employee/register".equals(requestURI)) {
-            filterChain.doFilter(request, response);
-            return;
-        }
-        if(requestURI.startsWith("/api/v1/")){
-            try{
-                if(token == null || !jwtProvider.validToken(token)){
-                    ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INVALID_TOKEN_ERROR);
-                    response.setStatus(HttpStatus.FORBIDDEN.value());
-                    responseWrapper.convertObjectToResponse(response, errorResponse);
-                    return;
-                }
-
-                Claims claims = jwtProvider.getClaims(token);
-
-                setAuthentication(claims.getSubject());
-                filterChain.doFilter(request, response);
-            }catch (Exception ex){
-                log.error("JwtAuthentication Exception : {}", ex.getMessage());
-
-                ErrorResponse errorResponse = new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR);
-                responseWrapper.convertObjectToResponse(response, errorResponse);
-            }
-        }else{
+        // 특정 요청은 필터를 건너뛰도록 설정
+        if (isExcludedRequest(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        try {
+            // JWT 토큰을 가져오고 유효성 검사
+            String token = jwtProvider.getJwtToken(request);
+            validateToken(token, response);
+
+            // 토큰에서 클레임을 가져와 인증 설정
+            Claims claims = jwtProvider.getClaims(token);
+            setAuthentication(claims.getSubject());
+            filterChain.doFilter(request, response);
+
+        } catch (Exception ex) {
+            // 예외 발생 시 처리
+            log.error("JwtAuthentication Exception : {}", ex.getMessage());
+            handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
+        }
     }
 
-    private void setAuthentication(String userId){
+    // 토큰 유효성 검사
+    private void validateToken(String token, HttpServletResponse response) throws IOException {
+        if (token == null || !jwtProvider.validToken(token)) {
+            handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
+        }
+    }
+
+    // 특정 요청 URI를 필터링에서 제외
+    private boolean isExcludedRequest(String requestURI) {
+        return "/api/v1/auth/login".equals(requestURI)
+                || isSwaggerRequest(requestURI)
+                || "/api/v1/employee/register".equals(requestURI);
+    }
+
+    // 예외 처리 메서드
+    private void handleException(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        response.setStatus(HttpStatus.FORBIDDEN.value());
+        responseWrapper.convertObjectToResponse(response, errorResponse);
+    }
+
+    // 인증 설정
+    private void setAuthentication(String userId) {
         EmployeeUserDetails unifiedUserDetails = (EmployeeUserDetails) employeeUserDetailsService.loadUserByUsername(userId);
         Authentication authentication = new UsernamePasswordAuthenticationToken(unifiedUserDetails, null, unifiedUserDetails.getAuthorities());
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
+    // Swagger 관련 요청인지 확인
     private boolean isSwaggerRequest(String uri) {
         return uri.startsWith("/swagger-ui")
                 || uri.startsWith("/v3/api-docs")
