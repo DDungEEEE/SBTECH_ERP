@@ -1,4 +1,4 @@
-package com.sbtech.erp.employee.adapter.out.persistence.adapter;
+package com.sbtech.erp.employee.adapter.out;
 
 import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeApprovalHistoryEntity;
 import com.sbtech.erp.employee.adapter.out.persistence.repository.ApprovalHistoryJpaRepository;

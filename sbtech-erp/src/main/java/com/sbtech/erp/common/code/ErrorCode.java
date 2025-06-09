@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "COMMON_001", "SERVER ERROR"),
     NOT_FOUND_RESOURCE_ERROR(404, "COMMON_002", "해당 데이터를 찾을 수 없습니다."),
+    NOT_FOUND_EMPLOYEE_ERROR(404, "EMPLOYEE_001", "해당 사원을 찾을 수 없습니다."),
 
     DUPLICATED_DEPARTMENT_ERROR(409, "DEPARTMENT_001", "이미 존재하는 부서 이름입니다."),
     DUPLICATED_EMPLOYEE_LOGIN_ID_ERROR(401,"EMPLOYEE_001", "이미 존재하는 로그인 ID 입니다."),

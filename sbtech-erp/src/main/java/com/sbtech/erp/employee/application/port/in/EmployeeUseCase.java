@@ -10,6 +10,8 @@ import java.util.List;
 public interface EmployeeUseCase {
     Employee register(String name, String loginId, String password);
     List<Employee> findAllEmployees();
+    Employee findById(Long id);
+
     boolean checkLoginIdDuplicated(String loginId);
     List<Employee> getPendingEmployees();
 }

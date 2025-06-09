@@ -10,6 +10,8 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.List;
+
 @Configuration
 public class SwaggerConfig {
 
@@ -26,15 +28,22 @@ public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI(){
         return new OpenAPI()
-                .info(new Info().title("Dongguk Chatting API DOCUMENT")
-                        .description("Dongguk Chatting API입니다.")
+                .info(new Info().title("SBTECH-ERP SYSTEM API DOCUMENT")
                         .version("1.0.0"))
                 .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
                         .addSecuritySchemes("bearerAuth", new SecurityScheme()
                                 .type(SecurityScheme.Type.HTTP)
                                 .scheme("bearer")
-                                .bearerFormat("JWT")));
+                                .bearerFormat("JWT")))
+                .servers(List.of(
+                        new io.swagger.v3.oas.models.servers.Server()
+                                .url("https://sbtech-erp.ddns.net")   // ✅ 여기서 URL 지정
+                                .description("Production Server"),
+                        new io.swagger.v3.oas.models.servers.Server()
+                                .url("http://localhost:30300")       // ✅ 예: 로컬 개발 서버도 추가 가능
+                                .description("Local Development Server")
+                ));
     }
     private Parameter createHeader(String name){
         return new Parameter()

@@ -1,4 +1,4 @@
-package com.sbtech.erp.employee.adapter.out.persistence.adapter;
+package com.sbtech.erp.employee.adapter.out;
 
 import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.employee.adapter.out.persistence.repository.EmployeeJpaRepository;
@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -27,8 +28,9 @@ public class EmployeeJpaAdapter implements EmployeeRepository {
     }
 
     @Override
-    public Employee findById(Long id) {
-        return EmployeeMapper.toDomain(employeeJpaRepository.findById(id).get());
+    public Optional<Employee> findById(Long id) {
+        return employeeJpaRepository.findById(id)
+                .map(EmployeeMapper::toDomain);
     }
 
 

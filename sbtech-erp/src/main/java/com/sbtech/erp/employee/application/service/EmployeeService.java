@@ -25,6 +25,12 @@ public class EmployeeService implements EmployeeUseCase {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Override
+    public Employee findById(Long id) {
+        return employeeRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_EMPLOYEE_ERROR)
+        );
+    }
 
     @Transactional
     @Override
