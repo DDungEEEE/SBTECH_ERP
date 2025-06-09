@@ -38,4 +38,9 @@ public class AttendanceJpaAdapter implements AttendanceRepository {
         return attendanceJpaRepository.findById(id)
                 .map(AttendanceMapper::toDomain);
     }
+
+    @Override
+    public List<Attendance> findAll() {
+        return AttendanceMapper.toDomain(attendanceJpaRepository.findAll());
+    }
 }

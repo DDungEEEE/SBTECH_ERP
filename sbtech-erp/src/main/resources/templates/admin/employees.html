@@ -146,6 +146,7 @@
 <script>
     document.addEventListener("DOMContentLoaded", async () => {
         const approveOptions = await (await secureFetch("/api/v1/employee/approve-form-data")).json();
+        console.log(approveOptions);
         const approveButtons = document.querySelectorAll(".approve-btn");
 
         approveButtons.forEach(button => {

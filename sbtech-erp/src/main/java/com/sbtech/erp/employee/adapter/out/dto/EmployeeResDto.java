@@ -37,7 +37,9 @@ public record EmployeeResDto(
                         .map(Rank::getLabel)
                         .orElse(null))
                 .employeeStatus(employee.getStatus().getDescription())
-                .systemRole(employee.getSystemRole().getDescription())
+                .systemRole(Optional.ofNullable(employee.getSystemRole())
+                        .map(role -> role.name().toLowerCase())
+                        .orElse(null))
                 .build();
     }
 

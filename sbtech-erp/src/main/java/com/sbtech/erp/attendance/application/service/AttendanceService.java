@@ -7,6 +7,7 @@ import com.sbtech.erp.attendance.domain.model.Attendance;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 
 
 @Service
@@ -24,5 +25,10 @@ public class AttendanceService implements AttendanceUseCase {
     public Attendance employeeCheckOut(Long attendanceId) {
         Attendance attendance = attendanceRepository.findById(attendanceId).get();
         return attendanceRepository.save(attendance.checkOut());
+    }
+
+    @Override
+    public List<Attendance> getAttendances() {
+        return attendanceRepository.findAll();
     }
 }

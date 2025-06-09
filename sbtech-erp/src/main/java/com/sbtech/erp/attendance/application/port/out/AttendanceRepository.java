@@ -11,4 +11,5 @@ public interface AttendanceRepository {
     Attendance save(Attendance attendance);
     List<Attendance> saveAll(List<Attendance> attendances);
     Optional<Attendance> findById(Long id);
+    List<Attendance> findAll();
 }
