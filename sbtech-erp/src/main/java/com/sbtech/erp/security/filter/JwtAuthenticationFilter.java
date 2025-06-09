@@ -68,7 +68,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private boolean isExcludedRequest(String requestURI) {
         return "/api/v1/auth/login".equals(requestURI)
                 || isSwaggerRequest(requestURI)
-                || "/api/v1/employee/register".equals(requestURI);
+                || "/api/v1/employee/register".equals(requestURI)
+                || requestURI.startsWith("/actuator");
     }
 
     // 예외 처리 메서드
