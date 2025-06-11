@@ -23,6 +23,7 @@ public record EmployeeResDto(
 ) {
 
     public static EmployeeResDto from(Employee employee){
+
         return EmployeeResDto.builder()
                 .id(employee.getId())
                 .name(employee.getName())
@@ -38,7 +39,7 @@ public record EmployeeResDto(
                         .orElse(null))
                 .employeeStatus(employee.getStatus().getDescription())
                 .systemRole(Optional.ofNullable(employee.getSystemRole())
-                        .map(role -> role.name().toLowerCase())
+                        .map(role -> role.getDescription())
                         .orElse(null))
                 .build();
     }
