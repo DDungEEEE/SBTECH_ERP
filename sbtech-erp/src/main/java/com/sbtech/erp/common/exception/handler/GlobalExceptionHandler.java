@@ -29,19 +29,21 @@ public class GlobalExceptionHandler {
 
         BindingResult bindingResult = ex.getBindingResult();
         List<ErrorResponse.ValidationError> fieldErrors = ErrorResponse.ValidationError.of(bindingResult);
-
+        log.error("Validation error: {}", fieldErrors);
         return new ResponseEntity<>(fieldErrors, HttpStatus.BAD_REQUEST);
     }
 
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<Object> handleHttpMessageNotReadableException(HttpMessageNotReadableException ex){
+        log.error("HttpMessageNotReadableException: {}", ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(NoResourceFoundException.class)
     protected ResponseEntity<Object> handleNoResourceFoundException(NoResourceFoundException ex){
         String message = ex.getMessage().toString();
+        log.error("NoResourceFoundException: {}", message);
         return new ResponseEntity<>(message, HTTP_NOT_FOUND_ERROR);
     }
 
@@ -50,6 +52,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleBusinessException(CustomException ex){
         ErrorCode errorCode = ex.getErrorCode();
         ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        log.error("CustomException: {} - {}", errorCode.getDivisionCode(), errorCode.getReason());
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
     }
 

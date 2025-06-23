@@ -1,0 +1,36 @@
+2025-06-23 16:08:04.650 [INFO] [background-preinit] [o.h.validator.internal.util.Version] - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-23 16:08:04.718 [INFO] [main] [com.sbtech.erp.SbtechErpApplication] - Starting SbtechErpApplication using Java 17.0.9 with PID 13304 (C:\Users\thsdn\Desktop\SBTECH_ERP\sbtech-erp\build\classes\java\main started by thsdn in C:\Users\thsdn\Desktop\SBTECH_ERP\sbtech-erp)
+2025-06-23 16:08:04.719 [INFO] [main] [com.sbtech.erp.SbtechErpApplication] - No active profile set, falling back to 1 default profile: "default"
+2025-06-23 16:08:06.435 [INFO] [main] [o.s.d.r.c.RepositoryConfigurationDelegate] - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-23 16:08:06.604 [INFO] [main] [o.s.d.r.c.RepositoryConfigurationDelegate] - Finished Spring Data repository scanning in 158 ms. Found 8 JPA repository interfaces.
+2025-06-23 16:08:07.664 [INFO] [main] [o.s.b.w.e.tomcat.TomcatWebServer] - Tomcat initialized with port 30300 (http)
+2025-06-23 16:08:07.676 [INFO] [main] [o.a.coyote.http11.Http11NioProtocol] - Initializing ProtocolHandler ["http-nio-30300"]
+2025-06-23 16:08:07.678 [INFO] [main] [o.a.catalina.core.StandardService] - Starting service [Tomcat]
+2025-06-23 16:08:07.679 [INFO] [main] [o.a.catalina.core.StandardEngine] - Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-06-23 16:08:07.758 [INFO] [main] [o.a.c.c.C.[Tomcat].[localhost].[/]] - Initializing Spring embedded WebApplicationContext
+2025-06-23 16:08:07.759 [INFO] [main] [o.s.b.w.s.c.ServletWebServerApplicationContext] - Root WebApplicationContext: initialization completed in 2993 ms
+2025-06-23 16:08:08.195 [INFO] [main] [o.h.jpa.internal.util.LogHelper] - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-23 16:08:08.271 [INFO] [main] [org.hibernate.Version] - HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-06-23 16:08:08.324 [INFO] [main] [o.h.c.i.RegionFactoryInitiator] - HHH000026: Second-level cache disabled
+2025-06-23 16:08:08.690 [INFO] [main] [o.s.o.j.p.SpringPersistenceUnitInfo] - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-23 16:08:08.730 [INFO] [main] [com.zaxxer.hikari.HikariDataSource] - HikariPool-1 - Starting...
+2025-06-23 16:08:18.260 [INFO] [main] [com.zaxxer.hikari.pool.HikariPool] - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@6520625f
+2025-06-23 16:08:18.263 [INFO] [main] [com.zaxxer.hikari.HikariDataSource] - HikariPool-1 - Start completed.
+2025-06-23 16:08:18.360 [INFO] [main] [o.hibernate.orm.connections.pooling] - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-23 16:08:19.809 [INFO] [main] [o.h.e.t.j.p.i.JtaPlatformInitiator] - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-23 16:08:19.812 [INFO] [main] [o.s.o.j.LocalContainerEntityManagerFactoryBean] - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-23 16:08:20.294 [INFO] [main] [o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer] - Global AuthenticationManager configured with UserDetailsService bean with name employeeUserDetailsService
+2025-06-23 16:08:21.689 [INFO] [main] [o.s.b.a.e.web.EndpointLinksResolver] - Exposing 14 endpoints beneath base path '/actuator'
+2025-06-23 16:08:22.954 [INFO] [main] [o.a.coyote.http11.Http11NioProtocol] - Starting ProtocolHandler ["http-nio-30300"]
+2025-06-23 16:08:22.973 [INFO] [main] [o.s.b.w.e.tomcat.TomcatWebServer] - Tomcat started on port 30300 (http) with context path '/'
+2025-06-23 16:08:22.999 [INFO] [main] [com.sbtech.erp.SbtechErpApplication] - Started SbtechErpApplication in 19.148 seconds (process running for 20.049)
+2025-06-23 16:08:23.398 [INFO] [RMI TCP Connection(4)-10.4.2.205] [o.a.c.c.C.[Tomcat].[localhost].[/]] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-23 16:08:23.398 [INFO] [RMI TCP Connection(4)-10.4.2.205] [o.s.web.servlet.DispatcherServlet] - Initializing Servlet 'dispatcherServlet'
+2025-06-23 16:08:23.400 [INFO] [RMI TCP Connection(4)-10.4.2.205] [o.s.web.servlet.DispatcherServlet] - Completed initialization in 2 ms
