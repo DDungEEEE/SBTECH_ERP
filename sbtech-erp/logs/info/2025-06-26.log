@@ -1,0 +1,40 @@
+2025-06-26 12:44:54.861 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2025-06-26 12:44:54.920 [main] INFO  com.sbtech.erp.SbtechErpApplication - Starting SbtechErpApplication using Java 17.0.9 with PID 26416 (C:\Users\thsdn\Desktop\SBTECH_ERP\sbtech-erp\build\classes\java\main started by thsdn in C:\Users\thsdn\Desktop\SBTECH_ERP\sbtech-erp)
+2025-06-26 12:44:54.921 [main] INFO  com.sbtech.erp.SbtechErpApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-26 12:44:56.672 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-06-26 12:44:56.850 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 163 ms. Found 8 JPA repository interfaces.
+2025-06-26 12:44:57.778 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 30300 (http)
+2025-06-26 12:44:57.790 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-30300"]
+2025-06-26 12:44:57.792 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-26 12:44:57.792 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.39]
+2025-06-26 12:44:57.865 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-06-26 12:44:57.866 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2902 ms
+2025-06-26 12:44:58.411 [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-06-26 12:44:58.469 [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 6.6.11.Final
+2025-06-26 12:44:58.510 [main] INFO  o.h.c.i.RegionFactoryInitiator - HHH000026: Second-level cache disabled
+2025-06-26 12:44:58.837 [main] INFO  o.s.o.j.p.SpringPersistenceUnitInfo - No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-06-26 12:44:58.869 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Starting...
+2025-06-26 12:45:03.878 [main] INFO  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@27ac3b6d
+2025-06-26 12:45:03.880 [main] INFO  com.zaxxer.hikari.HikariDataSource - HikariPool-1 - Start completed.
+2025-06-26 12:45:03.930 [main] WARN  org.hibernate.orm.deprecation - HHH90000025: MySQL8Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2025-06-26 12:45:03.931 [main] WARN  org.hibernate.orm.deprecation - HHH90000026: MySQL8Dialect has been deprecated; use org.hibernate.dialect.MySQLDialect instead
+2025-06-26 12:45:03.949 [main] INFO  o.hibernate.orm.connections.pooling - HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-1)']
+	Database driver: undefined/unknown
+	Database version: 8.0
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2025-06-26 12:45:05.163 [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2025-06-26 12:45:05.168 [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-06-26 12:45:05.614 [main] INFO  o.s.s.c.a.a.c.InitializeUserDetailsBeanManagerConfigurer$InitializeUserDetailsManagerConfigurer - Global AuthenticationManager configured with UserDetailsService bean with name employeeUserDetailsService
+2025-06-26 12:45:06.732 [main] INFO  o.s.b.a.e.web.EndpointLinksResolver - Exposing 14 endpoints beneath base path '/actuator'
+2025-06-26 12:45:07.783 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-30300"]
+2025-06-26 12:45:07.803 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 30300 (http) with context path '/'
+2025-06-26 12:45:07.824 [main] INFO  com.sbtech.erp.SbtechErpApplication - Started SbtechErpApplication in 13.528 seconds (process running for 14.241)
+2025-06-26 12:45:08.044 [RMI TCP Connection(4)-10.4.2.205] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-26 12:45:08.044 [RMI TCP Connection(4)-10.4.2.205] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-26 12:45:08.045 [RMI TCP Connection(4)-10.4.2.205] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+2025-06-26 16:31:03.245 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=3h28s571ms447µs500ns).
+2025-06-26 16:52:15.387 [HikariPool-1 housekeeper] WARN  com.zaxxer.hikari.pool.HikariPool - HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=21m17s315ms540µs).
