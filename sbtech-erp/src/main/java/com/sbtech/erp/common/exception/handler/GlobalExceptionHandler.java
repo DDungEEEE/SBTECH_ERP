@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     protected ResponseEntity<ErrorResponse> handleBusinessException(CustomException ex){
         ErrorCode errorCode = ex.getErrorCode();
         ErrorResponse errorResponse = new ErrorResponse(errorCode);
-        log.error("CustomException: {} - {}", errorCode.getDivisionCode(), errorCode.getReason());
+        log.warn("비즈니스 예외 발생 : {}", errorCode.getReason(), ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
     }
 

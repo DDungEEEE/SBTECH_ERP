@@ -21,7 +21,7 @@
     </appender>
 
     <!-- 🔹 로그 레벨 및 Appender 지정 -->
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="CONSOLE"/>
         <appender-ref ref="FILE"/>
     </root>

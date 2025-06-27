@@ -31,11 +31,9 @@ management:
       exposure:
         include: "*"
 
-#logging:
-#  level:
-#    org.springframework.security: ERROR
-#    org.springframework.client.RestTemplate: DEBUG
-#    org.springframework.web.reactive.function.client: DEBUG
+logging:
+  level:
+    root: warn
 
 
 server:
