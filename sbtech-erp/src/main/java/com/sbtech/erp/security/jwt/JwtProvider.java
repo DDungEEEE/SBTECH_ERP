@@ -1,4 +1,4 @@
-package com.sbtech.erp.security;
+package com.sbtech.erp.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.security.Key;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Base64;
 import java.util.Date;
@@ -47,18 +48,16 @@ public class JwtProvider {
     }
 
     public String generateAccessToken(String loginId){
-        log.info("{} ------------  AccessToken Generation", loginId);
-        Instant now = Instant.now();
-        long ACCESS_TOKEN_EXPIRED = 20 * 60 * 1000L;
-        Instant expiredTime = now.plusMillis(ACCESS_TOKEN_EXPIRED);
+        long ACCESS_TOKEN_EXPIRED = 30 * 60 * 1000L;
 
-        return Jwts.builder()
-                .setSubject(loginId)
-                .setIssuedAt(Date.from(now))
-                .setExpiration(Date.from(expiredTime))
-                .signWith(key, signatureAlgorithm)
-                .compact();
+       return createToken(loginId, ACCESS_TOKEN_EXPIRED);
     }
+    public String generateRefreshToken(String loginId){
+        long ACCESS_TOKEN_EXPIRED =  24 * 60 * 60 * 1000L;
+
+        return createToken(loginId, ACCESS_TOKEN_EXPIRED);
+    }
+
 
     // req Header 에서 jwt Token 추출
     public String getJwtToken(HttpServletRequest req){
@@ -75,9 +74,28 @@ public class JwtProvider {
         try{
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
         }catch (ExpiredJwtException e){
-            log.info("token 재발급 요청");
             throw e;
         }
     }
+
+    private String createToken(String loginId, long expiredTime) {
+        Instant now = Instant.now();
+        Instant expirationTime = now.plusMillis(expiredTime);
+
+        return Jwts.builder()
+                .setSubject(loginId)
+                .setIssuedAt(Date.from(now))
+                .setExpiration(Date.from(expirationTime))
+                .signWith(key, signatureAlgorithm)
+                .compact();
+    }
+
+    public Duration getRefreshTokenTtl() {
+        return Duration.ofDays(1);
+    }
+    public Duration getAccessTokenTtl() {
+        return Duration.ofMinutes(30);
+    }
+
 
 }

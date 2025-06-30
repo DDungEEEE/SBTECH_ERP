@@ -24,40 +24,88 @@ repositories {
 }
 
 dependencies {
+	// JPA 사용을 위한 스타터
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-actuator'
-	// logstash를 위한 의존성
-	implementation	"net.logstash.logback:logstash-logback-encoder:7.4"
 
+// 타임리프 템플릿 엔진
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+
+// 애플리케이션 모니터링용 액추에이터
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+// Logstash 로그 포맷 인코더
+	implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+// JSON 직렬화/역직렬화용 Gson
 	implementation 'com.google.code.gson:gson:2.8.6'
+
+// JSON 파싱 및 생성용 org.json 라이브러리
 	implementation 'org.json:json:20240303'
+
+// Redis 데이터 접근
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+// Redis 기반 세션 저장소
+	implementation 'org.springframework.session:spring-session-data-redis'
+
+// Spring Cache 지원
+	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+// Spring MVC, REST 지원
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+
+// Bean Validation 지원
 	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+// AOP 기능 지원
 	implementation 'org.springframework.boot:spring-boot-starter-aop'
+
+// Spring Security 기본 설정
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+// Lombok 컴파일 시에만 필요
 	compileOnly 'org.projectlombok:lombok'
+
+// MySQL JDBC 드라이버
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
-	//Swwager Docs사용
+// Swagger UI 및 OpenAPI 문서화
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0"
+
+// Jackson JSON 처리 핵심 라이브러리
 	implementation 'com.fasterxml.jackson.core:jackson-core:2.18.3'
 
-	implementation 'me.paulschwarz:spring-dotenv:3.0.0' //env 파일 사용
+// .env 파일을 통한 환경 변수 로딩
+	implementation 'me.paulschwarz:spring-dotenv:3.0.0'
 
+// QueryDSL JPA 지원
 	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+
+// QueryDSL 코드 생성기
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 
+// Lombok 어노테이션 처리기
 	annotationProcessor 'org.projectlombok:lombok'
+
+// Jakarta 어노테이션 API
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
+// Jakarta JPA API
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-	compileOnly group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
-	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
-	//jwt 사용
+// JWT API (컴파일 시 필요)
+	compileOnly 'io.jsonwebtoken:jjwt-api:0.11.5'
 
+// JWT 구현체 (실행 시 필요)
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+
+// JWT 처리 시 Jackson 사용
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+
+// JUnit 테스트 런처 (테스트 실행용)
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+
 }
 
 tasks.named('test') {

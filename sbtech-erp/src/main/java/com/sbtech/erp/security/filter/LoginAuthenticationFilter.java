@@ -1,16 +1,16 @@
 package com.sbtech.erp.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sbtech.erp.auth.adapter.in.dto.JwtToken;
+import com.sbtech.erp.auth.application.port.out.RefreshTokenPort;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.response.ErrorResponse;
 import com.sbtech.erp.employee.adapter.out.dto.EmployeeResDto;
 import com.sbtech.erp.employee.domain.model.Employee;
 import com.sbtech.erp.employee.mapper.EmployeeMapper;
-import com.sbtech.erp.security.JwtProvider;
-import com.sbtech.erp.security.JwtToken;
+import com.sbtech.erp.security.jwt.JwtProvider;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
-import com.sbtech.erp.security.user.UserLoginDto;
-import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.auth.adapter.in.dto.UserLoginDto;
 import com.sbtech.erp.util.ResponseWrapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -23,7 +23,6 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
@@ -33,6 +32,7 @@ import java.io.IOException;
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtProvider jwtProvider;
     private final ResponseWrapper responseWrapper;
+    private final RefreshTokenPort refreshTokenPort;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -57,7 +57,12 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         EmployeeUserDetails userDetails = (EmployeeUserDetails) authentication.getPrincipal();
 
         Employee employee = EmployeeMapper.toDomain(userDetails.getEmployeeEntity());
+
         String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
+        String refreshToken = jwtProvider.generateRefreshToken(employee.getLoginId());
+
+        // refreshToken Redis에 저장
+        refreshTokenPort.save(employee.getLoginId(), refreshToken, jwtProvider.getRefreshTokenTtl());
 
         JwtToken jwtToken = JwtToken.builder()
                 .accessToken(accessToken)
@@ -73,6 +78,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
         ErrorCode errorCode = ErrorCode.USER_NOT_FOUND_ERROR;
 
+        // 승인되지 않은 사용자일 경우
         if(failed instanceof DisabledException) {
             errorCode = ErrorCode.USER_NOT_APPROVAL_ERROR;
         }

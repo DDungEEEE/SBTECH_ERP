@@ -1,5 +1,6 @@
-package com.sbtech.erp.security;
+package com.sbtech.erp.security.config;
 
+import com.sbtech.erp.security.jwt.JwtProvider;
 import com.sbtech.erp.security.filter.JwtAuthenticationFilter;
 import com.sbtech.erp.security.filter.LoginAuthenticationFilter;
 import com.sbtech.erp.security.user.EmployeeUserDetailsService;
@@ -20,11 +21,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor

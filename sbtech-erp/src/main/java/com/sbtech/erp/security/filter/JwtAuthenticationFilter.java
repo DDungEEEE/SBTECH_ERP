@@ -2,7 +2,7 @@ package com.sbtech.erp.security.filter;
 
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.response.ErrorResponse;
-import com.sbtech.erp.security.JwtProvider;
+import com.sbtech.erp.security.jwt.JwtProvider;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import com.sbtech.erp.security.user.EmployeeUserDetailsService;
 import com.sbtech.erp.util.ResponseWrapper;
@@ -17,7 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
