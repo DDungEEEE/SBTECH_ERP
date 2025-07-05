@@ -58,6 +58,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
 
         Employee employee = EmployeeMapper.toDomain(userDetails.getEmployeeEntity());
 
+        // ID, PASSWORD 기반 로그인 시 토큰 초기화
         String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
         String refreshToken = jwtProvider.generateRefreshToken(employee.getLoginId());
 

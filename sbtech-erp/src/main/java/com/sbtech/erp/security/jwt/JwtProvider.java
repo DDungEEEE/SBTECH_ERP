@@ -64,6 +64,7 @@ public class JwtProvider {
         String authorizationHeader = "Authorization";
         String bearerToken = req.getHeader(authorizationHeader);
         String BEARER = "Bearer ";
+
         if(StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER)){
             return bearerToken.substring(7);
         }
@@ -76,6 +77,11 @@ public class JwtProvider {
         }catch (ExpiredJwtException e){
             throw e;
         }
+    }
+
+    public String getLoginIdFromToken(String token) {
+        Claims claims = getClaims(token);
+        return claims.getSubject();
     }
 
     private String createToken(String loginId, long expiredTime) {

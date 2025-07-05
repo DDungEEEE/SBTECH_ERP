@@ -1,5 +1,6 @@
 package com.sbtech.erp.security.config;
 
+import com.sbtech.erp.auth.application.port.out.RefreshTokenPort;
 import com.sbtech.erp.security.jwt.JwtProvider;
 import com.sbtech.erp.security.filter.JwtAuthenticationFilter;
 import com.sbtech.erp.security.filter.LoginAuthenticationFilter;
@@ -31,6 +32,7 @@ public class SecurityConfig {
     private final ResponseWrapper responseWrapper;
     private final AuthenticationConfiguration authenticationConfiguration;
     private final EmployeeUserDetailsService employeeUserDetailsService;
+    private final RefreshTokenPort refreshTokenPort;
 
     @Bean
     public AuthenticationManager authenticationManager() throws Exception {
@@ -44,7 +46,7 @@ public class SecurityConfig {
 
     @Bean
     public LoginAuthenticationFilter loginAuthenticationFilter(AuthenticationManager authenticationManager){
-        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(jwtProvider, responseWrapper);
+        LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(jwtProvider, responseWrapper, refreshTokenPort);
 
         loginAuthenticationFilter.setAuthenticationManager(authenticationManager);
         loginAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
