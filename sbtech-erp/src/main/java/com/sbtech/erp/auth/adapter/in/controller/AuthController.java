@@ -25,6 +25,7 @@ public class AuthController {
     private final JwtProvider jwtProvider;
     private final RefreshTokenPort refreshTokenPort;
 
+
     /**
      * 실제로 사용하진 않지만 Swagger 명세화를 위한 Controller
      */
@@ -70,25 +71,7 @@ public class AuthController {
     public ResponseEntity<JwtToken> reissueToken(@RequestBody TokenReissueReq req){
         String refreshToken = req.refreshToken();
 
-        // refreshToken 검증
-        if(!jwtProvider.validToken(refreshToken)){
-            throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
-        }
-
-        String loginId = jwtProvider.getLoginIdFromToken(refreshToken);
-        String findRefreshToken = refreshTokenPort.get(loginId);
-
-        // refreshToken이 존재하는지 검증
-        if(findRefreshToken.isEmpty() || !findRefreshToken.equals(refreshToken)){
-            log.error("리프레시 토큰이 존재하지 않거나 일치하지 않습니다.");
-            throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
-        }
-
-        String newAccessToken = jwtProvider.generateAccessToken(loginId);
-        String newRefreshToken = jwtProvider.generateRefreshToken(loginId);
-
-        refreshTokenPort.save(loginId, newRefreshToken, jwtProvider.getRefreshTokenTtl());
-
+     refreshTokenS
         return ResponseEntity.ok()
                 .body(JwtToken.builder()
                         .accessToken(newAccessToken)
