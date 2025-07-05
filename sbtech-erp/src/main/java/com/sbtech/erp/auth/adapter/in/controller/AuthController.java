@@ -9,13 +9,14 @@ import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.security.jwt.JwtProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "사욪아 인증 컨트롤러", description = "실제 로그인 요청은 Filter 딴에서 처리하지만, Swagger 명세용 Controller")
+@Tag(name = "사욪아 인증 컨트롤러")
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
@@ -42,10 +43,34 @@ public class AuthController {
         return JwtToken.builder().accessToken("asd").build();
     }
 
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest req) {
+
+        String token = jwtProvider.getJwtToken(req);
+
+        // accessToken 검증
+        if (!jwtProvider.validToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
+        }
+
+        // BlackList 에 추가하기 위해 토큰에서 로그인 아이디 추출
+        String loginId = jwtProvider.getLoginIdFromToken(token);
+
+        // 리프레시 토큰 삭제
+        refreshTokenPort.delete(loginId);
+
+        //
+        long remainingValidity = jwtProvider.getRemainingValidity(token);
+        refreshTokenPort.addToBlacklist(token, remainingValidity);
+
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/reissue")
     public ResponseEntity<JwtToken> reissueToken(@RequestBody TokenReissueReq req){
         String refreshToken = req.refreshToken();
 
+        // refreshToken 검증
         if(!jwtProvider.validToken(refreshToken)){
             throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
         }
@@ -53,22 +78,21 @@ public class AuthController {
         String loginId = jwtProvider.getLoginIdFromToken(refreshToken);
         String findRefreshToken = refreshTokenPort.get(loginId);
 
-        if(findRefreshToken.isEmpty()){
-            log.error("리프레시 토큰이 존재하지 않습니다.");
+        // refreshToken이 존재하는지 검증
+        if(findRefreshToken.isEmpty() || !findRefreshToken.equals(refreshToken)){
+            log.error("리프레시 토큰이 존재하지 않거나 일치하지 않습니다.");
             throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
         }
 
-        if(!findRefreshToken.equals(refreshToken)){
-            log.error("리프레시 토큰이 일치하지 않습니다.");
-            throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
-        }
+        String newAccessToken = jwtProvider.generateAccessToken(loginId);
+        String newRefreshToken = jwtProvider.generateRefreshToken(loginId);
 
-        String accessToken = jwtProvider.generateAccessToken(loginId);
+        refreshTokenPort.save(loginId, newRefreshToken, jwtProvider.getRefreshTokenTtl());
 
         return ResponseEntity.ok()
                 .body(JwtToken.builder()
-                        .accessToken(accessToken)
-                        .refreshToken(refreshToken)
+                        .accessToken(newAccessToken)
+                        .refreshToken(newRefreshToken)
                         .build());
 
 

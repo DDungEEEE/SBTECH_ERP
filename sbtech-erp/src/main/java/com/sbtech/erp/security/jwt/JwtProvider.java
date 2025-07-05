@@ -79,6 +79,12 @@ public class JwtProvider {
         }
     }
 
+    public long getRemainingValidity(String token){
+        Claims claims = getClaims(token);
+        Date expiration = claims.getExpiration();
+        return expiration.getTime() - System.currentTimeMillis();
+    }
+
     public String getLoginIdFromToken(String token) {
         Claims claims = getClaims(token);
         return claims.getSubject();

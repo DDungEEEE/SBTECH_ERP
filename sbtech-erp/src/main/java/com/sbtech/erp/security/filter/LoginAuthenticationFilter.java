@@ -52,38 +52,42 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         }
     }
 
+    // 로그인 성공 시 수행할 Logic
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
         EmployeeUserDetails userDetails = (EmployeeUserDetails) authentication.getPrincipal();
 
         Employee employee = EmployeeMapper.toDomain(userDetails.getEmployeeEntity());
 
-        // ID, PASSWORD 기반 로그인 시 토큰 초기화
+        JwtToken jwtToken = createAndStoreTokens(employee);
+
+        responseWrapper.convertObjectToResponse(response, jwtToken);
+    }
+
+    private JwtToken createAndStoreTokens(Employee employee) {
         String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
         String refreshToken = jwtProvider.generateRefreshToken(employee.getLoginId());
 
-        // refreshToken Redis에 저장
         refreshTokenPort.save(employee.getLoginId(), refreshToken, jwtProvider.getRefreshTokenTtl());
 
-        JwtToken jwtToken = JwtToken.builder()
+        return JwtToken.builder()
                 .accessToken(accessToken)
                 .employee(EmployeeResDto.from(employee))
                 .build();
-
-        responseWrapper.convertObjectToResponse(response, jwtToken);
     }
 
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
         log.error("로그인 실패: {}", failed.getMessage());
 
-        ErrorCode errorCode = ErrorCode.USER_NOT_FOUND_ERROR;
+        // 관리자에게 승인 되지 않았을 시 -> 승인 대기 중 or 사용자 불일치 예외 발생
+        ErrorCode errorCode = (failed instanceof DisabledException)
+                ? ErrorCode.USER_NOT_APPROVAL_ERROR
+                : ErrorCode.USER_NOT_FOUND_ERROR;
 
-        // 승인되지 않은 사용자일 경우
-        if(failed instanceof DisabledException) {
-            errorCode = ErrorCode.USER_NOT_APPROVAL_ERROR;
-        }
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         responseWrapper.convertObjectToResponse(response, new ErrorResponse(errorCode));
     }
+
+
 }
