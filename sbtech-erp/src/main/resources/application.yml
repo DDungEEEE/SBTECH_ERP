@@ -14,17 +14,23 @@ spring:
   config:
     import: "optional:file:.env"
   datasource:
-    url: ${MYSQL_URL}
-    username: ${MYSQL_USERNAME}
-    password: ${MYSQL_PASSWORD}
-    driver-class-name: com.mysql.cj.jdbc.Driver
-
+      url: ${MYSQL_URL}
+      username: ${MYSQL_USERNAME}
+      password: ${MYSQL_PASSWORD}
+      driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     open-in-view: false
     show-sql: true
     hibernate:
       ddl-auto: none
+
+external-datasource:
+    url: ${MSSQL_EXTERNAL_URL}
+    username: ${MSSQL_EXTERNAL_USERNAME}
+    password: ${MSSQL_EXTERNAL_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
 management:
   endpoints:
     web:
