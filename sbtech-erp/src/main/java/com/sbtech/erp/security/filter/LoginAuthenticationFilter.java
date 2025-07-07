@@ -2,7 +2,7 @@ package com.sbtech.erp.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sbtech.erp.auth.adapter.in.dto.JwtToken;
-import com.sbtech.erp.auth.application.port.out.RefreshTokenPort;
+import com.sbtech.erp.auth.application.port.in.RefreshTokenUseCase;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.response.ErrorResponse;
 import com.sbtech.erp.employee.adapter.out.dto.EmployeeResDto;
@@ -32,7 +32,7 @@ import java.io.IOException;
 public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtProvider jwtProvider;
     private final ResponseWrapper responseWrapper;
-    private final RefreshTokenPort refreshTokenPort;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
@@ -68,7 +68,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         String accessToken = jwtProvider.generateAccessToken(employee.getLoginId());
         String refreshToken = jwtProvider.generateRefreshToken(employee.getLoginId());
 
-        refreshTokenPort.save(employee.getLoginId(), refreshToken, jwtProvider.getRefreshTokenTtl());
+        refreshTokenUseCase.save(employee.getLoginId(), refreshToken);
 
         return JwtToken.builder()
                 .accessToken(accessToken)

@@ -1,5 +1,6 @@
 package com.sbtech.erp.security.filter;
 
+import com.sbtech.erp.auth.application.port.in.AccessTokenUseCase;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.response.ErrorResponse;
 import com.sbtech.erp.security.jwt.JwtProvider;
@@ -27,6 +28,7 @@ import java.io.IOException;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
     private final ResponseWrapper responseWrapper;
+    private final AccessTokenUseCase accessTokenUseCase;
     private final EmployeeUserDetailsService employeeUserDetailsService;
 
     @Override
@@ -43,6 +45,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             // JWT 토큰을 가져오고 유효성 검사
             String token = jwtProvider.getJwtToken(request);
             if(validateToken(token, response)){
+                return;
+            }
+
+            if(accessTokenUseCase.isBlacklisted(token)) {
+                handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
                 return;
             }
 

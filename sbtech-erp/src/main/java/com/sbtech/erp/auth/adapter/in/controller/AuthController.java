@@ -3,7 +3,8 @@ package com.sbtech.erp.auth.adapter.in.controller;
 import com.sbtech.erp.auth.adapter.in.dto.TokenReissueReq;
 import com.sbtech.erp.auth.adapter.in.dto.UserLoginDto;
 import com.sbtech.erp.auth.adapter.in.dto.JwtToken;
-import com.sbtech.erp.auth.application.port.out.RefreshTokenPort;
+import com.sbtech.erp.auth.application.port.in.AccessTokenUseCase;
+import com.sbtech.erp.auth.application.port.in.RefreshTokenUseCase;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.security.jwt.JwtProvider;
@@ -23,7 +24,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class AuthController {
     private final JwtProvider jwtProvider;
-    private final RefreshTokenPort refreshTokenPort;
+    private final RefreshTokenUseCase refreshTokenUseCase;
+    private final AccessTokenUseCase accessTokenUseCase;
 
 
     /**
@@ -47,31 +49,37 @@ public class AuthController {
     @PostMapping("/logout")
     public ResponseEntity<Void> logout(HttpServletRequest req) {
 
-        String token = jwtProvider.getJwtToken(req);
-
-        // accessToken 검증
-        if (!jwtProvider.validToken(token)) {
-            throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
-        }
-
-        // BlackList 에 추가하기 위해 토큰에서 로그인 아이디 추출
-        String loginId = jwtProvider.getLoginIdFromToken(token);
-
-        // 리프레시 토큰 삭제
-        refreshTokenPort.delete(loginId);
-
-        //
-        long remainingValidity = jwtProvider.getRemainingValidity(token);
-        refreshTokenPort.addToBlacklist(token, remainingValidity);
+        String accessToken = jwtProvider.getJwtToken(req);
+        accessTokenUseCase.addBlacklist(accessToken);
+        refreshTokenUseCase.delete(jwtProvider.getLoginIdFromToken(accessToken));
 
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/reissue")
-    public ResponseEntity<JwtToken> reissueToken(@RequestBody TokenReissueReq req){
-        String refreshToken = req.refreshToken();
+    @PostMapping("/reissue")
+    public ResponseEntity<JwtToken> reissueToken(@RequestBody TokenReissueReq tokenReq, HttpServletRequest req){
+        String refreshToken = tokenReq.refreshToken();
 
-     refreshTokenS
+        String expiredAccessToken = jwtProvider.getJwtToken(req);
+
+        if (!jwtProvider.validToken(refreshToken)) {
+            throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
+        }
+
+        String loginId = jwtProvider.getLoginIdFromToken(refreshToken);
+
+        String newRefreshToken = refreshTokenUseCase.reissue(loginId, refreshToken);
+
+        // 기존의 리프레시 토큰 삭제
+        refreshTokenUseCase.delete(loginId);
+        // 새로운 리프레시 토큰 저장
+        refreshTokenUseCase.save(loginId, newRefreshToken);
+
+        accessTokenUseCase.addBlacklist(expiredAccessToken);
+        // 액세스 토큰 재발급
+        String newAccessToken = jwtProvider.generateAccessToken(loginId);
+
+
         return ResponseEntity.ok()
                 .body(JwtToken.builder()
                         .accessToken(newAccessToken)

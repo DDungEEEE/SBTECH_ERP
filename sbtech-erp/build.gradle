@@ -102,6 +102,7 @@ dependencies {
 // JWT 처리 시 Jackson 사용
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 // JUnit 테스트 런처 (테스트 실행용)
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 

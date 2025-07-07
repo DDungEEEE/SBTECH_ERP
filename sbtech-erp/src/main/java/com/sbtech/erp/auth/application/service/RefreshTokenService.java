@@ -1,7 +1,7 @@
 package com.sbtech.erp.auth.application.service;
 
-import com.sbtech.erp.auth.adapter.in.dto.JwtToken;
-import com.sbtech.erp.auth.application.port.out.RefreshTokenPort;
+import com.sbtech.erp.auth.application.port.in.RefreshTokenUseCase;
+import com.sbtech.erp.auth.application.port.out.TokenRepository;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.security.jwt.JwtProvider;
@@ -9,34 +9,47 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class RefreshTokenService {
+public class RefreshTokenService implements RefreshTokenUseCase {
     private final JwtProvider jwtProvider;
-    private final RefreshTokenPort refreshTokenPort;
+    private final TokenRepository tokenRepository;
+    private static final String REFRESH_TOKEN_KEY_PREFIX = "refreshToken:";
 
-    public JwtToken reissue(String refreshToken) {
+    @Override
+    public String reissue(String loginId, String refreshToken) {
+
         if (!jwtProvider.validToken(refreshToken)) {
             throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
         }
 
-        String loginId = jwtProvider.getLoginIdFromToken(refreshToken);
-        String savedToken = refreshTokenPort.get(loginId);
+        String key = REFRESH_TOKEN_KEY_PREFIX + loginId;
+        Optional<String> savedTokenOptional = tokenRepository.get(key);
 
-        if (savedToken == null || !savedToken.equals(refreshToken)) {
+        if (savedTokenOptional.isEmpty() || !savedTokenOptional.get().equals(refreshToken)) {
             log.warn("리프레시 토큰 불일치: {}", loginId);
             throw new CustomException(ErrorCode.INVALID_TOKEN_ERROR);
         }
 
-        String newAccessToken = jwtProvider.generateAccessToken(loginId);
-        String newRefreshToken = jwtProvider.generateRefreshToken(loginId);
+        return jwtProvider.generateRefreshToken(loginId);
+    }
 
-        refreshTokenPort.save(loginId, newRefreshToken, jwtProvider.getRefreshTokenTtl());
+    @Override
+    public void save(String loginId, String refreshToken) {
+        String key = REFRESH_TOKEN_KEY_PREFIX + loginId;
 
-        return JwtToken.builder()
-                .accessToken(newAccessToken)
-                .refreshToken(newRefreshToken)
-                .build();}
+        tokenRepository.save(key, refreshToken, jwtProvider.getRefreshTokenTtl());
+    }
+
+
+    @Override
+    public void delete(String loginId) {
+        String key = REFRESH_TOKEN_KEY_PREFIX + loginId;
+        tokenRepository.delete(key);
+    }
+
 }
