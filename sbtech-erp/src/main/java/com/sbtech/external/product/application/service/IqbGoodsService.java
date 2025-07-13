@@ -1,8 +1,9 @@
-package com.sbtech.erp.product.application.service;
+package com.sbtech.external.product.application.service;
 
-import com.sbtech.erp.product.adapter.out.persistence.entity.IqbGoods;
-import com.sbtech.erp.product.adapter.out.persistence.repository.IqbGoodsJpaRepository;
-import com.sbtech.erp.product.application.port.IqbGoodsUseCase;
+
+import com.sbtech.external.product.adapter.out.persistence.entity.IqbGoods;
+import com.sbtech.external.product.adapter.out.persistence.repository.IqbGoodsJpaRepository;
+import com.sbtech.external.product.application.port.IqbGoodsUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;

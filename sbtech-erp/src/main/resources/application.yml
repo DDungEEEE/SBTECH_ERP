@@ -1,46 +1,34 @@
 spring:
   application:
     name: sbtech_erp
-  mvc:
-    view:
-      suffix: .html
-
-  thymeleaf:
-    cache: false
-    enabled: true
-  #    prefix: classpath:/templates/
-#    check-template-location: true
-#    suffix: .html
   config:
     import: "optional:file:.env"
   datasource:
+    primary:
       url: ${MYSQL_URL}
       username: ${MYSQL_USERNAME}
       password: ${MYSQL_PASSWORD}
       driver-class-name: com.mysql.cj.jdbc.Driver
-  jpa:
-    database-platform: org.hibernate.dialect.MySQL8Dialect
-    open-in-view: false
-    show-sql: true
-    hibernate:
-      ddl-auto: none
+    external:
+      url: ${MSSQL_EXTERNAL_URL}
+      username: ${MSSQL_EXTERNAL_USERNAME}
+      password: ${MSSQL_EXTERNAL_PASSWORD}
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+#  jpa:
+#    database-platform: org.hibernate.dialect.MySQL8Dialect
+#    open-in-view: false
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: none
 
-external-datasource:
-    url: ${MSSQL_EXTERNAL_URL}
-    username: ${MSSQL_EXTERNAL_USERNAME}
-    password: ${MSSQL_EXTERNAL_PASSWORD}
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
 management:
   endpoints:
     web:
       exposure:
         include: "*"
-
 logging:
   level:
-    root: warn
-
-
+    root: info
 server:
   port: 30300

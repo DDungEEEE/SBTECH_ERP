@@ -67,10 +67,10 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 
 // MySQL JDBC 드라이버
-	runtimeOnly 'com.mysql:mysql-connector-j'
+	implementation 'com.mysql:mysql-connector-j'
 
 // MSSQL JDBC 드라이버
-	runtimeOnly 'com.microsoft.sqlserver:mssql-jdbc:12.6.1'
+	implementation 'com.microsoft.sqlserver:mssql-jdbc:12.6.0.jre11'
 
 // Swagger UI 및 OpenAPI 문서화
 	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0"

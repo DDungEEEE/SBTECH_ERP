@@ -1,6 +1,9 @@
-package com.sbtech.erp.common.config.external;
+package com.sbtech.external;
 
-import jakarta.persistence.EntityManagerFactory;
+import com.zaxxer.hikari.HikariDataSource;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
@@ -11,24 +14,41 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import javax.inject.Qualifier;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
 
 @Configuration
 @EnableJpaRepositories(
-        basePackages = "com.sbtech.erp.product.adapter.out.persistence.repository",
+        basePackages = "com.sbtech.external.product.adapter.out.persistence.repository",
         entityManagerFactoryRef = "externalEntityManagerFactory",
         transactionManagerRef = "externalTransactionManager"
 )
 public class ExternalDataSourceConfig {
+    @Value("${spring.datasource.external.url}")
+    private String url;
+
+    @Value("${spring.datasource.external.username}")
+    private String username;
+
+    @Value("${spring.datasource.external.password}")
+    private String password;
+
+    @Value("${spring.datasource.external.driver-class-name}")
+    private String driver;
+
 
     @Bean(name = "externalDataSource")
-    @ConfigurationProperties(prefix = "external-datasource")
     public DataSource externalDataSource() {
-        return DataSourceBuilder.create().build();
+        System.out.println(url);
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setJdbcUrl(url);
+        dataSource.setUsername(username);
+        dataSource.setPassword(password);
+        dataSource.setDriverClassName(driver);
+        return dataSource;
     }
+
 
     @Bean(name = "externalEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean externalEntityManagerFactory(
@@ -36,13 +56,14 @@ public class ExternalDataSourceConfig {
     ) {
         LocalContainerEntityManagerFactoryBean emf = new LocalContainerEntityManagerFactoryBean();
         emf.setDataSource(externalDataSource);
-        emf.setPackagesToScan("com.example.external.entity");
+        emf.setPackagesToScan("com.sbtech.external.product.adapter.out.persistence.entity");
         emf.setPersistenceUnitName("external");
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.hbm2ddl.auto", "none");
         properties.put("hibernate.dialect", "org.hibernate.dialect.SQLServerDialect");
+        properties.put("show-sql", "true");
         emf.setJpaPropertyMap(properties);
 
         return emf;

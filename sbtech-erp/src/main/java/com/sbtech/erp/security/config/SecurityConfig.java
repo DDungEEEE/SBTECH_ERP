@@ -76,7 +76,8 @@ public class SecurityConfig {
                                                 "/v3/api-docs/**",
                                                 "/v3/api-docs.yaml",
                                                 "/swagger-resources/**",
-                                                "/webjars/**"
+                                                "/webjars/**",
+                                                "/api/v1/external/**" // 외부 API 접근 허용
                                         ).permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/api/v1/employee/register").permitAll()

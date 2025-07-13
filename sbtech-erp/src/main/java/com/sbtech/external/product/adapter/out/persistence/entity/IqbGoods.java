@@ -1,10 +1,16 @@
-package com.sbtech.erp.product.adapter.out.persistence.entity;
+package com.sbtech.external.product.adapter.out.persistence.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "IQB_GOODS")
 public class IqbGoods {
     @Id
@@ -22,4 +28,8 @@ public class IqbGoods {
     // 상품 이름
     private String NM_GOODS;
 
+    private String CD_GOODS_GROUP;
+
+    private String NM_GOODS_GROUP;
+    private String CD_GOODS_TYPE;
 }

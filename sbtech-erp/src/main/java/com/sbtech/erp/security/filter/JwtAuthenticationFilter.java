@@ -104,6 +104,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || uri.startsWith("/swagger-resources")
                 || uri.startsWith("/webjars")
                 || uri.equals("/swagger-ui.html")
-                || uri.equals("/favicon.ico");
+                || uri.equals("/favicon.ico")
+                || uri.startsWith("/api/v1/external");
     }
 }
