@@ -1,13 +1,11 @@
-package com.sbtech.erp;
+package com.sbtech;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-@SpringBootApplication(scanBasePackages = {
-		"com.sbtech"
-})
+@SpringBootApplication
 @EnableScheduling
 @Import(com.sbtech.external.ExternalDataSourceConfig.class)
 public class SbtechErpApplication {

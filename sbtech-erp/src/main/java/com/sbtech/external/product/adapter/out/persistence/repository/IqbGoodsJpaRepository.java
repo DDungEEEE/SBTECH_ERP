@@ -9,5 +9,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IqbGoodsJpaRepository extends JpaRepository<IqbGoods, Integer> {
+
     Page<IqbGoods> findAll(Pageable pageable);
 }

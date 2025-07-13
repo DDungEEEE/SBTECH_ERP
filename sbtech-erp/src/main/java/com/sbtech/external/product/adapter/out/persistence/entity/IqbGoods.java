@@ -28,8 +28,4 @@ public class IqbGoods {
     // 상품 이름
     private String NM_GOODS;
 
-    private String CD_GOODS_GROUP;
-
-    private String NM_GOODS_GROUP;
-    private String CD_GOODS_TYPE;
 }
