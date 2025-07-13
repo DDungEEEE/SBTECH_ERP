@@ -6,8 +6,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication(scanBasePackages = {
-		"com.sbtech.erp",
-		"com.sbtech.external"
+		"com.sbtech"
 })
 @EnableScheduling
 @Import(com.sbtech.external.ExternalDataSourceConfig.class)
