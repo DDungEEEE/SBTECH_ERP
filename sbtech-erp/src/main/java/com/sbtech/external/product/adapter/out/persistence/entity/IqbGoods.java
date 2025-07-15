@@ -27,5 +27,4 @@ public class IqbGoods {
 
     // 상품 이름
     private String NM_GOODS;
-
-}
+    }

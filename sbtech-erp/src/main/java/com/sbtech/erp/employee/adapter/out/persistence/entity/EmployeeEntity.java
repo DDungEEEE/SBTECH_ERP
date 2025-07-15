@@ -44,7 +44,7 @@ public class EmployeeEntity extends BaseTimeEntity {
     @JoinColumn(name = "department_id")
     private DepartmentEntity department;
 
-    @Column
+    @Column(name = "system_role")
     @Enumerated(EnumType.STRING)
     private SystemRole systemRole;
 

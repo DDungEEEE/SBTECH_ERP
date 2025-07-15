@@ -73,6 +73,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
         return JwtToken.builder()
                 .accessToken(accessToken)
                 .employee(EmployeeResDto.from(employee))
+                .refreshToken(refreshToken)
                 .build();
     }
 
