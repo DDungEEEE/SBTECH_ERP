@@ -64,12 +64,12 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, LoginAuthenticationFilter loginAuthenticationFilter) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(Customizer.withDefaults())
+//                .cors(Customizer.withDefaults())
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequest ->
                                 authorizeRequest
-                                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
+//                                        .requestMatchers(HttpMethod.OPTIONS,"/**").permitAll()
                                         .requestMatchers(
                                                 "/swagger-ui.html",
                                                 "/swagger-ui/**",

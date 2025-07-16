@@ -44,34 +44,34 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // JWT 토큰을 가져오고 유효성 검사
             String token = jwtProvider.getJwtToken(request);
-            if(validateToken(token, response)){
-                return;
-            }
+            
+
+            validateToken(token, response);
 
             if(accessTokenUseCase.isBlacklisted(token)) {
                 handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
                 return;
             }
-
             // 토큰에서 클레임을 가져와 인증 설정
             Claims claims = jwtProvider.getClaims(token);
+            System.out.println(claims.getSubject());
+
             setAuthentication(claims.getSubject());
+
             filterChain.doFilter(request, response);
 
         } catch (Exception ex) {
             // 예외 발생 시 처리
-            log.error("JwtAuthentication Exception : {}", ex.getMessage());
+            log.error("JwtAuthentication Exception : {}", ex);
             handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
         }
     }
 
     // 토큰 유효성 검사
-    private boolean validateToken(String token, HttpServletResponse response) throws IOException {
+    private void validateToken(String token, HttpServletResponse response) throws IOException {
         if (token == null || !jwtProvider.validToken(token)) {
             handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
-            return false;
         }
-        return true;
     }
 
     // 특정 요청 URI를 필터링에서 제외

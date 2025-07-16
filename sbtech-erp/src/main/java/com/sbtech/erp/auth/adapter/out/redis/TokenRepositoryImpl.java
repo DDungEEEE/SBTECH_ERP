@@ -21,7 +21,7 @@ public class TokenRepositoryImpl implements TokenRepository {
     @Override
     public Optional<String> get(String key) {
         String value = redisTemplate.opsForValue().get(key);
-        return Optional.of(value);
+        return Optional.ofNullable(value);
     }
 
     @Override
