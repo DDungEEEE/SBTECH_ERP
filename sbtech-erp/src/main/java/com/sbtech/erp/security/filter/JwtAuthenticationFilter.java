@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             // JWT 토큰을 가져오고 유효성 검사
             String token = jwtProvider.getJwtToken(request);
-            
+
 
             validateToken(token, response);
 

@@ -24,8 +24,8 @@ public class RedisConfig {
     @Value("${REDIS_PORT}")
     private int port;
 
-    @Value("${REDIS_PASSWORD}")
-    private String password;
+//    @Value("${REDIS_PASSWORD}")
+//    private String password;
 
 
     @Bean
@@ -33,7 +33,7 @@ public class RedisConfig {
         RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
         config.setHostName(host);
         config.setPort(port);
-        config.setPassword(RedisPassword.of(password));
+//        config.setPassword(password);
 
         return new LettuceConnectionFactory(config);
     }
