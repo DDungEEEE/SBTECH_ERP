@@ -46,44 +46,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             String token = jwtProvider.getJwtToken(request);
 
 
-            validateToken(token, response);
+            if (token == null || !jwtProvider.validToken(token)) {
+                handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
+                return;
+            }
 
             if(accessTokenUseCase.isBlacklisted(token)) {
                 handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
                 return;
             }
-            // 토큰에서 클레임을 가져와 인증 설정
-            Claims claims = jwtProvider.getClaims(token);
-            System.out.println(claims.getSubject());
+            try {
+                Claims claims = jwtProvider.getClaims(token);
+                setAuthentication(claims.getSubject());
+            } catch (Exception e) {
+                handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
+                return;
+            }
 
-            setAuthentication(claims.getSubject());
 
             filterChain.doFilter(request, response);
 
         } catch (Exception ex) {
             // 예외 발생 시 처리
-            log.error("JwtAuthentication Exception : {}", ex);
-            handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
-        }
-    }
-
-    // 토큰 유효성 검사
-    private void validateToken(String token, HttpServletResponse response) throws IOException {
-        if (token == null || !jwtProvider.validToken(token)) {
             handleException(response, ErrorCode.INVALID_TOKEN_ERROR);
         }
     }
 
     // 특정 요청 URI를 필터링에서 제외
     private boolean isExcludedRequest(String requestURI) {
-        return "/api/v1/auth/login".equals(requestURI)
+        return "/erp/api/v1/auth/login".equals(requestURI)
                 || isSwaggerRequest(requestURI)
-                || "/api/v1/employee/register".equals(requestURI)
+                || "/erp/api/v1/employee/register".equals(requestURI)
                 || requestURI.startsWith("/actuator");
     }
 
     // 예외 처리 메서드
     private void handleException(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        if(response.isCommitted()){
+            return;
+        }
         ErrorResponse errorResponse = new ErrorResponse(errorCode);
         response.setStatus(HttpStatus.FORBIDDEN.value());
         responseWrapper.convertObjectToResponse(response, errorResponse);

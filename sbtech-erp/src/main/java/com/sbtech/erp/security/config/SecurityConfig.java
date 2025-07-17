@@ -55,7 +55,7 @@ public class SecurityConfig {
             LoginAuthenticationFilter loginAuthenticationFilter = new LoginAuthenticationFilter(jwtProvider, responseWrapper, refreshTokenUseCase);
 
         loginAuthenticationFilter.setAuthenticationManager(authenticationManager);
-        loginAuthenticationFilter.setFilterProcessesUrl("/api/v1/auth/login");
+        loginAuthenticationFilter.setFilterProcessesUrl("/erp/api/v1/auth/login");
 
         return loginAuthenticationFilter;
     }

@@ -47,7 +47,7 @@ public class LoginAuthenticationFilter extends UsernamePasswordAuthenticationFil
                             userLoginDto.password())
             );
         } catch (IOException e) {
-            log.error("오류남 : {}",e.getMessage());
+            log.error("오류남 : {}",e.toString());
             throw new RuntimeException(e);
         }
     }
