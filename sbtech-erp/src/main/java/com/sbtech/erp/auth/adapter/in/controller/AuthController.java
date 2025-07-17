@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "사욪아 인증 컨트롤러")
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/erp/api/v1/auth")
 @RestController
 public class AuthController {
     private final JwtProvider jwtProvider;

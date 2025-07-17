@@ -39,7 +39,7 @@ import java.util.List;
 @Tag(name = "사원 API", description = "사원 관련 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/employee")
+@RequestMapping("/erp/api/v1/employee")
 public class EmployeeController {
     private final EmployeeUseCase employeeUseCase;
     private final EmployeeApprovalFacade  employeeApprovalFacade;

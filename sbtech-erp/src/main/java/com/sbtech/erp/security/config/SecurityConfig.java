@@ -79,9 +79,9 @@ public class SecurityConfig {
                                                 "/webjars/**",
                                                 "/api/v1/external/**" // 외부 API 접근 허용
                                         ).permitAll()
-                                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                                        .requestMatchers(HttpMethod.POST, "/api/v1/employee/register").permitAll()
-                                        .requestMatchers("/api/v1/**").authenticated()
+                                        .requestMatchers(HttpMethod.POST, "/erp/api/v1/auth/login").permitAll()
+                                        .requestMatchers(HttpMethod.POST, "/erp/api/v1/employee/register").permitAll()
+                                        .requestMatchers("/erp/api/v1/**").authenticated()
                                         .requestMatchers("/actuator/**").permitAll()
                                     .anyRequest().permitAll()
 

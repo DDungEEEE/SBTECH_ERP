@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/department")
+@RequestMapping("/erp/api/v1/department")
 public class DepartmentController {
     private final DepartmentUseCase departmentUseCase;
 

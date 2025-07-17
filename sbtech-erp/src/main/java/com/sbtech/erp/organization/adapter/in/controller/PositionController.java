@@ -21,7 +21,7 @@ import java.util.List;
 @Tag(name = "직무 관리 컨트롤러")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/position")
+@RequestMapping("/erp/api/v1/position")
 public class PositionController {
     private final PositionUseCase positionUseCase;
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/external/products")
+@RequestMapping("/erp/api/v1/external/products")
 public class ExternalProductController {
     private final IqbGoodsUseCase iqbGoodsUseCase;
     private final IqbGoodsJpaRepository repository;

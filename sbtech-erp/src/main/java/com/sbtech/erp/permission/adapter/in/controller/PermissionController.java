@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @Tag(name = "단일 권한 관리 컨트롤러", description = "클라이언트에게 권한 목록 반환")
-@RequestMapping("/api/v1/permissions")
+@RequestMapping("/erp/api/v1/permissions")
 @RequiredArgsConstructor
 @RestController
 public class PermissionController {
