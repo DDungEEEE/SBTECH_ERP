@@ -1,5 +1,6 @@
 package com.sbtech.erp.employee.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sbtech.erp.organization.domain.model.Position;
 import com.sbtech.erp.department.domain.model.Department;
 import com.sbtech.erp.permission.domain.role.model.SystemRole;
@@ -58,6 +59,7 @@ public class Employee {
         );
     }
 
+    @JsonIgnore
     public boolean isPendingEmployee(){
         return this.status.equals(EmployeeStatus.PENDING_APPROVAL);
     }

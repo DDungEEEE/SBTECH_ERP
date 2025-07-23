@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 public class EmployeeApprovalHistoryEntity {
 
     @Id
-    @Column(name = "employee_approval_history_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

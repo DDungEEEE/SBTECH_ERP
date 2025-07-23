@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,8 @@ public class AccessTokenService implements AccessTokenUseCase {
 
     @Override
     public boolean isBlacklisted(String accessToken) {
-        return tokenRepository.get(BLACKLIST_PREFIX + accessToken).isPresent();
+        Optional<String> blackToken = tokenRepository.get(BLACKLIST_PREFIX + accessToken);
+        return blackToken.isPresent();
     }
 
     // JwtProvider에서 남은 유효시간 계산하도록 유틸로 분리하거나 외부에서 주입하는 방식도 가능
