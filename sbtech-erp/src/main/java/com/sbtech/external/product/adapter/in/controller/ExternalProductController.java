@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,7 +26,7 @@ public class ExternalProductController {
     private final IqbGoodsJpaRepository repository;
 
     @GetMapping
-    public ResponseEntity<SuccessResponse<List<IqbGoods>>> getAllGoods(int page, int size) {
+    public ResponseEntity<SuccessResponse<List<IqbGoods>>> getAllGoods(@RequestParam int page, @RequestParam int size) {
         List<IqbGoods> goodsList = iqbGoodsUseCase.getAllGoods(page, size);
 
         SuccessResponse<List<IqbGoods>> response = SuccessResponse.<List<IqbGoods>>builder()
