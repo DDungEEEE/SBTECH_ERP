@@ -14,7 +14,9 @@ import java.time.LocalDateTime;
 @Table(name = "employee_approval_history")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class EmployeeApprovalHistoryEntity {
+
     @Id
+    @Column(name = "employee_approval_history_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -26,6 +28,7 @@ public class EmployeeApprovalHistoryEntity {
     @JoinColumn(name = "approver_id")
     private EmployeeEntity approvedBy; // 승인자
 
+    @Column(name = "approved_at")
     @CreationTimestamp
     private LocalDateTime approvedAt;
 
