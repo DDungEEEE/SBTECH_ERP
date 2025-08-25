@@ -8,13 +8,16 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
+import java.nio.file.AccessDeniedException;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -25,6 +28,7 @@ public class GlobalExceptionHandler {
     private final HttpStatus HTTP_NOT_FOUND_ERROR = HttpStatus.NOT_FOUND;
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex){
 
         BindingResult bindingResult = ex.getBindingResult();
@@ -46,6 +50,9 @@ public class GlobalExceptionHandler {
         log.error("NoResourceFoundException: {}", message);
         return new ResponseEntity<>(message, HTTP_NOT_FOUND_ERROR);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus
 
 
     @ExceptionHandler(CustomException.class)
