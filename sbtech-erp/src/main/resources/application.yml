@@ -1,4 +1,6 @@
 spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1m
   application:
     name: sbtech_erp
   config:
@@ -32,3 +34,4 @@ logging:
     root: info
 server:
   port: 30300
+  shutdown: graceful

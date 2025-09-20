@@ -51,8 +51,8 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(message, HTTP_NOT_FOUND_ERROR);
     }
 
-    @ExceptionHandler(AccessDeniedException.class)
-    @ResponseStatus
+//    @ExceptionHandler(AccessDeniedException.class)
+//    @ResponseStatus
 
 
     @ExceptionHandler(CustomException.class)

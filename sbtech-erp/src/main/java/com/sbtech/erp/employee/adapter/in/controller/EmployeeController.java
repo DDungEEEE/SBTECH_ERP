@@ -17,10 +17,7 @@ import com.sbtech.erp.employee.domain.model.Rank;
 import com.sbtech.erp.organization.application.port.in.PositionUseCase;
 import com.sbtech.erp.organization.domain.model.Position;
 import com.sbtech.erp.permission.application.facade.EmployeeApprovalFacade;
-import com.sbtech.erp.permission.domain.permission.model.Action;
 import com.sbtech.erp.permission.domain.role.model.SystemRole;
-import com.sbtech.erp.security.aspect.CheckPermission;
-import com.sbtech.erp.security.user.EmployeeUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -80,33 +77,33 @@ public class EmployeeController {
                         .build());
     }
 
-    @Operation(
-            summary = "사원 회원가입 요청 승인",
-            description = """
-                    - 사원의 회원가입 요청을 승인해주고, 부서 , 직무, 직급을 등록해줍니다.
-                    - 승인 시 사원의 상태(employeeStatus)는 `ACTIVE(재직 중)`으로 설정됩니다.
-                    """
-    )
-    @PatchMapping("/approve")
-    public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
-                                                                                 @AuthenticationPrincipal EmployeeUserDetails userDetails){
-        Long approvalId = userDetails.getEmployeeEntity().getId();
-        Employee approvedEmployee = employeeApprovalFacade.approveEmployeeRegistration(
-                employeeApprovalReq.positionId(),
-                employeeApprovalReq.departmentId(),
-                employeeApprovalReq.employeeId(),
-                Rank.from(employeeApprovalReq.rank()),
-                SystemRole.from(employeeApprovalReq.systemRole()));
-
-        approvalHistoryUseCase.create(approvedEmployee.getId(), approvalId, employeeApprovalReq.memo());
-
-        return ResponseEntity
-                .status(SuccessCode.UPDATE_SUCCESS.getStatus())
-                .body(SuccessResponse.<Employee>builder()
-                        .data(approvedEmployee)
-                        .successCode(SuccessCode.UPDATE_SUCCESS)
-                        .build());
-    }
+//    @Operation(
+//            summary = "사원 회원가입 요청 승인",
+//            description = """
+//                    - 사원의 회원가입 요청을 승인해주고, 부서 , 직무, 직급을 등록해줍니다.
+//                    - 승인 시 사원의 상태(employeeStatus)는 `ACTIVE(재직 중)`으로 설정됩니다.
+//                    """
+//    )
+//    @PatchMapping("/approve")
+//    public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
+//                                                                                 @AuthenticationPrincipal EmployeeUserDetails userDetails){
+//        Long approvalId = userDetails.getEmployeeEntity().getId();
+//        Employee approvedEmployee = employeeApprovalFacade.approveEmployeeRegistration(
+//                employeeApprovalReq.positionId(),
+//                employeeApprovalReq.departmentId(),
+//                employeeApprovalReq.employeeId(),
+//                Rank.from(employeeApprovalReq.rank()),
+//                SystemRole.from(employeeApprovalReq.systemRole()));
+//
+//        approvalHistoryUseCase.create(approvedEmployee.getId(), approvalId, employeeApprovalReq.memo());
+//
+//        return ResponseEntity
+//                .status(SuccessCode.UPDATE_SUCCESS.getStatus())
+//                .body(SuccessResponse.<Employee>builder()
+//                        .data(approvedEmployee)
+//                        .successCode(SuccessCode.UPDATE_SUCCESS)
+//                        .build());
+//    }
 
     @Operation(
             summary = "사원 승인 폼 데이터 조회",
@@ -146,7 +143,7 @@ public class EmployeeController {
         - status를 주지 않으면 전체 사원을 반환합니다.
         """
     )
-    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
+//    @CheckPermission(resource = "EMPLOYEE", action = Action.READ)
     @GetMapping("/list")
     public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findAll(@RequestParam(required = false) String status){
         List<Employee> employees = "pending".equals(status)

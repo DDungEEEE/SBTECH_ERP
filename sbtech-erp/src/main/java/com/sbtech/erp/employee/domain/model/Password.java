@@ -22,5 +22,6 @@ public class Password {
 
     public static Password encoded(String encodedPassword){
         return new Password(encodedPassword);
+
     }
 }

@@ -74,6 +74,13 @@ public class Employee {
     ) {
         return new Employee(id, name, loginId, password, position, rank, department, systemRole, status);
     }
+
+    /**
+     * 회원가입을 위한 생성자
+     * name :실명
+     * loginId : 로그인 id
+     * password : 비밀번호
+     */
     public static Employee createForSignUp(
             Long id,
             String name,
