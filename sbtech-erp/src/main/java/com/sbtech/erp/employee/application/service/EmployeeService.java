@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +36,12 @@ public class EmployeeService implements EmployeeUseCase {
     @Transactional
     @Override
     public Employee register(String name, String loginId, String password) {
-        Employee employee = Employee.createForSignUp(null, name, loginId, Password.encoded(passwordEncoder.encode(password)));
 
         if(employeeRepository.existsByLoginId(loginId)){
             throw new CustomException(ErrorCode.DUPLICATED_EMPLOYEE_LOGIN_ID_ERROR);
         }
+
+        Employee employee = Employee.createForSignUp(null, name, loginId, Password.encoded(passwordEncoder.encode(password)));
 
         return employeeRepository.save(employee);
     }
@@ -57,5 +59,30 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public List<Employee> getPendingEmployees() {
         return findAllEmployees().stream().filter(Employee::isPendingEmployee).toList();
+    }
+
+    @Override
+    public Employee requestLeave(Long id) {
+        return changeStatus(id, Employee::requestLeave);
+    }
+
+    @Override
+    public Employee approveLeave(Long id) {
+        return changeStatus(id, Employee::approveLeave);
+    }
+
+    @Override
+    public Employee requestRetire(Long id) {
+        return changeStatus(id, Employee::requestRetire);
+    }
+
+    @Override
+    public Employee approveRetire(Long id) {
+        return changeStatus(id, Employee::approveRetire);
+    }
+
+    private Employee changeStatus(Long id, Function<Employee, Employee> transition) {
+        Employee employee = findById(id);
+        return employeeRepository.save(transition.apply(employee));
     }
 }

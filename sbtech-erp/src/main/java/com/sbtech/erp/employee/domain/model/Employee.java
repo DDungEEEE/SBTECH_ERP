@@ -42,7 +42,7 @@ public class Employee {
         this.position = null;
         this.department = null;
         this.systemRole = null;
-        this.status = null;
+        this.status = EmployeeStatus.PENDING_APPROVAL;
     }
 
     public Employee approveRegistration(Position position, Rank rank, Department department, SystemRole systemRole){
@@ -61,7 +61,7 @@ public class Employee {
 
     @JsonIgnore
     public boolean isPendingEmployee(){
-        return this.status.equals(EmployeeStatus.PENDING_APPROVAL);
+        return this.status == EmployeeStatus.PENDING_APPROVAL;
     }
 
     /**
@@ -88,5 +88,24 @@ public class Employee {
             Password password
     ) {
         return new Employee(id, name, loginId, password);
+    }
+
+    public Employee requestLeave()   { return withStatus(EmployeeStatus.ON_LEAVE_PENDING); }
+    public Employee approveLeave()   { return withStatus(EmployeeStatus.ON_LEAVE); }
+    public Employee requestRetire()  { return withStatus(EmployeeStatus.RETIRED_PENDING); }
+    public Employee approveRetire()  { return withStatus(EmployeeStatus.RETIRED); }
+
+    private Employee withStatus(EmployeeStatus newStatus) {
+        return new Employee(
+                this.id,
+                this.name,
+                this.loginId,
+                this.password,
+                this.position,
+                this.rank,
+                this.department,
+                this.systemRole,
+                newStatus
+        );
     }
 }

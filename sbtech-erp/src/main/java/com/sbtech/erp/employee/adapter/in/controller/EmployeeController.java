@@ -46,7 +46,7 @@ public class EmployeeController {
 
 
     @GetMapping("/approval-history")
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+//    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     public ResponseEntity<SuccessResponse<List<ApprovalHistoryRes>>> getApprovalHistories(){
         List<EmployeeApprovalHistory> employeeApprovalHistories = approvalHistoryUseCase.getEmployeeApprovalHistories();
 

@@ -10,7 +10,9 @@ import java.util.Arrays;
 public enum EmployeeStatus {
     PENDING_APPROVAL("승인 대기"),
     ACTIVE("재직"),
+    ON_LEAVE_PENDING("휴직 승인 대기"),
     ON_LEAVE("휴직"),
+    RETIRED_PENDING("퇴사 승인 대기"),
     RETIRED("퇴사"),
     SUSPENDED("정직");
 
