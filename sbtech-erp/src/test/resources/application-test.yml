@@ -1,6 +1,6 @@
 spring:
   datasource:
-      url: jdbc:mysql://220.122.83.136:3306/sbtech_erp
+      url: jdbc:mysql://220.122.83.136:3306/erp_test_db
       username: dnjsdlr12
       password: rhdoddldml!!423
       driver-class-name: com.mysql.cj.jdbc.Driver
