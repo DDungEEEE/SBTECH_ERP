@@ -28,7 +28,7 @@ public class EmployeeEntity extends BaseTimeEntity {
     @Column(name = "employee_login_id", unique = true, nullable = false, updatable = false)
     private String loginId;
 
-    @Column(name = "employee_password", nullable = false)
+    @Embedded
     private Password password;
 
     @ManyToOne(fetch = FetchType.EAGER)

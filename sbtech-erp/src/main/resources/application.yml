@@ -5,6 +5,8 @@ spring:
     name: sbtech_erp
   config:
     import: "optional:file:.env"
+    activate:
+      on-profile: default
   datasource:
     primary:
       url: ${MYSQL_URL}

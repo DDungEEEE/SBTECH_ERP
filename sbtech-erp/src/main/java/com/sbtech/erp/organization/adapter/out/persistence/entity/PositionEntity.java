@@ -23,7 +23,7 @@ public class PositionEntity extends BaseTimeEntity {
     @Column(name = "is_active")
     private boolean isActive;
 
-    public PositionEntity create(Long id, String name, boolean isActive){
+    public static PositionEntity create(Long id, String name, boolean isActive){
         return new PositionEntity(id, name, isActive);
     }
 }
