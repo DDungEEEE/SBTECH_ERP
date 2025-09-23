@@ -108,4 +108,8 @@ public class Employee {
                 newStatus
         );
     }
+
+    public boolean isActive(){
+        return this.status != EmployeeStatus.ACTIVE;
+    }
 }

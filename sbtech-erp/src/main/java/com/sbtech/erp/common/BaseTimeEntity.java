@@ -9,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
@@ -16,10 +17,10 @@ public abstract class BaseTimeEntity implements Serializable {
 
     @CreationTimestamp
     @Column(name = "created_at")
-    protected Timestamp createdAt;
+    protected LocalDateTime createdAt;
 
     @UpdateTimestamp
     @Column(name = "updated_at")
-    protected Timestamp updatedAt;
+    protected LocalDateTime updatedAt;
 
 }
