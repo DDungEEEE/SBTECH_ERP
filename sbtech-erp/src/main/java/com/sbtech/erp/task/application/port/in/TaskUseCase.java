@@ -7,6 +7,6 @@ import com.sbtech.erp.task.domain.model.TaskStatus;
 public interface TaskUseCase {
     Task createTask(CreateTaskRequestDto dto);
     Task changeStatus(Long taskId, TaskStatus newStatus);
-    Task ressignTask(Long taskId, Long newAssigneeId);
+    Task reassignTask(Long taskId, Long newAssigneeId);
     Task findById(Long taskId);
 }

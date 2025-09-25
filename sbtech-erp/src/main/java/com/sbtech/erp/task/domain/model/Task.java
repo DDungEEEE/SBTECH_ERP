@@ -3,15 +3,7 @@ package com.sbtech.erp.task.domain.model;
 import com.sbtech.erp.employee.domain.model.Employee;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;ㅔ
-import java.time.LocalDate;
-
-
-import com.sbtech.erp.employee.domain.model.Employee;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-
 import java.time.LocalDate;
 
 @Getter
@@ -30,6 +22,10 @@ public class Task {
     private final LocalDate startDate;
     private final LocalDate dueDate;
     private final LocalDate completedAt;
+
+    public boolean isOverDue(){
+        return LocalDate.now().isAfter(dueDate);
+    }
 
     // 신규 생성
     public static Task createNew(String title,
@@ -53,7 +49,7 @@ public class Task {
 
     // Persistence 복원
     // Entity -> Domain 복원용 static method
-    static Task reconstruct(Long id,
+    public static Task reconstruct(Long id,
                             String title,
                             String description,
                             TaskStatus status,

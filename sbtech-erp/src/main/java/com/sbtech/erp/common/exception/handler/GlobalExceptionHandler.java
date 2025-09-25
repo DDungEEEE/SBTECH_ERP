@@ -58,7 +58,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(CustomException.class)
     protected ResponseEntity<ErrorResponse> handleBusinessException(CustomException ex){
         ErrorCode errorCode = ex.getErrorCode();
-        ErrorResponse errorResponse = new ErrorResponse(errorCode);
+        // 오버라이딩한 내용 or 기본 ErrorCode 내용
+        ErrorResponse errorResponse = new ErrorResponse(errorCode, ex.getReason());
         log.warn("비즈니스 예외 발생 : {}", errorCode.getReason(), ex);
         return new ResponseEntity<>(errorResponse, HttpStatus.valueOf(errorResponse.getStatus()));
     }

@@ -1,5 +1,6 @@
 package com.sbtech.erp.common.code;
 
+import com.sbtech.erp.common.exception.CustomException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -19,10 +20,12 @@ public enum ErrorCode {
     INVALID_TOKEN_ERROR(401, "AUTH_001", "유효하지 않은 토큰입니다."),
     NO_PERMISSION_ERROR(401, "AUTH_002", "해당 리소스에 대한 권한이 없습니다."),
 
+
     USER_NOT_FOUND_ERROR(401, "AUTH_003", "사용자의 아이디 혹은 패스워드가 일치하지 않습니다"),
     USER_NOT_APPROVAL_ERROR(401, "AUTH_004", "승인되지 않은 사용자입니다.");
 
     private final int status;
     private final String divisionCode;
     private final String reason;
+
 }
