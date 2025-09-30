@@ -1,5 +1,7 @@
 package com.sbtech.erp.task.domain.model;
 
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.employee.domain.model.Employee;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -68,13 +70,26 @@ public class Task {
         }
         LocalDate completedAt = (newStatus == TaskStatus.DONE) ? LocalDate.now() : this.completedAt;
         return new Task(this.id, this.title, this.description, newStatus,
-                this.assignee, this.createdBy, this.startDate, this.dueDate, completedAt);
+                this.assignee, this.createdBy, this.startDate, this.dueDate, this.completedAt);
+    }
+
+    public Task approveCompletion(Employee admin){
+        if (this.status != TaskStatus.DONE) {
+            throw new CustomException(ErrorCode.INVALID_STATUS_CHANGE,
+                    "DONE 상태인 업무만 승인할 수 있습니다.");
+        }
+        // 이미 승인되었다면 중복 방지
+        if (this.completedAt != null) {
+            throw new CustomException(ErrorCode.ALREADY_APPROVED_ERROR);
+        }
+        return new Task(this.id, this.title, this.description, this.status,
+                this.assignee, this.createdBy, this.startDate, this.dueDate, LocalDate.now());
     }
 
     // 담당자 변경
     public Task reassign(Employee newAssignee) {
         if (!newAssignee.isActive()) {
-            throw new IllegalArgumentException("휴직/퇴직 상태 직원에게는 업무 배정 불가");
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE_ERROR, "휴직/퇴직 상태 직원에게는 업무 배정 불가");
         }
         return new Task(this.id, this.title, this.description, this.status,
                 newAssignee, this.createdBy, this.startDate, this.dueDate, this.completedAt);

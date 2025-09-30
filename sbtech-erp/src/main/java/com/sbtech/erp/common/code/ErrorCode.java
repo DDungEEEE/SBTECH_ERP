@@ -11,6 +11,7 @@ public enum ErrorCode {
     NOT_FOUND_RESOURCE_ERROR(404, "COMMON_002", "해당 데이터를 찾을 수 없습니다."),
 
     NOT_FOUND_EMPLOYEE_ERROR(404, "EMPLOYEE_001", "해당 사원을 찾을 수 없습니다."),
+    USER_NOT_ACTIVE_ERROR(401, "EMPLOYEE_002", "재직중인 사원이 아닙니다."),
 
     NOT_FOUND_TASK_ERROR(404, "TASK_001", "해당 업무(Task)를 찾을 수 없습니다."),
 
@@ -19,6 +20,12 @@ public enum ErrorCode {
 
     INVALID_TOKEN_ERROR(401, "AUTH_001", "유효하지 않은 토큰입니다."),
     NO_PERMISSION_ERROR(401, "AUTH_002", "해당 리소스에 대한 권한이 없습니다."),
+
+    PRODUCT_NOT_FOUND_ERROR(404, "PRODUCT_001", "상품을 찾을 수 없습니다."),
+
+    INVALID_STATUS_CHANGE(401, null, "잘못된 상태 전환입니다."),
+    ALREADY_APPROVED_ERROR(401, null, "이미 승인된 업무입니다."),
+    INSUFFICIENT_STOCK_ERROR(401, "STOCK_001", "재고가 부족합니다."),
 
 
     USER_NOT_FOUND_ERROR(401, "AUTH_003", "사용자의 아이디 혹은 패스워드가 일치하지 않습니다"),

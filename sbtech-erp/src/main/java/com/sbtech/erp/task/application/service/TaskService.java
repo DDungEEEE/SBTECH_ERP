@@ -29,10 +29,24 @@ public class TaskService implements TaskUseCase {
         return taskRepository.save(task);
     }
 
+
     @Override
-    public Task changeStatus(Long taskId, TaskStatus newStatus) {
+    public Task changeMyTaskStatus(Long taskId, TaskStatus newStatus, Long employeeId) {
         Task task = findById(taskId);
-        return taskRepository.save(task.changeStatus(newStatus));
+        if (!task.getAssignee().getId().equals(employeeId)) {
+            throw new CustomException(ErrorCode.NO_PERMISSION_ERROR);
+        }
+        Task changed = task.changeStatus(newStatus); // 도메인 규칙 검증 포함
+        return taskRepository.save(changed);
+    }
+
+    @Override
+    public Task changeTaskStatusAsAdmin(Long taskId, TaskStatus newStatus, Long adminId) {
+        // TODO: adminId 권한 검증(RBAC)
+        Task task = findById(taskId);
+        Task changed = task.changeStatus(newStatus); // 규칙은 동일하게 적용 권장
+
+        return taskRepository.save(changed);
     }
 
     @Override
@@ -44,8 +58,18 @@ public class TaskService implements TaskUseCase {
     }
 
     @Override
+    public Task approveTaskCompletion(Long taskId, Long adminId) {
+        Employee admin = employeeUseCase.findById(adminId);
+        Task task = findById(taskId);
+
+        Task approvedTask = task.approveCompletion(admin);
+        return taskRepository.save(approvedTask);
+    }
+
+    @Override
     public Task findById(Long taskId) {
         return taskRepository.findById(taskId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TASK_ERROR));
     }
+
 }

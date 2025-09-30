@@ -1,6 +1,8 @@
 package com.sbtech.erp.employee.domain.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.organization.domain.model.Position;
 import com.sbtech.erp.department.domain.model.Department;
 import com.sbtech.erp.permission.domain.role.model.SystemRole;
@@ -109,7 +111,13 @@ public class Employee {
         );
     }
 
+    public void validateActive(){
+        if(!isActive()){
+            throw new CustomException(ErrorCode.USER_NOT_ACTIVE_ERROR);
+        }
+    }
+
     public boolean isActive(){
-        return this.status != EmployeeStatus.ACTIVE;
+        return this.status == EmployeeStatus.ACTIVE;
     }
 }
