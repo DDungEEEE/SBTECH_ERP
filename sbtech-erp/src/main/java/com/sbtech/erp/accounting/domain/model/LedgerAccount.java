@@ -1,5 +1,9 @@
 package com.sbtech.erp.accounting.domain.model;
 
+import com.sbtech.erp.accounting.domain.code.AccountType;
+import com.sbtech.erp.accounting.domain.code.NormalSide;
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.exception.CustomException;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -23,10 +27,17 @@ public class LedgerAccount {
 
     private final boolean active;
 
+    /**
+     *  자산/비용 = 차변(DEBIT)
+     *  부채 / 자본 / 수익 = 대변(CREDIT)
+     *  -> 생성 시 type 과  normalSide가 맞지 않으면 예외 발생
+     */
     public static LedgerAccount createNew(String code, String name,
-                                    AccountType type, NormalSide side,
+                                    AccountType type, NormalSide normalSide,
                                     Long parentId, boolean posting) {
-        return new LedgerAccount(null, code, name, type, side, parentId, posting, true);
+
+
+        return new LedgerAccount(null, code, name, type, normalSide, parentId, posting, true);
     }
 
     public static LedgerAccount reconstruct(Long id, String code, String name,
@@ -36,6 +47,16 @@ public class LedgerAccount {
     }
 
     public void assertPostingUsable() {
-        if (!active || !posting) throw new IllegalStateException("해당 계정은 전표에 사용 불가");
+        if (!active || !posting) throw new CustomException(ErrorCode.INACTIVE_OR_NON_POSTING_ACCOUNT_ERROR);
+    }
+
+    public void validateRules(){
+        if (type == AccountType.ASSET || type == AccountType.EXPENSE) {
+            if (normalSide != NormalSide.DEBIT) throw new CustomException(ErrorCode.ACCOUNT_TYPE_MISMATCH_ERROR);
+        }
+
+        if (type == AccountType.LIABILITY || type == AccountType.EQUITY || type == AccountType.REVENUE) {
+            if (normalSide != NormalSide.CREDIT) throw new CustomException(ErrorCode.ACCOUNT_TYPE_MISMATCH_ERROR);
+        }
     }
 }

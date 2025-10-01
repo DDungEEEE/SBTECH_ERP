@@ -1,12 +1,10 @@
 package com.sbtech.erp.accounting.adapter.out.persistence.entity;
 
-import com.sbtech.erp.accounting.domain.model.NormalSide;
+import com.sbtech.erp.accounting.domain.code.NormalSide;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "journal_lines")

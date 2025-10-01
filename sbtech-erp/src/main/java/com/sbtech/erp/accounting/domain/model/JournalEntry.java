@@ -1,5 +1,6 @@
 package com.sbtech.erp.accounting.domain.model;
 
+import com.sbtech.erp.accounting.domain.code.PostingStatus;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -12,19 +13,33 @@ import java.util.List;
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JournalEntry {
-    private final Long id;                 // null 가능
+    private final Long id;
+    // null 가능
     private final LocalDate entryDate;
+
     private final String description;
+
     private PostingStatus status;          // 상태는 가변
+
     private final List<JournalLine> lines; // 불변 리스트로 관리 권장
 
     public static JournalEntry createNew(LocalDate date, String description) {
+        if (date == null) throw new IllegalArgumentException("전표 날짜는 필수");
+        if (description == null || description.isBlank()) throw new IllegalArgumentException("설명 필수");
         return new JournalEntry(null, date, description, PostingStatus.DRAFT, new ArrayList<>());
     }
 
     public void addLine(JournalLine line) {
-        if (status != PostingStatus.DRAFT) throw new IllegalStateException("POSTED 전표는 수정 불가");
-        lines.add(line);
+        if (line == null) throw new IllegalArgumentException("라인 없음");
+        this.lines.add(line);
+
+        // 차변/대변 합계 검증 예시
+        BigDecimal debitSum = lines.stream().map(JournalLine::getDebit).reduce(BigDecimal.ZERO, BigDecimal::add);
+        BigDecimal creditSum = lines.stream().map(JournalLine::getCredit).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        if (debitSum.compareTo(creditSum) != 0) {
+            throw new IllegalStateException("차변/대변 불일치");
+        }
     }
 
     public void post() {

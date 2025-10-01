@@ -1,7 +1,7 @@
 package com.sbtech.erp.accounting.adapter.out.persistence.entity;
 
-import com.sbtech.erp.accounting.domain.model.AccountType;
-import com.sbtech.erp.accounting.domain.model.NormalSide;
+import com.sbtech.erp.accounting.domain.code.AccountType;
+import com.sbtech.erp.accounting.domain.code.NormalSide;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
