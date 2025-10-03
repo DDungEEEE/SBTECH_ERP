@@ -6,7 +6,7 @@ import com.sbtech.erp.accounting.domain.model.LedgerAccount;
 import java.util.List;
 
 public interface LedgerAccountUseCase {
-    LedgerAccount register(CreateLedgerAccountReq req);
+    LedgerAccount create(CreateLedgerAccountReq req);
     List<LedgerAccount> findAll();
     LedgerAccount findById(Long id);
 }

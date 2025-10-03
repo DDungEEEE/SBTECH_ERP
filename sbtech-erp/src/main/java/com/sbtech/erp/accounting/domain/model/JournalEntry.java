@@ -10,18 +10,19 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+// 분개전표
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JournalEntry {
     private final Long id;
     // null 가능
-    private final LocalDate entryDate;
+    private final LocalDate entryDate; // 전표 날짜
 
-    private final String description;
+    private final String description; // 설명
 
     private PostingStatus status;          // 상태는 가변
 
-    private final List<JournalLine> lines; // 불변 리스트로 관리 권장
+    private final List<JournalLine> lines; // 분개 항목 List
 
     public static JournalEntry createNew(LocalDate date, String description) {
         if (date == null) throw new IllegalArgumentException("전표 날짜는 필수");
@@ -58,5 +59,19 @@ public class JournalEntry {
 
     public BigDecimal totalCredit() {
         return lines.stream().map(l -> l.getCredit()).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public static JournalEntry reconstruct(Long id,
+                                           LocalDate entryDate,
+                                           String description,
+                                           PostingStatus status,
+                                           List<JournalLine> lines) {
+        if (id == null) throw new IllegalArgumentException("ID는 null 불가 (재구성)");
+        if (entryDate == null) throw new IllegalArgumentException("전표 날짜는 필수");
+        if (description == null || description.isBlank()) throw new IllegalArgumentException("설명 필수");
+        if (status == null) throw new IllegalArgumentException("상태 필수");
+        if (lines == null) throw new IllegalArgumentException("라인 리스트 null 불가");
+
+        return new JournalEntry(id, entryDate, description, status, lines);
     }
 }

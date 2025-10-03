@@ -6,6 +6,8 @@ import lombok.Getter;
 
 import java.math.BigDecimal;
 
+
+// 분개전표의 각각의 라인
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class JournalLine {
@@ -13,9 +15,9 @@ public class JournalLine {
 
     private final LedgerAccount account;   // 계정과목 종류
 
-    private final BigDecimal debit;  // >= 0
+    private final BigDecimal debit;  // 차변금액 >= 0
 
-    private final BigDecimal credit; // >= 0
+    private final BigDecimal credit; // 대변금액 >= 0
 
     private final String memo;
 
@@ -29,5 +31,13 @@ public class JournalLine {
         account.assertPostingUsable();
 
         return new JournalLine(null, account, debit, credit, memo);
+    }
+
+    public static JournalLine reconstruct(Long id,
+                                          LedgerAccount account,
+                                          BigDecimal debit,
+                                          BigDecimal credit,
+                                          String memo) {
+        return new JournalLine(id, account, debit, credit, memo);
     }
 }

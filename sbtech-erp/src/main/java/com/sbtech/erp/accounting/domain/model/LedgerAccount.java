@@ -17,9 +17,9 @@ public class LedgerAccount {
 
     private final String name;             // ex) 현금
 
-    private final AccountType type;        // ASSET/...
+    private final AccountType type;        // 현금, 애입채무 ...
 
-    private final NormalSide normalSide;   // DEBIT/CREDIT
+    private final NormalSide normalSide;   // 차변 / 대변
 
     private final Long parentId;           // 그룹 계정 상위
 

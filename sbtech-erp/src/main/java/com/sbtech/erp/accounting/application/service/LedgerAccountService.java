@@ -7,15 +7,17 @@ import com.sbtech.erp.accounting.domain.model.LedgerAccount;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 @RequiredArgsConstructor
 public class LedgerAccountService implements LedgerAccountUseCase {
     private final LedgerAccountRepository repository;
 
     @Override
-    public LedgerAccount register(CreateLedgerAccountReq req) {
+    public LedgerAccount create(CreateLedgerAccountReq req) {
         LedgerAccount ledgerAccount = LedgerAccount.createNew(
                 req.code(),
                 req.name(),

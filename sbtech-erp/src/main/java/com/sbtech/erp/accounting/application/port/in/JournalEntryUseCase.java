@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface JournalEntryUseCase {
-    Long create(JournalEntryCreateReq req);
+    JournalEntry create(JournalEntryCreateReq req);
     JournalEntry get(Long id);
     List<JournalEntry> list();
 }
