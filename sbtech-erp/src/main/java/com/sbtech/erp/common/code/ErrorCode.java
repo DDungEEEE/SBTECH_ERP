@@ -27,9 +27,13 @@ public enum ErrorCode {
     ALREADY_APPROVED_ERROR(401, null, "이미 승인된 업무입니다."),
     INSUFFICIENT_STOCK_ERROR(401, "STOCK_001", "재고가 부족합니다."),
 
+    JOURNAL_LINE_NOT_FOUND_ERROR(404, "JOURNAL_LINE_001", "분개전표를 찾을 수가 없습니다."),
+
     LEDGER_ACCOUNT_NOT_FOUND_ERROR(404, "LEDGER_ACCOUNT_001", "계정과목을 찾을 수 없습니다."),
     ACCOUNT_TYPE_MISMATCH_ERROR(401, "LEDGER_ACCOUNT_002", "계정유형과 정상잔액이 일치하지 않습니다."),
     INACTIVE_OR_NON_POSTING_ACCOUNT_ERROR(401, "LEDGER_ACCOUNT_003", "전표에 사용할 수 없는 계정입니다."),
+
+    JOURNAL_ENTRY_NOT_FOUND_ERROR(404, "JOURNAL_ENTRY_001", "분개전표를 찾을 수 없습니다."),
 
     USER_NOT_FOUND_ERROR(401, "AUTH_003", "사용자의 아이디 혹은 패스워드가 일치하지 않습니다"),
     USER_NOT_APPROVAL_ERROR(401, "AUTH_004", "승인되지 않은 사용자입니다.");

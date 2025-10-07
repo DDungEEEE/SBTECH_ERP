@@ -1,17 +1,20 @@
 package com.sbtech.erp.accounting.application.service;
 
-import com.sbtech.erp.accounting.adapter.in.dto.JournalEntryCreateReq;
-import com.sbtech.erp.accounting.adapter.in.dto.JournalLineCreateReq;
+import com.sbtech.erp.accounting.adapter.in.dto.CreateJournalEntryReq;
+import com.sbtech.erp.accounting.adapter.in.dto.CreateJournalLineReq;
 import com.sbtech.erp.accounting.application.port.in.JournalEntryUseCase;
 import com.sbtech.erp.accounting.application.port.in.LedgerAccountUseCase;
 import com.sbtech.erp.accounting.application.port.out.JournalEntryRepository;
 import com.sbtech.erp.accounting.domain.model.JournalEntry;
 import com.sbtech.erp.accounting.domain.model.JournalLine;
 import com.sbtech.erp.accounting.domain.model.LedgerAccount;
+import com.sbtech.erp.common.code.ErrorCode;
+import com.sbtech.erp.common.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 
 @Service
 @RequiredArgsConstructor
@@ -21,11 +24,11 @@ public class JournalEntryService implements JournalEntryUseCase {
     private final LedgerAccountUseCase ledgerAccountUseCase;
 
     @Override
-    public JournalEntry create(JournalEntryCreateReq req) {
+    public JournalEntry create(CreateJournalEntryReq req) {
 
         JournalEntry entry = JournalEntry.createNew(req.entryDate(), req.description());
 
-        for (JournalLineCreateReq lineReq : req.lines()) {
+        for (CreateJournalLineReq lineReq : req.lines()) {
             // accountId는 보통 LedgerAccountRepository를 조회해야 함
             LedgerAccount account = ledgerAccountUseCase.findById(lineReq.accountId());
 
@@ -43,11 +46,12 @@ public class JournalEntryService implements JournalEntryUseCase {
 
     @Override
     public JournalEntry get(Long id) {
-        return null;
+        JournalEntry journalEntry = repository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.JOURNAL_ENTRY_NOT_FOUND_ERROR));
+        return journalEntry;
     }
 
     @Override
-    public List<JournalEntry> list() {
-        return null;
+    public List<JournalEntry> getAll() {
+        return repository.findAll();
     }
 }

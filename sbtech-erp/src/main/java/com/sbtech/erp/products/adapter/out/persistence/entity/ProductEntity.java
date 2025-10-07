@@ -1,6 +1,7 @@
 package com.sbtech.erp.products.adapter.out.persistence.entity;
 
 import com.sbtech.erp.common.BaseTimeEntity;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.products.domain.ProductStatus;
 import com.sbtech.erp.products.domain.model.Product;
 import jakarta.persistence.*;
@@ -37,6 +38,10 @@ public class ProductEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ProductStatus status;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id", nullable = false)
+    private EmployeeEntity createdBy;
 
 
     private ProductEntity(String name, String description, Integer price, Integer stockQuantity, ProductStatus status) {

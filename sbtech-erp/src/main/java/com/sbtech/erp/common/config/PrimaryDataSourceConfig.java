@@ -33,7 +33,11 @@ import java.util.Map;
                 "com.sbtech.erp.department.adapter.out.persistence.repository",
                 "com.sbtech.erp.employee.adapter.out.persistence.repository",
                 "com.sbtech.erp.organization.adapter.out.persistence.repository",
-                "com.sbtech.erp.permission.adapter.out.persistence.repository"
+                "com.sbtech.erp.permission.adapter.out.persistence.repository",
+                "com.sbtech.erp.accounting.adapter.out.persistence.repository",
+                "com.sbtech.erp.inventory.adapter.out.persistence.repository",
+                "com.sbtech.erp.products.adapter.out.persistence.repository",
+                "com.sbtech.erp.task.adapter.out.persistence.repository"
         },          // ★ 내부 JPA 레포지토리
         entityManagerFactoryRef = "primaryEntityManagerFactory",
         transactionManagerRef  = "primaryTransactionManager")
@@ -73,7 +77,11 @@ public class PrimaryDataSourceConfig {
                 "com.sbtech.erp.department.adapter.out.persistence.entity",
                 "com.sbtech.erp.employee.adapter.out.persistence.entity",
                 "com.sbtech.erp.organization.adapter.out.persistence.entity",
-                "com.sbtech.erp.permission.adapter.out.persistence.entity");
+                "com.sbtech.erp.permission.adapter.out.persistence.entity",
+                "com.sbtech.erp.accounting.adapter.out.persistence.entity",
+                "com.sbtech.erp.inventory.adapter.out.persistence.entity",
+                "com.sbtech.erp.products.adapter.out.persistence.entity",
+                "com.sbtech.erp.task.adapter.out.persistence.entity");
         emf.setPersistenceUnitName("primary");
         emf.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
 

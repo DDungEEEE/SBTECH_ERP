@@ -34,13 +34,13 @@ public class JournalEntry {
         if (line == null) throw new IllegalArgumentException("라인 없음");
         this.lines.add(line);
 
-        // 차변/대변 합계 검증 예시
-        BigDecimal debitSum = lines.stream().map(JournalLine::getDebit).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal creditSum = lines.stream().map(JournalLine::getCredit).reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        if (debitSum.compareTo(creditSum) != 0) {
-            throw new IllegalStateException("차변/대변 불일치");
-        }
+//        // 차변/대변 합계 검증 예시
+//        BigDecimal debitSum = lines.stream().map(JournalLine::getDebit).reduce(BigDecimal.ZERO, BigDecimal::add);
+//        BigDecimal creditSum = lines.stream().map(JournalLine::getCredit).reduce(BigDecimal.ZERO, BigDecimal::add);
+//
+//        if (debitSum.compareTo(creditSum) != 0) {
+//            throw new IllegalStateException("차변/대변 불일치");
+//        }
     }
 
     public void post() {

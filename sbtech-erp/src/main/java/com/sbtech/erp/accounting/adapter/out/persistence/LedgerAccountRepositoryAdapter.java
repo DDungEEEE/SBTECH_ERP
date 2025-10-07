@@ -25,11 +25,12 @@ public class LedgerAccountRepositoryAdapter implements LedgerAccountRepository {
 
     @Override
     public List<LedgerAccount> findAll() {
-        return null;
+        return LedgerAccountMapper.toDomain(jpaRepository.findAll());
     }
 
     @Override
     public Optional<LedgerAccount> findById(Long id) {
-        return Optional.empty();
+        return jpaRepository.findById(id)
+                .map(LedgerAccountMapper::toDomain);
     }
 }
