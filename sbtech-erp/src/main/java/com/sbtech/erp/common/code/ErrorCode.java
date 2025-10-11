@@ -23,9 +23,10 @@ public enum ErrorCode {
 
     PRODUCT_NOT_FOUND_ERROR(404, "PRODUCT_001", "상품을 찾을 수 없습니다."),
 
-    INVALID_STATUS_CHANGE(401, null, "잘못된 상태 전환입니다."),
+    INVALID_STATUS_CHANGE_ERROR(401, null, "잘못된 상태 전환입니다."),
     ALREADY_APPROVED_ERROR(401, null, "이미 승인된 업무입니다."),
     INSUFFICIENT_STOCK_ERROR(401, "STOCK_001", "재고가 부족합니다."),
+
 
     JOURNAL_LINE_NOT_FOUND_ERROR(404, "JOURNAL_LINE_001", "분개전표를 찾을 수가 없습니다."),
 

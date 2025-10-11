@@ -1,6 +1,7 @@
 package com.sbtech.erp.task.domain.mapper;
 
 import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.mapper.EmployeeMapper;
 import com.sbtech.erp.task.adapter.out.persistence.entity.TaskEntity;
 import com.sbtech.erp.task.domain.model.Task;
 import com.sbtech.erp.task.domain.model.TaskPriority;
@@ -12,11 +13,11 @@ public class TaskMapper {
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),
-                task.getAssignee().getId(),
-                task.getCreatedBy().getId(),
+                EmployeeMapper.toEntity(task.getAssignee()),
+                EmployeeMapper.toEntity(task.getCreatedBy()),
                 task.getStartDate(),
                 task.getDueDate(),
-                TaskPriority.MEDIUM
+                task.getPriority()
         );
     }
 
@@ -30,7 +31,8 @@ public class TaskMapper {
                 createdBy,
                 entity.getStartDate(),
                 entity.getDueDate(),
-                entity.getCompletedAt()
+                entity.getCompletedAt(),
+                entity.getPriority()
         );
     }
 }

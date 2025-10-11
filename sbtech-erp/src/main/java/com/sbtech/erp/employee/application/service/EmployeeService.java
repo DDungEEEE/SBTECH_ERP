@@ -26,12 +26,20 @@ public class EmployeeService implements EmployeeUseCase {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
 
-        @Override
-        public Employee findById(Long id) {
-            return employeeRepository.findById(id).orElseThrow(
-                    () -> new CustomException(ErrorCode.NOT_FOUND_EMPLOYEE_ERROR)
-            );
-        }
+    @Override
+    public Employee findById(Long id) {
+        return employeeRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_EMPLOYEE_ERROR)
+        );
+    }
+
+    // 추가적인 세부 예외 -> 업무 담당자 x , 업무 생성자 x
+    @Override
+    public Employee findById(Long id, String message) {
+        return employeeRepository.findById(id).orElseThrow(
+                () -> new CustomException(ErrorCode.NOT_FOUND_EMPLOYEE_ERROR, message)
+        );
+    }
 
     @Transactional
     @Override

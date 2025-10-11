@@ -13,6 +13,7 @@ public interface EmployeeUseCase {
     List<Employee> findAllEmployees();
 
     Employee findById(Long id);
+    Employee findById(Long id, String message);
 
     boolean checkLoginIdDuplicated(String loginId);
 

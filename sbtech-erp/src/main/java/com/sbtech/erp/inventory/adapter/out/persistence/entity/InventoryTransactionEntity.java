@@ -37,6 +37,7 @@ public class InventoryTransactionEntity extends BaseTimeEntity {
     @Column(nullable = false, name = "after_quantity")
     private int afterQuantity;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "created_by", nullable = false)
     private EmployeeEntity createdBy;

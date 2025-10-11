@@ -40,7 +40,7 @@ public class ProductEntity extends BaseTimeEntity {
     private ProductStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by_id", nullable = false)
+    @JoinColumn(name = "created_by_id", nullable = false, referencedColumnName = "employee_id")
     private EmployeeEntity createdBy;
 
 

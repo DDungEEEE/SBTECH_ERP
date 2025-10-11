@@ -9,6 +9,7 @@ import com.sbtech.erp.task.adapter.in.dto.CreateTaskRequestDto;
 import com.sbtech.erp.task.application.port.in.TaskUseCase;
 import com.sbtech.erp.task.application.port.out.TaskRepository;
 import com.sbtech.erp.task.domain.model.Task;
+import com.sbtech.erp.task.domain.model.TaskPriority;
 import com.sbtech.erp.task.domain.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,8 +25,17 @@ public class TaskService implements TaskUseCase {
     public Task createTask(CreateTaskRequestDto dto) {
         Employee assignee = employeeUseCase.findById(dto.assigneeId());
         Employee createdBy = employeeUseCase.findById(dto.createdById());
+        TaskPriority p = dto.priority() == null ? TaskPriority.MEDIUM : dto.priority();
 
-        Task task = Task.createNew(dto.title(), dto.description(), assignee, createdBy, dto.startDate(), dto.dueDate());
+        Task task = Task.createNew(
+                dto.title(),
+                dto.description(),
+                assignee,
+                createdBy,
+                dto.startDate(),
+                dto.dueDate(),
+                p
+        );
         return taskRepository.save(task);
     }
 

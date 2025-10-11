@@ -1,6 +1,7 @@
 package com.sbtech.erp.task.adapter.out.persistence.entity;
 
 import com.sbtech.erp.common.BaseTimeEntity;
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.task.domain.model.TaskPriority;
 import com.sbtech.erp.task.domain.model.TaskStatus;
 import jakarta.persistence.*;
@@ -30,11 +31,16 @@ public class TaskEntity extends BaseTimeEntity {
     @Column(nullable = false, length = 20)
     private TaskStatus status;
 
-    @Column(name = "assignee_id", nullable = false)
-    private Long assigneeId; // 업무 담당자
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "assignee_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_task_assignee"))
+    private EmployeeEntity assignee; // 담당자
 
-    @Column(name = "created_by_id", nullable = false)
-    private Long createdById;  // 업무 생성자 (관리자)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by_id", nullable = false,
+            foreignKey = @ForeignKey(name = "fk_task_created_by"))
+    private EmployeeEntity createdBy; // 생성자
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -52,8 +58,8 @@ public class TaskEntity extends BaseTimeEntity {
     private TaskEntity(String title,
                        String description,
                        TaskStatus status,
-                       Long assigneeId,
-                       Long createdById,
+                       EmployeeEntity assignee,
+                       EmployeeEntity createdBy,
                        LocalDate startDate,
                        LocalDate dueDate,
                        LocalDate completedAt,
@@ -61,22 +67,22 @@ public class TaskEntity extends BaseTimeEntity {
         this.title = title;
         this.description = description;
         this.status = status;
-        this.assigneeId = assigneeId;
-        this.createdById = createdById;
+        this.assignee = assignee;
+        this.createdBy = createdBy;
         this.startDate = startDate;
         this.dueDate = dueDate;
         this.completedAt = completedAt;
-        this.priority = priority;
+        this.priority = priority == null ? TaskPriority.MEDIUM : priority;
     }
 
     public static TaskEntity create(String title,
                                     String description,
                                     TaskStatus status,
-                                    Long assigneeId,
-                                    Long createdById,
+                                    EmployeeEntity assignee,
+                                    EmployeeEntity createdBy,
                                     LocalDate startDate,
                                     LocalDate dueDate,
                                     TaskPriority priority) {
-        return new TaskEntity(title, description, status, assigneeId, createdById, startDate, dueDate, null, priority);
+        return new TaskEntity(title, description, status, assignee, createdBy, startDate, dueDate, null, priority);
     }
 }
