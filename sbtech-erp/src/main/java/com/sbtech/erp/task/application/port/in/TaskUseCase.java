@@ -12,6 +12,7 @@ public interface TaskUseCase {
     Task reassignTask(Long taskId, Long newAssigneeId);
     Task approveTaskCompletion(Long taskId, Long adminId);
     Task findById(Long taskId);
+    List<Task> getTasksByAssignee(Long assigneeId);
     List<Task> getAllTasks();
 
 }

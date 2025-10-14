@@ -84,4 +84,8 @@ public class TaskService implements TaskUseCase {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_TASK_ERROR));
     }
 
+    @Override
+    public List<Task> getTasksByAssignee(Long assigneeId) {
+        return taskRepository.findByAssigneeId(assigneeId);
+    }
 }
