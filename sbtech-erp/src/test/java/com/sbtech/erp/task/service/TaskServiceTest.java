@@ -6,7 +6,7 @@ import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.domain.model.Employee;
 import com.sbtech.erp.employee.domain.model.EmployeeStatus;
 import com.sbtech.erp.employee.domain.model.Password;
-import com.sbtech.erp.task.adapter.in.dto.CreateTaskRequestDto;
+import com.sbtech.erp.task.adapter.in.dto.TaskCreateRequest;
 import com.sbtech.erp.task.application.port.out.TaskRepository;
 import com.sbtech.erp.task.application.service.TaskService;
 import com.sbtech.erp.task.domain.model.Task;
@@ -54,7 +54,7 @@ class TaskServiceTest {
         when(employeeUseCase.findById(1L)).thenReturn(assignee);
         when(employeeUseCase.findById(2L)).thenReturn(creator);
 
-        CreateTaskRequestDto dto = new CreateTaskRequestDto(
+        TaskCreateRequest dto = new TaskCreateRequest(
                 "업무 제목",
                 "업무 설명",
                 1L,

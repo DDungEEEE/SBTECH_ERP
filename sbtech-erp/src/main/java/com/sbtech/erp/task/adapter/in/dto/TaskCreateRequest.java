@@ -3,9 +3,8 @@ package com.sbtech.erp.task.adapter.in.dto;
 import com.sbtech.erp.task.domain.model.TaskPriority;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-public record CreateTaskRequestDto(
+public record TaskCreateRequest(
         String title,
         String description,
         Long assigneeId,

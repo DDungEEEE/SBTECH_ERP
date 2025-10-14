@@ -43,9 +43,20 @@ public class TaskJpaAdapter implements TaskRepository {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<Task> findAllTasks() {
+        List<TaskEntity> tasks = taskJpaRepository.findAll();
+        return tasks
+                .stream()
+                .map(this::toDomainWithEmployees)
+                .collect(Collectors.toList());
+    }
+
     private Task toDomainWithEmployees(TaskEntity entity) {
         Employee assignee = employeeUseCase.findById(entity.getAssignee().getId(), "담당자 없음");
         Employee createdBy = employeeUseCase.findById(entity.getCreatedBy().getId(), "생성자 없음");
         return TaskMapper.toDomain(entity, assignee, createdBy);
     }
+
+
 }

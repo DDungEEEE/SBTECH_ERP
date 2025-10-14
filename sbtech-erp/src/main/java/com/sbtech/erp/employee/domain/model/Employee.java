@@ -120,4 +120,8 @@ public class Employee {
     public boolean isActive(){
         return this.status == EmployeeStatus.ACTIVE;
     }
+
+    public boolean isAdmin(){
+        return this.systemRole == SystemRole.ADMIN;
+    }
 }

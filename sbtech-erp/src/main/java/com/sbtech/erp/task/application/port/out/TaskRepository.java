@@ -9,4 +9,5 @@ public interface TaskRepository {
     Task save(Task task);
     Optional<Task> findById(Long id);
     List<Task> findByAssigneeId(Long assigneeId);
+    List<Task> findAllTasks();
 }

@@ -1,11 +1,11 @@
 package com.sbtech.erp.task.application.service;
 
+import com.sbtech.erp.auth.application.service.AuthService;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
-import com.sbtech.erp.employee.application.port.out.EmployeeRepository;
 import com.sbtech.erp.employee.domain.model.Employee;
-import com.sbtech.erp.task.adapter.in.dto.CreateTaskRequestDto;
+import com.sbtech.erp.task.adapter.in.dto.TaskCreateRequest;
 import com.sbtech.erp.task.application.port.in.TaskUseCase;
 import com.sbtech.erp.task.application.port.out.TaskRepository;
 import com.sbtech.erp.task.domain.model.Task;
@@ -14,15 +14,18 @@ import com.sbtech.erp.task.domain.model.TaskStatus;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TaskService implements TaskUseCase {
 
     private final TaskRepository taskRepository;
     private final EmployeeUseCase employeeUseCase;
+    private final AuthService authService;
 
     @Override
-    public Task createTask(CreateTaskRequestDto dto) {
+    public Task createTask(TaskCreateRequest dto) {
         Employee assignee = employeeUseCase.findById(dto.assigneeId());
         Employee createdBy = employeeUseCase.findById(dto.createdById());
         TaskPriority p = dto.priority() == null ? TaskPriority.MEDIUM : dto.priority();
@@ -41,23 +44,21 @@ public class TaskService implements TaskUseCase {
     }
 
 
+
     @Override
-    public Task changeMyTaskStatus(Long taskId, TaskStatus newStatus, Long employeeId) {
+    public Task changeTaskStatus(Long taskId, TaskStatus newStatus, Long employeeId) {
         Task task = findById(taskId);
-        if (!task.getAssignee().getId().equals(employeeId)) {
-            throw new CustomException(ErrorCode.NO_PERMISSION_ERROR);
-        }
+
+        authService.validateOwnershipOrAdmin(employeeId, task.getAssignee().getId());
+
         Task changed = task.changeStatus(newStatus); // 도메인 규칙 검증 포함
+
         return taskRepository.save(changed);
     }
 
     @Override
-    public Task changeTaskStatusAsAdmin(Long taskId, TaskStatus newStatus, Long adminId) {
-        // TODO: adminId 권한 검증(RBAC)
-        Task task = findById(taskId);
-        Task changed = task.changeStatus(newStatus); // 규칙은 동일하게 적용 권장
-
-        return taskRepository.save(changed);
+    public List<Task> getAllTasks() {
+        return taskRepository.findAllTasks();
     }
 
     @Override
