@@ -27,6 +27,7 @@ public class TaskService implements TaskUseCase {
         Employee createdBy = employeeUseCase.findById(dto.createdById());
         TaskPriority p = dto.priority() == null ? TaskPriority.MEDIUM : dto.priority();
 
+        
         Task task = Task.createNew(
                 dto.title(),
                 dto.description(),
