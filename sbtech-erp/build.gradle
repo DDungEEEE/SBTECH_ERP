@@ -44,7 +44,7 @@ dependencies {
 //	implementation 'org.json:json:20240303'
 
 // Redis 데이터 접근
-//	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
 // Redis 기반 세션 저장소
 //	implementation 'org.springframework.session:spring-session-data-redis'

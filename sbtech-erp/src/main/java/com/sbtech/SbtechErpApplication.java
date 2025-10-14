@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 @SpringBootApplication
-//@EnableScheduling
+@EnableScheduling
 //@Import(com.sbtech.external.ExternalDataSourceConfig.class)
 public class SbtechErpApplication {
 
