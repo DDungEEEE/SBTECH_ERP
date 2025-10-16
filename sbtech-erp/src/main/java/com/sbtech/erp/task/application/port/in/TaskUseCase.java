@@ -7,12 +7,13 @@ import com.sbtech.erp.task.domain.model.TaskStatus;
 import java.util.List;
 
 public interface TaskUseCase {
-    Task createTask(TaskCreateRequest dto);
+    Task createTask(TaskCreateRequest dto, Long assigneeId);
     Task changeTaskStatus(Long taskId, TaskStatus newStatus, Long employeeId);
     Task reassignTask(Long taskId, Long newAssigneeId);
     Task approveTaskCompletion(Long taskId, Long adminId);
     Task findById(Long taskId);
     List<Task> getTasksByAssignee(Long assigneeId);
     List<Task> getAllTasks();
+    void deleteTask(Long taskId);
 
 }

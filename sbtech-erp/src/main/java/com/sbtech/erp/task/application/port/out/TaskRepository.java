@@ -10,4 +10,5 @@ public interface TaskRepository {
     Optional<Task> findById(Long id);
     List<Task> findByAssigneeId(Long assigneeId);
     List<Task> findAllTasks();
+    void deleteByTaskId(Long taskId);
 }

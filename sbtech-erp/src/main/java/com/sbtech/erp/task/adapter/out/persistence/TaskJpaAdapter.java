@@ -58,5 +58,8 @@ public class TaskJpaAdapter implements TaskRepository {
         return TaskMapper.toDomain(entity, assignee, createdBy);
     }
 
-
+    @Override
+    public void deleteByTaskId(Long taskId) {
+        taskJpaRepository.deleteById(taskId);
+    }
 }

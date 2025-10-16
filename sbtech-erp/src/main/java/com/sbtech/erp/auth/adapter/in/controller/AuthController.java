@@ -17,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "사욪아 인증 컨트롤러")
+@Tag(name = "사용자 인증 컨트롤러")
 @Slf4j
 @RequiredArgsConstructor
 @RequestMapping("/erp/api/v1/auth")

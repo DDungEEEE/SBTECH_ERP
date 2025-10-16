@@ -55,7 +55,9 @@ public class TaskEntity extends BaseTimeEntity {
     @Column(name = "priority", nullable = false, length = 10)
     private TaskPriority priority;
 
-    private TaskEntity(String title,
+    private TaskEntity(
+                       Long id,
+                       String title,
                        String description,
                        TaskStatus status,
                        EmployeeEntity assignee,
@@ -64,6 +66,7 @@ public class TaskEntity extends BaseTimeEntity {
                        LocalDate dueDate,
                        LocalDate completedAt,
                        TaskPriority priority) {
+        this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
@@ -75,7 +78,9 @@ public class TaskEntity extends BaseTimeEntity {
         this.priority = priority == null ? TaskPriority.MEDIUM : priority;
     }
 
-    public static TaskEntity create(String title,
+    public static TaskEntity create(
+                                    Long id,
+                                    String title,
                                     String description,
                                     TaskStatus status,
                                     EmployeeEntity assignee,
@@ -83,6 +88,6 @@ public class TaskEntity extends BaseTimeEntity {
                                     LocalDate startDate,
                                     LocalDate dueDate,
                                     TaskPriority priority) {
-        return new TaskEntity(title, description, status, assignee, createdBy, startDate, dueDate, null, priority);
+        return new TaskEntity(id, title, description, status, assignee, createdBy, startDate, dueDate, null, priority);
     }
 }

@@ -10,6 +10,7 @@ public class TaskMapper {
 
     public static TaskEntity toEntity(Task task) {
         return TaskEntity.create(
+                task.getId(),
                 task.getTitle(),
                 task.getDescription(),
                 task.getStatus(),

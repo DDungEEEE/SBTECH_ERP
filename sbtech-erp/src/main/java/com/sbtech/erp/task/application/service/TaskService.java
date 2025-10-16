@@ -25,9 +25,9 @@ public class TaskService implements TaskUseCase {
     private final AuthService authService;
 
     @Override
-    public Task createTask(TaskCreateRequest dto) {
+    public Task createTask(TaskCreateRequest dto, Long assigneeId) {
         Employee assignee = employeeUseCase.findById(dto.assigneeId());
-        Employee createdBy = employeeUseCase.findById(dto.createdById());
+        Employee createdBy = employeeUseCase.findById(assigneeId);
         TaskPriority p = dto.priority() == null ? TaskPriority.MEDIUM : dto.priority();
 
         
@@ -40,9 +40,9 @@ public class TaskService implements TaskUseCase {
                 dto.dueDate(),
                 p
         );
+
         return taskRepository.save(task);
     }
-
 
 
     @Override
@@ -87,5 +87,10 @@ public class TaskService implements TaskUseCase {
     @Override
     public List<Task> getTasksByAssignee(Long assigneeId) {
         return taskRepository.findByAssigneeId(assigneeId);
+    }
+
+    @Override
+    public void deleteTask(Long taskId) {
+        taskRepository.deleteByTaskId(taskId);
     }
 }
