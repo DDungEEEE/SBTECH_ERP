@@ -98,6 +98,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 || uri.startsWith("/webjars")
                 || uri.equals("/swagger-ui.html")
                 || uri.equals("/favicon.ico")
-                || uri.startsWith("/api/v1/external");
+                || uri.startsWith("/api/v1/external")
+                || uri.startsWith("/login")
+                || uri.startsWith("/signup")
+                || uri.startsWith("/css")
+                || uri.startsWith("/js")
+                || uri.startsWith("/images");
+
     }
 }
