@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
-            background-color: #ffffff;
+            background-color: #f5f7fb;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -16,6 +16,10 @@
 
         .login-container {
             text-align: center;
+            background-color: #fff;
+            padding: 50px 60px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
         .login-logo {
@@ -23,7 +27,7 @@
         }
 
         .login-logo img {
-            width: 150px;
+            width: 180px;
         }
 
         .login-form {
@@ -38,17 +42,17 @@
             margin-bottom: 10px;
             padding: 0 10px;
             border: 1px solid #ccc;
-            border-radius: 3px;
+            border-radius: 5px;
             font-size: 14px;
         }
 
         .login-button {
             width: 350px;
             height: 45px;
-            background-color: #3da9f5;
+            background-color: #0094ff;
             color: white;
             border: none;
-            border-radius: 3px;
+            border-radius: 5px;
             cursor: pointer;
             font-size: 15px;
             font-weight: 600;
@@ -56,7 +60,7 @@
         }
 
         .login-button:hover {
-            background-color: #2196f3;
+            background-color: #007bdb;
         }
 
         .login-links {
@@ -76,7 +80,7 @@
         }
 
         .login-footer {
-            margin-top: 60px;
+            margin-top: 40px;
             font-size: 12px;
             color: #999;
         }
@@ -84,6 +88,9 @@
 </head>
 <body>
 <div class="login-container">
+    <div class="login-logo">
+        <img th:src="@{/images/sbtech-logo.png}" alt="SBTECH ERP 로고">
+    </div>
 
     <form class="login-form" th:action="@{/login}" method="post">
         <input type="text" class="login-input" name="username" placeholder="아이디를 입력해주세요">

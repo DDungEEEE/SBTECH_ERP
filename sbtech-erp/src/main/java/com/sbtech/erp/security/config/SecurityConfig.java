@@ -85,7 +85,8 @@ public class SecurityConfig {
                                                 "/css/**",          // 정적 리소스
                                                 "/js/**",
                                                 "/images/**",
-                                                "/favicon.ico"
+                                                "/favicon.ico",
+                                                "/employee/**"
                                         ).permitAll()           // ←
                                         .requestMatchers(HttpMethod.POST, "/erp/api/v1/auth/login").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/erp/api/v1/employee/register").permitAll()
