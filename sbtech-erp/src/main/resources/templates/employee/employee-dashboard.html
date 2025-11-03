@@ -4,22 +4,26 @@
     <meta charset="UTF-8">
     <title>사원 대시보드</title>
     <style>
-        body {
+        html, body {
+            height: 100%;
             margin: 0;
-            font-family: 'Noto Sans KR', sans-serif;
-            background-color: #f5f7fa;
-            display: flex;
+            padding: 0;
         }
 
-        /* Sidebar */
+        body {
+            display: flex;
+            height: 100vh;
+            background-color: #f5f7fa;
+        }
+
         .sidebar {
             width: 220px;
             background-color: #1e293b;
             color: white;
-            height: 100vh;
             display: flex;
             flex-direction: column;
             padding-top: 20px;
+            height: 100vh;
         }
 
         .sidebar h2 {
@@ -47,6 +51,7 @@
         .main {
             flex-grow: 1;
             padding: 30px;
+            min-height: 100vh;
         }
 
         .topbar {
@@ -96,6 +101,9 @@
             grid-template-columns: 2fr 1fr;
             gap: 20px;
             margin-top: 30px;
+        }
+        .chart{
+            max-height: 700px;
         }
 
         .chart, .quick-access {
@@ -158,7 +166,7 @@
 
         canvas {
             width: 100%;
-            height: 250px;
+            height: 100px;
         }
     </style>
 </head>
@@ -200,8 +208,7 @@
         </div>
         <div class="card">
             <h3>업무 완료율</h3>
-            <p id="progress">84%</p>
-            <small>+5% 향상</small>
+            <p id="progress">33%</p>
         </div>
     </div>
 
@@ -213,9 +220,9 @@
 
         <div class="quick-access">
             <h4>빠른 액세스</h4>
-            <div>📋 내 업무 보기</div>
-            <div>🧾 보고서 작성</div>
-            <div>🛒 내 주문 보기</div>
+            <div> 내 업무 보기</div>
+            <div> 보고서 작성</div>
+            <div> 내 주문 보기</div>
         </div>
     </div>
 
@@ -244,10 +251,10 @@
                 <th>주문번호</th><th>고객사</th><th>상품</th><th>금액</th><th>상태</th>
             </tr>
             <tr>
-                <td>ORD-145</td><td>삼성전자</td><td>노트북 10대</td><td>₩50,000,000</td><td><span class="status done">완료</span></td>
+                <td>ORD-145</td><td>파주점</td><td>DF100D 10개</td><td>₩500,000</td><td><span class="status done">완료</span></td>
             </tr>
             <tr>
-                <td>ORD-146</td><td>LG전자</td><td>모니터 20대</td><td>₩15,000,000</td><td><span class="status in-progress">진행중</span></td>
+                <td>ORD-146</td><td>수원점</td><td>XF12100 200개</td><td>₩5,000,000</td><td><span class="status in-progress">진행중</span></td>
             </tr>
         </table>
     </div>
@@ -260,7 +267,7 @@
     new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['1월', '2월', '3월', '4월', '5월', '6월'],
+            labels: ['5월', '6월', '7월', '8월', '9월', '10월'],
             datasets: [{
                 label: '매출 (만원)',
                 data: [300, 450, 380, 520, 480, 550],

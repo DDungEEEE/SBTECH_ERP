@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>SBTECH 회원가입</title>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f5f7fb;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .signup-container {
+            text-align: center;
+            background-color: #fff;
+            padding: 50px 60px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 400px;
+        }
+
+        .signup-form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .signup-input {
+            width: 100%;
+            height: 40px;
+            margin-bottom: 10px;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .id-check-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .id-check-input {
+            flex: 1;
+            height: 40px;
+            padding: 0 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .check-button {
+            height: 40px;
+            width: 90px;
+            background-color: #0094ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .check-button:hover {
+            background-color: #007bdb;
+        }
+
+        .signup-button {
+            width: 100%;
+            height: 45px;
+            background-color: #0094ff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            margin-top: 5px;
+        }
+
+        .signup-button:hover {
+            background-color: #007bdb;
+        }
+
+        .message {
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .message.error {
+            color: red;
+        }
+
+        .message.success {
+            color: green;
+        }
+
+        .back-link {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .back-link a {
+            color: #666;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="signup-container">
+    <h2>SBTECH 회원가입</h2>
+
+    <form class="signup-form" th:action="@{/register}" method="post">
+        <input type="text" class="signup-input" name="name" placeholder="이름을 입력해주세요">
+
+        <div class="id-check-container">
+            <input type="text" id="loginId" class="id-check-input" name="loginId" placeholder="아이디를 입력해주세요">
+            <button type="button" class="check-button" onclick="checkLoginId()">중복확인</button>
+        </div>
+        <span id="loginIdMessage" class="message"></span>
+
+        <input type="password" class="signup-input" name="password" placeholder="비밀번호를 입력해주세요">
+        <button type="submit" class="signup-button">회원가입</button>
+    </form>
+
+    <div class="back-link">
+        <a th:href="@{/login}">← 로그인 페이지로 돌아가기</a>
+    </div>
+</div>
+
+<script>
+    async function checkLoginId() {
+        const loginId = document.getElementById("loginId").value.trim();
+        const messageEl = document.getElementById("loginIdMessage");
+
+        if (!loginId) {
+            messageEl.textContent = "아이디를 입력해주세요.";
+            messageEl.className = "message error";
+            return;
+        }
+
+        try {
+            const response = await fetch(`/check-login-id?loginId=${encodeURIComponent(loginId)}`);
+            const result = await response.json();
+
+            if (result.data === true) {
+                messageEl.textContent = " 아이디가 이미 존재합니다.";
+                messageEl.className = "message error";
+            } else {
+                messageEl.textContent = " 사용 가능한 아이디입니다.";
+                messageEl.className = "message success";
+            }
+        } catch (error) {
+            console.error(error);
+            messageEl.textContent = "서버 오류가 발생했습니다.";
+            messageEl.className = "message error";
+        }
+    }
+</script>
+</body>
+</html>
