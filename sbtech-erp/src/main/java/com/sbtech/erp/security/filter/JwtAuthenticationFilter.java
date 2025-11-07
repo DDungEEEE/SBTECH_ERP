@@ -69,6 +69,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         return "/erp/api/v1/auth/login".equals(requestURI)
                 || isSwaggerRequest(requestURI)
                 || "/erp/api/v1/employee/register".equals(requestURI)
+                ||requestURI.equals("/erp/api/v1/employee/check-login-id")
                 || requestURI.startsWith("/actuator");
     }
 

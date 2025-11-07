@@ -90,6 +90,7 @@ public class SecurityConfig {
                                         ).permitAll()           // ←
                                         .requestMatchers(HttpMethod.POST, "/erp/api/v1/auth/login").permitAll()
                                         .requestMatchers(HttpMethod.POST, "/erp/api/v1/employee/register").permitAll()
+                                        .requestMatchers(HttpMethod.GET, "/erp/api/v1/employee/check-login-id").permitAll()
                                         .requestMatchers("/erp/api/v1/**").authenticated()
                                         .requestMatchers("/actuator/**").permitAll()
                                     .anyRequest().permitAll()

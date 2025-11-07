@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
+
+    <h1>사원 관리</h1>
+
+    <!-- 재직중 직원 -->
+    <div class="section-card">
+        <h3>재직중 사원 목록</h3>
+        <table class="table" id="employeeTable">
+            <thead>
+            <tr>
+                <th>사번</th>
+                <th>이름</th>
+                <th>아이디</th>
+                <th>부서</th>
+                <th>직무</th>
+                <th>직급</th>
+                <th>권한</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <!-- 승인 대기 직원 -->
+    <div class="section-card">
+        <h3>승인 대기 사원 목록</h3>
+        <table class="table" id="pendingTable">
+            <thead>
+            <tr>
+                <th>이름</th>
+                <th>아이디</th>
+                <th>부서</th>
+                <th>직무</th>
+                <th>직급</th>
+                <th>권한</th>
+                <th>상태</th>
+                <th>작업</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+    <script>
+        const token = localStorage.getItem("accessToken");
+
+        async function apiGet(url) {
+            const res = await fetch(url, {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+            const json = await res.json();
+            return json.data; // ✅ data만 추출
+        }
+
+        async function loadEmployees() {
+            const data = await apiGet('/erp/api/v1/employee/list');
+
+            const tbody = document.querySelector("#employeeTable tbody");
+            tbody.innerHTML = "";
+
+            data
+                .filter(emp => emp.employeeStatus !== "pending")
+                .forEach(emp => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${emp.id}</td>
+                            <td>${emp.name}</td>
+                            <td>${emp.loginId}</td>
+                            <td>${emp.departmentName}</td>
+                            <td>${emp.positionName}</td>
+                            <td>${emp.rank}</td>
+                            <td>
+                                <span class="badge ${emp.employeeStatus === '재직' ? 'badge-success' : 'badge-secondary'}">
+                                    ${emp.employeeStatus}
+                                </span>
+                            </td>
+                        </tr>
+                    `;
+                });
+        }
+
+        async function loadPendingEmployees() {
+            const data = await apiGet('/erp/api/v1/employee/list?status=pending');
+            const dept = await apiGet('/erp/api/v1/department');
+            const positions = await apiGet('/erp/api/v1/position');
+            const ranks = ["인턴","사원","주임","대리","과장","차장","부장","이사"]; // Rank enum labels
+            const roles = ["사원", "관리자"]; // ✅ 권한 추가
+
+            const tbody = document.querySelector("#pendingTable tbody");
+            tbody.innerHTML = "";
+
+            data.forEach(emp => {
+                tbody.innerHTML += `
+            <tr>
+                <td>${emp.name}</td>
+                <td>${emp.loginId}</td>
+
+                <td>
+                    <select class="deptSelect">
+                        ${dept.map(d => `<option value="${d.id}">${d.name}</option>`).join("")}
+                    </select>
+                </td>
+
+                <td>
+                    <select class="posSelect">
+                        ${positions.map(p => `<option value="${p.id}">${p.name}</option>`).join("")}
+                    </select>
+                </td>
+
+                <td>
+                    <select class="rankSelect">
+                        ${ranks.map(r => `<option value="${r}">${r}</option>`).join("")}
+                    </select>
+                </td>
+
+                <!-- ✅ 권한 선택 -->
+                <td>
+                    <select class="roleSelect">
+                        ${roles.map(r => `<option value="${r}">${r}</option>`).join("")}
+                    </select>
+                </td>
+
+                <td>${emp.employeeStatus}</td>
+
+                <td>
+                    <button class="btn-approve approveBtn" data-id="${emp.id}">승인</button>
+                </td>
+            </tr>
+        `;
+            });
+        }
+
+        window.onload = () => {
+            loadEmployees();
+            loadPendingEmployees();
+        };
+    </script>
+
+</th:block>
+</html>

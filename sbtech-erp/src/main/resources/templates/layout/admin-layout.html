@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>ERP 관리자 시스템</title>
+
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        .sidebar {
+            width: 240px;
+            transition: width 0.3s;
+            background-color: #1e2a3a;
+            height: 100vh;
+            padding-top: 20px;
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .sidebar.collapsed {
+            width: 60px;
+        }
+
+        .toggle-sidebar-btn {
+            font-size: 20px;
+            color: white;
+            cursor: pointer;
+            padding: 10px 15px;
+            display: inline-block;
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 22px;
+            margin-bottom: 25px;
+            white-space: nowrap;
+        }
+
+        .logo span {
+            color: #4f83ff;
+            font-weight: bold;
+        }
+
+        .menu {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .menu-item > a {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-decoration: none;
+            padding: 12px 18px;
+            font-size: 15px;
+            color: #b8c7ce;
+            transition: 0.2s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .sidebar.collapsed .menu-item > a span.text {
+            display: none;
+        }
+
+        .sidebar.collapsed .arrow {
+            display: none;
+        }
+
+        .menu-item:hover > a,
+        .menu-item.active > a {
+            background-color: #4f83ff;
+            color: white;
+            border-radius: 4px;
+        }
+
+        .arrow {
+            font-size: 13px;
+        }
+
+        .submenu {
+            display: none;
+            background: #273447;
+        }
+
+        .submenu li a {
+            padding: 10px 35px;
+            display: block;
+            text-decoration: none;
+            color: #cdd9e5;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .submenu li a:hover {
+            background-color: #4f83ff;
+            color: white;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+        }
+    </style>
+
+    <th:block th:if="${pageName == 'employee-management'}">
+        <link rel="stylesheet" th:href="@{/css/employee-management.css}">
+    </th:block>
+    }">
+</head>
+
+<body>
+
+<!-- ✅ Sidebar -->
+<div class="sidebar" id="sidebar">
+    <div class="toggle-sidebar-btn" id="toggleBtn">☰</div>
+
+    <h2 class="logo"><span>ERP</span> System</h2>
+
+    <ul class="menu">
+
+        <li class="menu-item"><a href="web/admin"><span class="text">대시보드</span></a></li>
+
+        <li class="menu-item has-sub">
+            <a class="toggle-btn"><span class="text">사원 관리</span> <span class="arrow">▶</span></a>
+            <ul class="submenu">
+                <li><a href="/web/admin/employee-management">사원 목록</a></li>
+                <li><a href="/admin/employees/new">신규 사원 등록</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-item has-sub">
+            <a class="toggle-btn"><span class="text">업무 관리</span> <span class="arrow">▶</span></a>
+            <ul class="submenu">
+                <li><a href="/admin/tasks">업무 현황</a></li>
+                <li><a href="/admin/tasks/new">업무 생성</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-item has-sub">
+            <a class="toggle-btn"><span class="text">회계 관리</span> <span class="arrow">▶</span></a>
+            <ul class="submenu">
+                <li><a href="/admin/accounting">회계 대시보드</a></li>
+                <li><a href="/admin/accounting/vouchers">전표 관리</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-item has-sub">
+            <a class="toggle-btn"><span class="text">재고 관리</span> <span class="arrow">▶</span></a>
+            <ul class="submenu">
+                <li><a href="/admin/inventory">재고 현황</a></li>
+                <li><a href="/admin/inventory/io">입·출고 관리</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-item"><a href="#"><span class="text">보고서</span></a></li>
+
+    </ul>
+</div>
+
+<!-- ✅ Content -->
+<div class="content">
+    <th:block th:replace="~{${content} :: content}"></th:block>
+</div>
+
+
+<!-- ✅ Scripts -->
+<script>
+    // 서브메뉴 토글
+    document.querySelectorAll(".has-sub .toggle-btn").forEach(button => {
+        button.addEventListener("click", () => {
+            const submenu = button.nextElementSibling;
+            const arrow = button.querySelector(".arrow");
+
+            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+            arrow.textContent = arrow.textContent === "▶" ? "▼" : "▶";
+        });
+    });
+
+    // 전체 사이드바 토글
+    const sidebar = document.getElementById("sidebar");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("collapsed");
+    });
+</script>
+
+<script th:if="${pageName == 'employee-management'}"
+        src="/js/admin/employee-management.js">
+</script>
+</body>
+</html>
