@@ -107,12 +107,27 @@
             flex: 1;
             padding: 20px;
         }
+
+        .logout-btn {
+            margin-top: auto;
+            padding: 12px 20px;
+            color: #cbd5e1; /* 사이드바 기본 글씨색과 동일 */
+            text-decoration: none;
+            display: block;
+            font-size: 15px;
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background-color: #2563eb; /* 메뉴 hover와 동일 */
+            color: white;
+            border-radius: 6px;
+        }
     </style>
 
     <th:block th:if="${pageName == 'employee-management'}">
         <link rel="stylesheet" th:href="@{/css/employee-management.css}">
     </th:block>
-    }">
 </head>
 
 <body>
@@ -131,7 +146,6 @@
             <a class="toggle-btn"><span class="text">사원 관리</span> <span class="arrow">▶</span></a>
             <ul class="submenu">
                 <li><a href="/web/admin/employee-management">사원 목록</a></li>
-                <li><a href="/admin/employees/new">신규 사원 등록</a></li>
             </ul>
         </li>
 
@@ -160,7 +174,7 @@
         </li>
 
         <li class="menu-item"><a href="#"><span class="text">보고서</span></a></li>
-
+        <a href="/web/login" id="logoutBtn" class="logout-btn">로그아웃</a>
     </ul>
 </div>
 
