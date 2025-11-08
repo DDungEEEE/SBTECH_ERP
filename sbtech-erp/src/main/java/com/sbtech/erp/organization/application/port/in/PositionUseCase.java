@@ -8,4 +8,5 @@ public interface PositionUseCase {
     Position createPosition(String name, boolean isActive);
     Position findByName(String name);
     List<Position> getAllPositions();
+    Position findById(Long id);
 }

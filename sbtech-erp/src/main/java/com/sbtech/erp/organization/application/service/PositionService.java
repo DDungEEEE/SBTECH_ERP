@@ -31,4 +31,9 @@ public class PositionService implements PositionUseCase {
     public List<Position> getAllPositions() {
         return positionRepository.findAllPositions();
     }
+
+    @Override
+    public Position findById(Long id) {
+        return positionRepository.findById(id);
+    }
 }

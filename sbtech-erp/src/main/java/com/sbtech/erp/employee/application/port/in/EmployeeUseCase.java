@@ -1,5 +1,6 @@
 package com.sbtech.erp.employee.application.port.in;
 
+import com.sbtech.erp.employee.adapter.in.dto.AdminEmployeeCreateReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeApprovalReq;
 import com.sbtech.erp.employee.adapter.in.dto.EmployeeCreateReq;
 import com.sbtech.erp.employee.domain.model.Employee;
@@ -26,6 +27,8 @@ public interface EmployeeUseCase {
     Employee requestRetire(Long id);
 
     Employee approveRetire(Long id);
+
+    Employee createByAdmin(AdminEmployeeCreateReq req);
 
 
 }

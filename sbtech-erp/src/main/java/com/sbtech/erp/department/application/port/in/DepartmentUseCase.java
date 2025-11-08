@@ -10,4 +10,5 @@ public interface DepartmentUseCase {
     Department updateDepartment(String name, Long parentDepartmentId);
     List<Department> getAllDepartmentList();
     List<Department> getTopLevelDepartments();
+    Department findById(Long id);
 }

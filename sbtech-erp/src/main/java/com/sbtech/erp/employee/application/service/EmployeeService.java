@@ -2,16 +2,16 @@ package com.sbtech.erp.employee.application.service;
 
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
-import com.sbtech.erp.department.adapter.out.persistence.entity.DepartmentEntity;
-import com.sbtech.erp.employee.adapter.out.persistence.repository.ApprovalHistoryJpaRepository;
-import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.department.application.port.in.DepartmentUseCase;
+import com.sbtech.erp.employee.adapter.in.dto.AdminEmployeeCreateReq;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.application.port.out.EmployeeRepository;
-import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeApprovalHistoryEntity;
 import com.sbtech.erp.employee.domain.model.Employee;
-import com.sbtech.erp.employee.mapper.EmployeeMapper;
 import com.sbtech.erp.employee.domain.model.Password;
+
 import com.sbtech.erp.employee.domain.model.Rank;
+import com.sbtech.erp.organization.application.port.in.PositionUseCase;
+import com.sbtech.erp.permission.domain.role.model.SystemRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,6 +25,8 @@ import java.util.function.Function;
 public class EmployeeService implements EmployeeUseCase {
     private final EmployeeRepository employeeRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PositionUseCase positionUseCase;
+    private final DepartmentUseCase departmentUseCase;
 
     @Override
     public Employee findById(Long id) {
@@ -52,6 +54,22 @@ public class EmployeeService implements EmployeeUseCase {
         Employee employee = Employee.createForSignUp(null, name, loginId, Password.encoded(passwordEncoder.encode(password)));
 
         return employeeRepository.save(employee);
+    }
+
+    @Override
+    public Employee createByAdmin(AdminEmployeeCreateReq req) {
+
+        return Employee.createFull(
+                null,
+                req.name(),
+                req.loginId(),
+                Password.encoded(req.password()),
+                positionUseCase.findById(req.positionId()),
+                Rank.from(req.rank()),
+                departmentUseCase.findById(req.departmentId()),
+                SystemRole.from(req.systemRole()),
+                null
+        );
     }
 
     @Override

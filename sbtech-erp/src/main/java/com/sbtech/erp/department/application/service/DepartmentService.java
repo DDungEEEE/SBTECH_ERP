@@ -47,4 +47,9 @@ public class DepartmentService implements DepartmentUseCase {
     public Department updateDepartment(String name, Long parentDepartmentId) {
         return null;
     }
+
+    @Override
+    public Department findById(Long id) {
+        return departmentRepository.findById(id);
+    }
 }

@@ -154,8 +154,6 @@ select {
     color: #2563eb;
     border-radius: 6px;
     cursor: pointer;
-    float: right;
-    margin-bottom: 10px;
     transition: .2s;
 }
 
@@ -210,6 +208,19 @@ select {
     color: white;
 }
 
+.btn-create {
+    padding: 8px 14px;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.btn-create:hover {
+    background-color: #1e40af;
+}
+
 .modal-cancel-btn {
     background: #e2e8f0;
     color: #334155;
@@ -219,6 +230,13 @@ select {
     margin-left: 220px;
     flex: 1;
     padding: 30px;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
 }
 /* 애니메이션 */
 @keyframes fadeIn {
