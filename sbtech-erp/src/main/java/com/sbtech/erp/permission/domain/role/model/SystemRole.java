@@ -13,7 +13,10 @@ public enum SystemRole {
     private final String description;
     private final String authority;
 
-    public static SystemRole from(String description){
-        return Arrays.stream(SystemRole.values()).findFirst().get();
+    public static SystemRole from(String description) {
+        return Arrays.stream(SystemRole.values())
+                .filter(r -> r.description.equals(description))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 권한입니다: " + description));
     }
 }

@@ -26,9 +26,33 @@ public class MainController {
     }
 
 
-    @GetMapping("/admin/task")
-    public String taskManagementList() {
-        return "admin/task-management";
+    @GetMapping("/admin/task-management")
+    public String taskManagementList(Model model) {
+        model.addAttribute("content", "admin/task-management");
+        model.addAttribute("pageName", "task-management");
+        return "layout/admin-layout";
+    }
+
+    @GetMapping("/admin/inventory")
+    public String inventoryManagement(Model model) {
+        model.addAttribute("content", "admin/inventory");
+        model.addAttribute("pageName", "inventory");
+        return "layout/admin-layout";
+    }
+
+    @GetMapping("/admin/journal")
+    public String journalManagement(Model model) {
+        model.addAttribute("content", "admin/journal");
+        model.addAttribute("pageName", "journal");
+        return "layout/admin-layout";
+    }
+
+
+    @GetMapping("/admin/inventory-inout")
+    public String inventoryManagementInOut(Model model) {
+        model.addAttribute("content", "admin/inventory-inout");
+        model.addAttribute("pageName", "inventory-inout");
+        return "layout/admin-layout";
     }
 
     @GetMapping("/admin")

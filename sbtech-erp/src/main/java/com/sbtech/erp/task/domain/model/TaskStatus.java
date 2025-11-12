@@ -1,7 +1,13 @@
 package com.sbtech.erp.task.domain.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
 public enum TaskStatus {
-    TODO, IN_PROGRESS, DONE, CANCELED;
+    TODO("진행 중"), IN_PROGRESS("시작 전"), DONE("완료"), CANCELED("취소");
+    private final String description;
 
     public boolean canTransitionTo(TaskStatus target){
         return switch (this){

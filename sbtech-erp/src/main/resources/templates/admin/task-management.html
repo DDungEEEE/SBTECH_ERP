@@ -1,116 +1,64 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-    <meta charset="UTF-8">
-    <title>업무 관리</title>
-    <style>
-        body{margin:0;font-family:'Noto Sans KR',sans-serif;display:flex;background:#f5f7fa;}
-        .sidebar{width:220px;background:#1e293b;color:white;padding-top:20px;min-height:100vh;}
-        .sidebar a{display:block;padding:12px 20px;color:#cbd5e1;text-decoration:none;font-size:15px;}
-        .sidebar a.active,.sidebar a:hover{background:#2563eb;color:white;border-radius:6px;}
-        .main{flex:1;padding:30px;}
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
 
-        .card,.table-card{background:white;border-radius:10px;padding:20px;margin-bottom:20px;
-            box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-        table{width:100%;border-collapse:collapse;margin-top:10px;}
-        th,td{padding:12px;border-bottom:1px solid #eee;text-align:center;font-size:14px;}
-        th{background:#f9fafb;font-weight:600;}
-        .add-btn{background:#2563eb;color:white;padding:10px 15px;border-radius:6px;float:right;cursor:pointer;}
-        .status{padding:5px 10px;border-radius:6px;color:#fff;}
-        .p{background:#4f46e5;} .w{background:#f59e0b;} .d{background:#16a34a;}
-
-        /* ✅ 모달 스타일 */
-        .modal-bg{
-            display:none; position:fixed; top:0;left:0;width:100%;height:100%;
-            background:rgba(0,0,0,0.4);align-items:center;justify-content:center;
-        }
-        .modal{
-            background:#fff;width:420px;border-radius:10px;padding:25px;
-            box-shadow:0 5px 25px rgba(0,0,0,0.15);
-        }
-        .modal h2{margin-top:0;font-size:20px;}
-        .modal label{display:block;margin:8px 0 3px;font-size:14px;}
-        .modal input,.modal select{
-            width:100%;padding:10px;border:1px solid #ddd;border-radius:6px;margin-bottom:10px;
-        }
-        .modal button{
-            width:100%;padding:10px;font-size:15px;border:none;border-radius:6px;cursor:pointer;
-        }
-        .save-btn{background:#2563eb;color:white;}
-        .cancel-btn{background:#9ca3af;color:white;margin-top:6px;}
-    </style>
-</head>
-
-<body>
-
-<div class="sidebar">
-    <h2 style="text-align:center;">ERP System</h2>
-    <a href="admin_dashboard.html">대시보드</a>
-    <a href="employee-management.html">사원 관리</a>
-    <a href="#" class="active">업무 관리</a>
-    <a href="admin_accounting.html">회계 관리</a>
-    <a href="admin_inventory.html">재고 관리</a>
-    <a href="report.html">보고서</a>
-</div>
-
-<div class="main">
-    <h1>업무 관리</h1>
-
-    <!-- ✅ 현재 업무 개수 반영 -->
-    <div class="card">
-        업무 진행 중: <b>1건</b> / 대기: <b>1건</b> / 완료: <b>1건</b>
-        <button class="add-btn" onclick="openModal()">+ 업무 배정</button>
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <h1>업무 관리</h1>
+        <button class="btn-assign" onclick="openTaskModal()">+ 업무 배정</button>
     </div>
 
+    <!-- 통계 -->
+    <div class="card">
+        업무 진행 중: <b id="inProgressCount">0건</b> /
+        대기: <b id="pendingCount">0건</b> /
+        완료: <b id="doneCount">0건</b>
+    </div>
+
+    <!-- 리스트 -->
     <div class="table-card">
         <table>
-            <tr><th>업무명</th><th>담당자</th><th>마감일</th><th>상태</th></tr>
-            <tr><td>신규 고객 발굴</td><td>김철수</td><td>2025-11-02</td><td><span class="status p">진행중</span></td></tr>
-            <tr><td>비용 분석 보고</td><td>이지연</td><td>2025-11-05</td><td><span class="status w">대기</span></td></tr>
-            <tr><td>제안서 검토</td><td>박민수</td><td>2025-10-28</td><td><span class="status d">완료</span></td></tr>
+            <thead>
+            <tr>
+                <th>업무명</th>
+                <th>담당자</th>
+                <th>마감일</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody id="taskTable"></tbody>
         </table>
     </div>
-</div>
 
-<!-- ✅ 모달 UI -->
-<div class="modal-bg" id="taskModal">
-    <div class="modal">
-        <h2>업무 배정</h2>
+    <!-- 모달 -->
+    <div class="modal-bg" id="taskModal">
+        <div class="modal">
+            <h2>업무 배정</h2>
 
-        <label>업무명</label>
-        <input type="text" placeholder="예: 신규 고객 발굴">
+            <label>업무명</label>
+            <input id="taskTitle" type="text" placeholder="예: 신규 고객 발굴">
 
-        <label>담당자</label>
-        <select>
-            <option>사원 선택</option>
-            <option>김철수</option>
-            <option>이지연</option>
-            <option>박민수</option>
-        </select>
+            <label>담당자</label>
+            <select id="assigneeSelect">
+                <option value="">사원 선택</option>
+            </select>
 
-        <label>마감일</label>
-        <input type="date">
+            <label>마감일</label>
+            <input id="dueDate" type="date">
 
-        <label>상태</label>
-        <select>
-            <option>진행중</option>
-            <option>대기</option>
-            <option>완료</option>
-        </select>
+            <label>상태</label>
+            <select id="statusSelect">
+                <option value="PENDING">대기</option>
+                <option value="IN_PROGRESS">진행중</option>
+                <option value="DONE">완료</option>
+            </select>
 
-        <button class="save-btn">배정 완료</button>
-        <button class="cancel-btn" onclick="closeModal()">취소</button>
+            <button class="save-btn" onclick="assignTask()">배정 완료</button>
+            <button class="cancel-btn" onclick="closeTaskModal()">취소</button>
+        </div>
     </div>
-</div>
 
-<script>
-    function openModal() {
-        document.getElementById("taskModal").style.display = "flex";
-    }
-    function closeModal() {
-        document.getElementById("taskModal").style.display = "none";
-    }
-</script>
+    <script th:src="@{/js/admin/task-management.js}"></script>
 
-</body>
+</th:block>
 </html>

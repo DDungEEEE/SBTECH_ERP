@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1>입·출고 관리</h1>
+        <button class="btn-primary" onclick="location.href='/web/admin/inventory'">재고 현황</button>
+    </div>
+
+    <div class="card form-grid">
+        <select id="itemSelect">
+            <option value="">품목 선택</option>
+        </select>
+
+        <input id="qtyInput" type="number" placeholder="수량 입력">
+
+        <select id="typeSelect">
+            <option value="IN">입고</option>
+            <option value="OUT">출고</option>
+        </select>
+
+        <button class="btn-primary" onclick="saveInOut()">등록</button>
+    </div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>품목명</th>
+                <th>유형</th>
+                <th>수량</th>
+                <th>담당자</th>
+            </tr>
+            </thead>
+            <tbody id="inoutTable"></tbody>
+        </table>
+    </div>
+
+    <script th:src="@{/js/admin/inventory-inout.js}"></script>
+</th:block>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<link rel="stylesheet" th:href="@{/css/journal.css}">
+
+<th:block th:fragment="content">
+
+    <div class="page-header">
+        <h1>전표 관리</h1>
+        <button class="btn-primary" onclick="openJournalModal()">+ 전표 등록</button>
+    </div>
+
+    <!-- 검색바 -->
+    <div class="card">
+        <input class="search-input" placeholder="계정명 또는 설명 검색..." oninput="searchJournal(this.value)">
+    </div>
+
+    <!-- 전표 테이블 -->
+    <div class="table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>날짜</th>
+                <th>전표 번호</th>
+                <th>계정명</th>
+                <th>차변</th>
+                <th>대변</th>
+                <th>금액</th>
+                <th>작성자</th>
+            </tr>
+            </thead>
+            <tbody id="journalTable"></tbody>
+        </table>
+    </div>
+
+    <!-- 모달 -->
+    <div class="modal-bg" id="journalModal">
+        <div class="modal">
+            <h2>전표 등록</h2>
+
+            <label>계정명</label>
+            <select id="accountSelect">
+                <option value="">계정 선택</option>
+            </select>
+
+            <label>차변/대변</label>
+            <select id="typeSelect">
+                <option value="DEBIT">차변</option>
+                <option value="CREDIT">대변</option>
+            </select>
+
+            <label>금액</label>
+            <input id="amountInput" type="number" placeholder="금액 입력">
+
+            <button class="save-btn" onclick="saveJournal()">등록</button>
+            <button class="cancel-btn" onclick="closeJournalModal()">취소</button>
+        </div>
+    </div>
+
+    <script th:src="@{/js/admin/journal.js}"></script>
+
+</th:block>
+</html>

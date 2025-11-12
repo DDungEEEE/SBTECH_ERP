@@ -91,7 +91,7 @@
             const dept = await apiGet('/erp/api/v1/department');
             const positions = await apiGet('/erp/api/v1/position');
             const ranks = ["인턴","사원","주임","대리","과장","차장","부장","이사"]; // Rank enum labels
-            const roles = ["사원", "관리자"]; // ✅ 권한 추가
+            const roles = ["사용자", "관리자"]; // ✅ 권한 추가
 
             const tbody = document.querySelector("#pendingTable tbody");
             tbody.innerHTML = "";
@@ -137,11 +137,67 @@
             });
         }
 
+
         window.onload = () => {
             loadEmployees();
             loadPendingEmployees();
         };
+
+        // ✅ POST 요청 함수
+        async function apiPatch(url, body) {
+            const res = await fetch(url, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                alert("승인 실패: " + errorText);
+                return;
+            }
+
+            return res.json();
+        }
+
+        // ✅ 승인 버튼 이벤트 바인딩
+        document.addEventListener("click", async (e) => {
+            if (e.target.classList.contains("approveBtn")) {
+                const row = e.target.closest("tr");
+
+                const employeeId = e.target.dataset.id;
+                const departmentId = row.querySelector(".deptSelect").value;
+                const positionId = row.querySelector(".posSelect").value;
+                const rank = row.querySelector(".rankSelect").value;
+                const systemRole = row.querySelector(".roleSelect").value;
+
+                const body = {
+                    employeeId: Number(employeeId),
+                    departmentId: Number(departmentId),
+                    positionId: Number(positionId),
+                    rank: rank,
+                    systemRole: systemRole,
+                    memo: "승인 처리"  // 필요하면 textarea UI로 분리
+                };
+
+
+
+                console.log("Approval Request:", body);
+
+                const result = await apiPatch("/erp/api/v1/employee/approve", body);
+
+                if (result) {
+                    await loadEmployees();
+                    await loadPendingEmployees();
+                }
+            }
+        });
+
     </script>
+
 
 </th:block>
 </html>

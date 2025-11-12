@@ -3,11 +3,14 @@ package com.sbtech.erp.task.adapter.out.dto;
 import com.sbtech.erp.task.domain.model.Task;
 import com.sbtech.erp.task.domain.model.TaskStatus;
 
+import java.time.LocalDate;
+
 public record TaskResponse(
         Long id,
         String title,
         String description,
-        TaskStatus status,
+        String status,
+        LocalDate dueDate,
         String assigneeName,
         String createdByName
 ) {
@@ -16,7 +19,8 @@ public record TaskResponse(
                 task.getId(),
                 task.getTitle(),
                 task.getDescription(),
-                task.getStatus(),
+                task.getStatus().getDescription(),
+                task.getDueDate(),
                 task.getAssignee().getName(),
                 task.getCreatedBy().getName()
         );

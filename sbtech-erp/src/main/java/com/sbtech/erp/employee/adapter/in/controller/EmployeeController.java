@@ -89,6 +89,7 @@ public class EmployeeController {
     public ResponseEntity<SuccessResponse<Employee>> allowEmployeeRegister(@RequestBody EmployeeApprovalReq employeeApprovalReq,
                                                                                  @AuthenticationPrincipal EmployeeUserDetails userDetails){
         Long approvalId = userDetails.getEmployeeEntity().getId();
+
         Employee approvedEmployee = employeeApprovalFacade.approveEmployeeRegistration(
                 employeeApprovalReq.positionId(),
                 employeeApprovalReq.departmentId(),
@@ -158,6 +159,20 @@ public class EmployeeController {
                             .successCode(SuccessCode.SELECT_SUCCESS).build());
         }
 
+    @GetMapping("/list/user")
+    public ResponseEntity<SuccessResponse<List<EmployeeResDto>>> findUser(@RequestParam(required = false) String status){
+        List<Employee> employees = "pending".equals(status)
+                ? employeeUseCase.getPendingEmployees()
+                : employeeUseCase.findAllEmployees();
+
+        employees.stream().filter(employee -> employee.getSystemRole().equals(SystemRole.USER));
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(SuccessResponse.<List<EmployeeResDto>>builder()
+                        .data(EmployeeResDto.from(employees))
+                        .successCode(SuccessCode.SELECT_SUCCESS).build());
+    }
 
     @Operation(
             summary = "사원 로그인 ID 중복 확인",

@@ -128,6 +128,22 @@
     <th:block th:if="${pageName == 'employee-management'}">
         <link rel="stylesheet" th:href="@{/css/employee-management.css}">
     </th:block>
+
+    <th:block th:if="${pageName == 'task-management'}">
+        <link rel="stylesheet" th:href="@{/css/task-management.css}">
+    </th:block>
+    <th:block th:if="${pageName == 'inventory'}">
+        <link rel="stylesheet" th:href="@{/css/inventory.css}">
+    </th:block>
+
+    <th:block th:if="${pageName == 'inventory-inout'}">
+        <link rel="stylesheet" th:href="@{/css/inventory-inout.css}">
+    </th:block>
+
+    <th:block th:if="${pageName == 'journal'}">
+        <link rel="stylesheet" th:href="@{/css/journal.css}">
+    </th:block>
+
 </head>
 
 <body>
@@ -140,7 +156,7 @@
 
     <ul class="menu">
 
-        <li class="menu-item"><a href="web/admin"><span class="text">대시보드</span></a></li>
+        <li class="menu-item"><a th:href="@{/web/admin}"><span class="text">대시보드</span></a></li>
 
         <li class="menu-item has-sub">
             <a class="toggle-btn"><span class="text">사원 관리</span> <span class="arrow">▶</span></a>
@@ -152,8 +168,7 @@
         <li class="menu-item has-sub">
             <a class="toggle-btn"><span class="text">업무 관리</span> <span class="arrow">▶</span></a>
             <ul class="submenu">
-                <li><a href="/admin/tasks">업무 현황</a></li>
-                <li><a href="/admin/tasks/new">업무 생성</a></li>
+                <li><a th:href="@{/web/admin/task-management}">업무 현황</a></li>
             </ul>
         </li>
 
@@ -161,15 +176,15 @@
             <a class="toggle-btn"><span class="text">회계 관리</span> <span class="arrow">▶</span></a>
             <ul class="submenu">
                 <li><a href="/admin/accounting">회계 대시보드</a></li>
-                <li><a href="/admin/accounting/vouchers">전표 관리</a></li>
+                <li><a th:href="@{/web/admin/journal}">전표 관리</a></li>
             </ul>
         </li>
 
         <li class="menu-item has-sub">
             <a class="toggle-btn"><span class="text">재고 관리</span> <span class="arrow">▶</span></a>
             <ul class="submenu">
-                <li><a href="/admin/inventory">재고 현황</a></li>
-                <li><a href="/admin/inventory/io">입·출고 관리</a></li>
+                <li><a th:href="@{/web/admin/inventory}">재고 현황</a></li>
+                <li><a th:href="@{/web/admin/inventory-inout}">입·출고 관리</a></li>
             </ul>
         </li>
 

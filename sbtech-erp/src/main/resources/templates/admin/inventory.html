@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
+    <div class="page-header">
+        <h1>재고 관리</h1>
+        <button class="btn-primary" onclick="location.href='/web/admin/inventory/inout'">입·출고 관리</button>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <p>전체 재고</p>
+            <h2 id="totalItems">2,847</h2>
+            <span class="stat-label stat-green">정상 운영중</span>
+        </div>
+        <div class="stat-card">
+            <p>부족 품목</p>
+            <h2 id="lowStock">23</h2>
+            <span class="stat-label stat-red">재고 확보 필요</span>
+        </div>
+        <div class="stat-card">
+            <p>총 가치</p>
+            <h2 id="totalValue">₩423M</h2>
+            <span class="stat-subtext">+8.2% vs 지난달</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <input class="search-input" placeholder="품목 검색..." oninput="searchInventory(this.value)">
+    </div>
+
+    <div class="table-card">
+        <table>
+            <thead>
+            <tr>
+                <th>품목명</th>
+                <th>카테고리</th>
+                <th>재고 수량</th>
+                <th>단가</th>
+                <th>총 금액</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody id="inventoryTable"></tbody>
+        </table>
+    </div>
+
+    <script th:src="@{/js/admin/inventory.js}"></script>
+</th:block>
+</html>
