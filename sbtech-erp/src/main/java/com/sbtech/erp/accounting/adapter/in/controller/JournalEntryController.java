@@ -1,8 +1,11 @@
 package com.sbtech.erp.accounting.adapter.in.controller;
 
 
+import com.sbtech.erp.accounting.adapter.in.dto.CreateJournalEntryReq;
 import com.sbtech.erp.accounting.adapter.in.dto.CreateLedgerAccountReq;
+import com.sbtech.erp.accounting.application.port.in.JournalEntryUseCase;
 import com.sbtech.erp.accounting.application.port.in.LedgerAccountUseCase;
+import com.sbtech.erp.accounting.domain.model.JournalEntry;
 import com.sbtech.erp.accounting.domain.model.LedgerAccount;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -12,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ledger-account")
+@RequestMapping("/erp/api/v1/journal-entry")
 @RequiredArgsConstructor
 public class JournalEntryController {
 
     private final LedgerAccountUseCase ledgerAccountUseCase;
+    private final JournalEntryUseCase journalEntryUseCase;
 
     @Operation(
             summary = "분개전표 생성",
@@ -40,8 +44,8 @@ public class JournalEntryController {
             }
     )
     @PostMapping
-    public LedgerAccount create(@RequestBody CreateLedgerAccountReq req) {
-        return ledgerAccountUseCase.create(req);
+    public JournalEntry create(@RequestBody CreateJournalEntryReq req) {
+        return journalEntryUseCase.create(req);
     }
 
     @Operation(

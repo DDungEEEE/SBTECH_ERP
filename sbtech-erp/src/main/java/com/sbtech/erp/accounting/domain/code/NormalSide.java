@@ -3,6 +3,8 @@ package com.sbtech.erp.accounting.domain.code;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.Arrays;
+
 @Getter
 @AllArgsConstructor
 public enum NormalSide {
@@ -11,4 +13,11 @@ public enum NormalSide {
 
     private final String label;       // 한국어 라벨 (차변 / 대변)
     private final String description; // 설명
+
+    public static NormalSide from(String string) {
+        return Arrays.stream(NormalSide.values())
+                .filter(ns -> ns.label.equals(string))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Invalid NormalSide label: " + string));
+    }
 }

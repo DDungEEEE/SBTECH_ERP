@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/api/ledger-accounts")
+@RequestMapping(path = "/erp/api/v1/ledger-accounts")
 @RequiredArgsConstructor
 public class LedgerAccountController {
     private final LedgerAccountUseCase ledgerAccountUseCase;
