@@ -12,6 +12,7 @@ import com.sbtech.erp.accounting.domain.model.JournalEntry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,7 +29,7 @@ public class JournalEntryRepositoryAdapter implements JournalEntryRepository {
                 entry.getEntryDate(),
                 entry.getDescription(),
                 entry.getStatus(),
-                List.of() // 라인은 나중에 채움
+                new ArrayList<>() // 라인은 나중에 채움
         );
 
         // 2. 라인 엔티티 변환

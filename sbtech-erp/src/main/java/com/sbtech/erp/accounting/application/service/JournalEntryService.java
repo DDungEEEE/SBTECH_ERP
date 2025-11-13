@@ -24,7 +24,7 @@ public class JournalEntryService implements JournalEntryUseCase {
     private final LedgerAccountUseCase ledgerAccountUseCase;
 
     @Override
-    public JournalEntry create(CreateJournalEntryReq req) {
+    public JournalEntry create(CreateJournalEntryReq req, Long createById) {
 
         JournalEntry entry = JournalEntry.createNew(req.entryDate(), req.description());
 

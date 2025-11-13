@@ -7,9 +7,11 @@ import com.sbtech.erp.accounting.application.port.in.JournalEntryUseCase;
 import com.sbtech.erp.accounting.application.port.in.LedgerAccountUseCase;
 import com.sbtech.erp.accounting.domain.model.JournalEntry;
 import com.sbtech.erp.accounting.domain.model.LedgerAccount;
+import com.sbtech.erp.security.user.EmployeeUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,8 +46,10 @@ public class JournalEntryController {
             }
     )
     @PostMapping
-    public JournalEntry create(@RequestBody CreateJournalEntryReq req) {
-        return journalEntryUseCase.create(req);
+    public JournalEntry create(@RequestBody CreateJournalEntryReq req, @AuthenticationPrincipal EmployeeUserDetails userDetails) {
+        Long createById = userDetails.getEmployeeEntity().getId();
+
+        return journalEntryUseCase.create(req, createById);
     }
 
     @Operation(

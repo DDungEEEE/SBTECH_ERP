@@ -38,9 +38,6 @@ public class SwaggerConfig {
                                 .bearerFormat("JWT")))
                 .servers(List.of(
                         new io.swagger.v3.oas.models.servers.Server()
-                                .url("https://sbtech-erp.ddns.net")   // ✅ 여기서 URL 지정
-                                .description("Production Server"),
-                        new io.swagger.v3.oas.models.servers.Server()
                                 .url("http://localhost:30300")       // ✅ 예: 로컬 개발 서버도 추가 가능
                                 .description("Local Development Server")
                 ));
