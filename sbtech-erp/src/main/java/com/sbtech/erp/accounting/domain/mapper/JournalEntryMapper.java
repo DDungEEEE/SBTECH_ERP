@@ -5,6 +5,8 @@ import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalLineEntit
 import com.sbtech.erp.accounting.domain.code.PostingStatus;
 import com.sbtech.erp.accounting.domain.model.JournalEntry;
 import com.sbtech.erp.accounting.domain.model.JournalLine;
+import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.mapper.EmployeeMapper;
 
 import java.util.List;
 
@@ -12,13 +14,15 @@ public class JournalEntryMapper {
 
     // Domain → Entity
     public static JournalEntryEntity toEntity(JournalEntry domain,
-                                              List<JournalLineEntity> lineEntities) {
+                                              List<JournalLineEntity> lineEntities,
+                                              Employee employee) {
         return JournalEntryEntity.reconstruct(
                 domain.getId(),
                 domain.getEntryDate(),
                 domain.getDescription(),
                 domain.getStatus(),
-                lineEntities
+                lineEntities,
+                EmployeeMapper.toEntity(employee)
         );
     }
 

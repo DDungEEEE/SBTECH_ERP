@@ -54,13 +54,14 @@ public class JournalEntryEntity extends BaseTimeEntity {
     }
 
     // 복원 팩토리
-    public static JournalEntryEntity reconstruct(Long id, LocalDate entryDate, String description, PostingStatus status, List<JournalLineEntity> lines) {
+    public static JournalEntryEntity reconstruct(Long id, LocalDate entryDate, String description, PostingStatus status, List<JournalLineEntity> lines, EmployeeEntity createdBy) {
         JournalEntryEntity entity = new JournalEntryEntity();
         entity.id = id;
         entity.entryDate = entryDate;
         entity.description = description;
         entity.status = status;
         entity.lines = (lines != null) ? lines : new ArrayList<>();
+        entity.createdBy = createdBy;
         return entity;
     }
 

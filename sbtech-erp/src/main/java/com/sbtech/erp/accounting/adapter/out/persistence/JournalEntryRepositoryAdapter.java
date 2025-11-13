@@ -9,6 +9,8 @@ import com.sbtech.erp.accounting.domain.mapper.JournalEntryMapper;
 import com.sbtech.erp.accounting.domain.mapper.JournalLineMapper;
 import com.sbtech.erp.accounting.domain.mapper.LedgerAccountMapper;
 import com.sbtech.erp.accounting.domain.model.JournalEntry;
+import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.mapper.EmployeeMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -21,15 +23,17 @@ import java.util.Optional;
 public class JournalEntryRepositoryAdapter implements JournalEntryRepository {
     private final JournalEntryJpaRepository jpaRepository;
 
+
     @Override
-    public JournalEntry save(JournalEntry entry) {
+    public JournalEntry save(JournalEntry entry, Employee createBy) {
         // 1. 부모 엔티티 뼈대 생성
         JournalEntryEntity parentEntity = JournalEntryEntity.reconstruct(
                 entry.getId(),
                 entry.getEntryDate(),
                 entry.getDescription(),
                 entry.getStatus(),
-                new ArrayList<>() // 라인은 나중에 채움
+                new ArrayList<>(), // 라인은 나중에 채움
+                EmployeeMapper.toEntity(createBy)
         );
 
         // 2. 라인 엔티티 변환

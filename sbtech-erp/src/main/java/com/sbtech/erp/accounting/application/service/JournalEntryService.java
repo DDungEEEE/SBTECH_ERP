@@ -10,6 +10,7 @@ import com.sbtech.erp.accounting.domain.model.JournalLine;
 import com.sbtech.erp.accounting.domain.model.LedgerAccount;
 import com.sbtech.erp.common.code.ErrorCode;
 import com.sbtech.erp.common.exception.CustomException;
+import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +23,7 @@ public class JournalEntryService implements JournalEntryUseCase {
 
     private final JournalEntryRepository repository;
     private final LedgerAccountUseCase ledgerAccountUseCase;
+    private final EmployeeUseCase employeeUseCase;
 
     @Override
     public JournalEntry create(CreateJournalEntryReq req, Long createById) {
@@ -41,7 +43,7 @@ public class JournalEntryService implements JournalEntryUseCase {
 
             entry.addLine(line);
             }
-        return repository.save(entry);
+        return repository.save(entry, employeeUseCase.findById(createById));
     }
 
     @Override
