@@ -1,5 +1,7 @@
 package com.sbtech.erp.products.adapter.out.persistence;
 
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
+import com.sbtech.erp.employee.adapter.out.persistence.repository.EmployeeJpaRepository;
 import com.sbtech.erp.products.adapter.out.persistence.entity.ProductEntity;
 import com.sbtech.erp.products.adapter.out.persistence.repository.ProductJpaRepository;
 import com.sbtech.erp.products.application.port.out.ProductRepository;
@@ -17,8 +19,8 @@ public class ProductJpaAdapter implements ProductRepository {
     private final ProductJpaRepository productJpaRepository;
 
     @Override
-    public Product save(Product product) {
-        ProductEntity saved = productJpaRepository.save(ProductMapper.toEntity(product));
+    public Product save(Product product, EmployeeEntity employee) {
+        ProductEntity saved = productJpaRepository.save(ProductMapper.toEntity(product, employee));
         return ProductMapper.toDomain(saved);
     }
 

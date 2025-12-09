@@ -7,11 +7,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
-
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Product {
+
     private final Long id;
 
     private final String name;
@@ -24,44 +23,98 @@ public class Product {
 
     private final ProductStatus status;
 
+    /** 🔥 추가 */
+    private final ProductCategory category;
 
-    // 신규 생성
-    public static Product createNew(String name, String description, int price, int stockQuantity, ProductStatus productStatus) {
+    /** 🔥 추가 - 부족 기준 */
+    private final Integer minimumStock;
+
+    // ░░ 신규 생성 ░░
+    public static Product createNew(String name,
+                                    String description,
+                                    int price,
+                                    int stockQuantity,
+                                    ProductStatus productStatus,
+                                    ProductCategory category,
+                                    Integer minimumStock) {
+
         return new Product(
                 null,
                 name,
                 description,
                 price,
                 stockQuantity,
-                productStatus
+                productStatus,
+                category,
+                minimumStock
         );
     }
 
-    // 복원 (Entity → Domain 매핑용)
-    public static Product reconstruct(Long id, String name, String description,
-                                      int price, int stockQuantity,
-                                      ProductStatus status) {
-        return new Product(id, name, description, price, stockQuantity, status);
+    // ░░ 복원 (Entity → Domain 매핑용) ░░
+    public static Product reconstruct(Long id,
+                                      String name,
+                                      String description,
+                                      int price,
+                                      int stockQuantity,
+                                      ProductStatus status,
+                                      ProductCategory category,
+                                      Integer minimumStock) {
+
+        return new Product(
+                id,
+                name,
+                description,
+                price,
+                stockQuantity,
+                status,
+                category,
+                minimumStock
+        );
     }
 
-    // 비즈니스 로직: 재고 증가
+    // ░░ 재고 증가 ░░
     public Product increaseStock(int quantity) {
-        return new Product(id, name, description, price,
-                stockQuantity + quantity, status);
+        return new Product(
+                id, name, description,
+                price,
+                stockQuantity + quantity,
+                status,
+                category,
+                minimumStock
+        );
     }
 
-    // 비즈니스 로직: 재고 감소
+    // ░░ 재고 감소 ░░
     public Product decreaseStock(int quantity) {
+
         if (stockQuantity < quantity) {
             throw new CustomException(ErrorCode.INSUFFICIENT_STOCK_ERROR);
         }
-        return new Product(id, name, description, price,
-                stockQuantity - quantity, status);
+
+        return new Product(
+                id, name, description,
+                price,
+                stockQuantity - quantity,
+                status,
+                category,
+                minimumStock
+        );
     }
 
-    // 상품 비활성화
+    // ░░ 상품 비활성화 ░░
     public Product deactivate() {
-        return new Product(id, name, description, price,
-                stockQuantity, ProductStatus.INACTIVE);
+        return new Product(
+                id, name, description,
+                price,
+                stockQuantity,
+                ProductStatus.INACTIVE,
+                category,
+                minimumStock
+        );
+    }
+
+    /** 🔥 재고 부족 여부 계산 */
+    public boolean isShortage() {
+        return stockQuantity < minimumStock;
     }
 }

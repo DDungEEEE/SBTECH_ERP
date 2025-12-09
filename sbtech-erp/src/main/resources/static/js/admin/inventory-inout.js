@@ -96,7 +96,7 @@ function saveInOut() {
 
     inoutHistory.unshift({
         date: new Date().toISOString().split("T")[0],
-        item, type, qty: Number(qty), user: randomEmployee()
+        item, type, qty: Number(qty), user: "관리자"
     });
 
     renderInOut();

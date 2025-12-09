@@ -34,28 +34,46 @@
     </div>
 
     <!-- 모달 -->
+    <!-- 전표 등록 모달 -->
     <div class="modal-bg" id="journalModal">
         <div class="modal">
+
             <h2>전표 등록</h2>
 
-            <label>계정명</label>
-            <select id="accountSelect">
-                <option value="">계정 선택</option>
-            </select>
+            <label>전표 설명</label>
+            <input id="entryDesc" type="text" placeholder="예: 급여 지급">
 
-            <label>차변/대변</label>
-            <select id="typeSelect">
-                <option value="DEBIT">차변</option>
-                <option value="CREDIT">대변</option>
-            </select>
+            <label>전표 날짜</label>
+            <input id="entryDate" type="date"/>
 
-            <label>금액</label>
-            <input id="amountInput" type="number" placeholder="금액 입력">
+            <hr>
 
-            <button class="save-btn" onclick="saveJournal()">등록</button>
+            <table class="line-table">
+                <thead>
+                <tr>
+                    <th>계정명</th>
+                    <th>차변</th>
+                    <th>대변</th>
+                    <th>삭제</th>
+                </tr>
+                </thead>
+                <tbody id="lineTableBody"></tbody>
+            </table>
+
+            <button class="btn-primary" onclick="addLineRow()">+ 라인 추가</button>
+
+            <hr>
+
+            <div class="sum-box">
+                <span>차변 합계: <b id="sumDebit">0</b></span>
+                <span>대변 합계: <b id="sumCredit">0</b></span>
+            </div>
+
+            <button class="save-btn" onclick="saveJournal()">전표 저장</button>
             <button class="cancel-btn" onclick="closeJournalModal()">취소</button>
         </div>
     </div>
+
 
     <script th:src="@{/js/admin/journal.js}"></script>
 

@@ -2,20 +2,22 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="content">
 
-    <!-- 페이지 헤더 -->
+    <link rel="stylesheet" th:href="@{/css/admin/task-management.css}"/>
+
+    <!-- 🔹 페이지 헤더 -->
     <div class="page-header">
         <h1>업무 관리</h1>
         <button class="btn-assign" onclick="openTaskModal()">+ 업무 배정</button>
     </div>
 
-    <!-- 통계 -->
-    <div class="card">
-        업무 진행 중: <b id="inProgressCount">0건</b> /
-        대기: <b id="pendingCount">0건</b> /
-        완료: <b id="doneCount">0건</b>
+    <!-- 🔹 통계 -->
+    <div class="card stats-card">
+        ⏳ 진행중: <b id="inProgressCount">0건</b> /
+        🕒 대기: <b id="pendingCount">0건</b> /
+        ✅ 완료: <b id="doneCount">0건</b>
     </div>
 
-    <!-- 리스트 -->
+    <!-- 🔹 업무 리스트 -->
     <div class="table-card">
         <table>
             <thead>
@@ -24,13 +26,16 @@
                 <th>담당자</th>
                 <th>마감일</th>
                 <th>상태</th>
+                <th>작업</th>
             </tr>
             </thead>
             <tbody id="taskTable"></tbody>
         </table>
     </div>
 
-    <!-- 모달 -->
+    <button onclick="downloadExcel()">엑셀 다운로드</button>
+
+    <!-- 🔹 업무 배정 모달 -->
     <div class="modal-bg" id="taskModal">
         <div class="modal">
             <h2>업무 배정</h2>
@@ -39,19 +44,13 @@
             <input id="taskTitle" type="text" placeholder="예: 신규 고객 발굴">
 
             <label>담당자</label>
-            <select id="assigneeSelect">
-                <option value="">사원 선택</option>
-            </select>
+            <select id="assigneeSelect"></select>
 
             <label>마감일</label>
             <input id="dueDate" type="date">
 
             <label>상태</label>
-            <select id="statusSelect">
-                <option value="PENDING">대기</option>
-                <option value="IN_PROGRESS">진행중</option>
-                <option value="DONE">완료</option>
-            </select>
+
 
             <button class="save-btn" onclick="assignTask()">배정 완료</button>
             <button class="cancel-btn" onclick="closeTaskModal()">취소</button>
@@ -60,5 +59,27 @@
 
     <script th:src="@{/js/admin/task-management.js}"></script>
 
+    <script>
+        function downloadExcel() {
+            const token = localStorage.getItem("accessToken");
+
+            fetch("/erp/api/v1/task/excel", {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            })
+                .then(res => res.blob())
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "my_tasks.xlsx";
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                });
+        }
+    </script>
 </th:block>
 </html>

@@ -5,5 +5,7 @@ public record ProductCreateReq(
         String description,
         Integer price,
         Integer stockQuantity,
-        String status
+        String status,
+        String category,
+        Integer minimumStock
 ) {}

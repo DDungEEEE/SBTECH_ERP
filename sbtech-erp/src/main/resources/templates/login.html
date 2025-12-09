@@ -144,7 +144,13 @@
         if (result.employee.systemRole === "관리자") {
             window.location.href = "/web/admin";
         } else {
-            window.location.href = "/web/employee";
+            if (result.employee.loginId === "test1234") {
+                window.location.href = "/web/employee";
+            }
+            // 그 외 모든 직원은 빈 페이지로 이동
+            else {
+                window.location.href = "/web/employee/test";
+            }
         }
     });
 </script>

@@ -47,6 +47,7 @@ public class LedgerAccountEntity {
         this.posting = posting;
         this.active = active;
     }
+
     private LedgerAccountEntity(Long id, String code, String name,
                                 AccountType type, NormalSide side,
                                 Long parentId, boolean posting, boolean active) {
@@ -65,5 +66,4 @@ public class LedgerAccountEntity {
                                                   Long parentId, boolean posting, boolean active) {
         return new LedgerAccountEntity(id, code, name, type, side, parentId, posting, active);
     }
-
 }

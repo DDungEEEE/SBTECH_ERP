@@ -33,9 +33,9 @@ async function loadEmployees() {
                     <td>${e.id}</td>
                     <td>${e.name}</td>
                     <td>${e.loginId}</td>
-                    <td>${e.departmentName ?? "-"}</td>
-                    <td>${e.positionName ?? "-"}</td>
-                    <td>-</td>
+                    <td>${e.departmentName}</td>
+                    <td>${e.positionName}</td>
+                    <td>${e.systemRole}</td>
                     <td>${e.employeeStatus}</td>
                 </tr>
             `;

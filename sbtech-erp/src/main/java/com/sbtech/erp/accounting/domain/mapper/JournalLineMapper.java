@@ -1,5 +1,6 @@
 package com.sbtech.erp.accounting.domain.mapper;
 
+import com.sbtech.erp.accounting.adapter.in.dto.JournalLineResponse;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalEntryEntity;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalLineEntity;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.LedgerAccountEntity;
@@ -64,5 +65,13 @@ public class JournalLineMapper {
                     return toDomain(lineEntity, account);
                 })
                 .collect(Collectors.toList());
+    }
+
+    public static JournalLineResponse toResponse(JournalLineEntity entity) {
+        return new JournalLineResponse(
+                entity.getLedgerAccount().getName(),
+                entity.getDebit(),
+                entity.getCredit()
+        );
     }
 }

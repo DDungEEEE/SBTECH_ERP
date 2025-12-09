@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
+
+    <h1 class="page-title">내 업무</h1>
+
+    <!-- 🔹 통계 카드 -->
+    <div class="stats">
+        <div class="stat-card">
+            <h3 id="progressCount">0</h3><p>진행 중</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="waitingCount">0</h3><p>시작 전</p>
+        </div>
+        <div class="stat-card">
+            <h3 id="doneCount">0</h3><p>완료</p>
+        </div>
+    </div>
+
+    <!-- 🔹 검색 / 필터 -->
+    <div class="filters">
+        <input type="text" class="task-search" id="searchInput" placeholder="업무 검색" />
+        <select class="task-filter" id="filterSelect">
+            <option value="ALL">전체보기</option>
+            <option value="IN_PROGRESS">진행 중</option>
+            <option value="WAITING">시작 전</option>
+            <option value="DONE">완료</option>
+        </select>
+    </div>
+
+    <!-- 🔹 업무 목록 테이블 -->
+    <table class="task-table">
+        <thead>
+        <tr>
+            <th>업무명</th>
+            <th>내용</th>
+            <th>마감일</th>
+            <th>상태</th>
+            <th>작업</th> <!-- 🔥 승인 요청 버튼 추가 -->
+        </tr>
+        </thead>
+        <tbody id="taskBody"></tbody>
+    </table>
+
+
+    <!-- 🔹📌 API 연동 JS -->
+    <script>
+
+        /***************************************************
+         🔹 공통 GET 함수 (Authorization 자동 포함)
+         ****************************************************/
+        async function apiGet(url) {
+            const token = localStorage.getItem("accessToken");
+
+            const res = await fetch(url, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (res.status === 401) {
+                alert("세션 만료. 다시 로그인해주세요");
+                localStorage.clear();
+                window.location.href = "/web/login";
+                return null;
+            }
+
+            return res.json();
+        }
+
+        /***************************************************
+         🔹 페이지 로드 시 실행
+         ****************************************************/
+        document.addEventListener("DOMContentLoaded", loadTasks);
+
+        async function loadTasks() {
+            const res = await apiGet(`/erp/api/v1/task/me`);
+
+            if (!res) return;
+
+            const tasks = Array.isArray(res) ? res : res.data ?? [];
+
+            updateStats(tasks);
+            renderTasks(tasks);
+
+            document.getElementById("searchInput").oninput = () => renderTasks(tasks);
+            document.getElementById("filterSelect").onchange = () => renderTasks(tasks);
+        }
+
+        /***************************************************
+         🔹 테이블 렌더링 + 승인요청 버튼 포함
+         ****************************************************/
+        function renderTasks(tasks) {
+            const tbody = document.getElementById("taskBody");
+            const keyword = document.getElementById("searchInput").value.toLowerCase();
+            const filter = document.getElementById("filterSelect").value;
+
+            tbody.innerHTML = "";
+
+            tasks
+                .filter(t =>
+                    filter === "ALL" ||
+                    (filter === "IN_PROGRESS" && t.status === "진행 중") ||
+                    (filter === "WAITING" && t.status === "시작 전") ||
+                    (filter === "DONE" && t.status === "완료")
+                )
+                .filter(t => t.title.toLowerCase().includes(keyword))
+                .forEach(t => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>${t.title}</td>
+                            <td>${t.description ?? '-'}</td>
+                            <td>${formatDate(t.dueDate)}</td>
+                            <td>${badge(t.status)}</td>
+                            <td>
+                                ${t.status !== "완료"
+                        ? `<button class="approve-btn" onclick="requestApproval(${t.id})">승인 요청</button>`
+                        : `<span style="color:#999;">-</span>`
+                    }
+                            </td>
+                        </tr>`;
+                });
+        }
+
+        /***************************************************
+         🔹 승인 요청 (업무 상태 DONE으로 변경)
+         ****************************************************/
+        async function requestApproval(taskId) {
+
+            if (!confirm("업무를 완료(DONE) 상태로 변경하시겠습니까?")) return;
+
+            const token = localStorage.getItem("accessToken");
+
+            const res = await fetch(`/erp/api/v1/task/${taskId}/status?status=DONE`, {
+                method: "PATCH",
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json"
+                }
+            });
+
+            if (!res.ok) {
+                alert("상태 변경 실패");
+                return;
+            }
+
+            alert("승인 요청이 완료되었습니다!");
+            loadTasks(); // 다시 로드
+        }
+
+        /***************************************************
+         🔹 통계 업데이트
+         ****************************************************/
+        function updateStats(tasks) {
+            document.getElementById("progressCount").innerText =
+                tasks.filter(t => t.status === "진행 중").length;
+
+            document.getElementById("waitingCount").innerText =
+                tasks.filter(t => t.status === "시작 전").length;
+
+            document.getElementById("doneCount").innerText =
+                tasks.filter(t => t.status === "완료").length;
+        }
+
+        /***************************************************
+         🔹 상태 뱃지 변환
+         ****************************************************/
+        function badge(status) {
+            return status === "진행 중"
+                ? `<span class="status in-progress">진행 중</span>`
+                : status === "완료"
+                    ? `<span class="status done">완료</span>`
+                    : `<span class="status waiting">시작 전</span>`;
+        }
+
+        function formatDate(date) {
+            if (!date) return "-";
+
+            if (Array.isArray(date)) {
+                const [year, month, day] = date;
+                return `${year}.${String(month).padStart(2, '0')}.${String(day).padStart(2, '0')}`;
+            }
+
+            return date.replace(/-/g, ".");
+        }
+
+    </script>
+
+    <!-- 🔹 승인요청 버튼 스타일 -->
+    <style>
+        .approve-btn {
+            background-color: #4f83ff;
+            border: none;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .approve-btn:hover {
+            background-color: #3b6fe0;
+        }
+    </style>
+
+</th:block>
+</html>

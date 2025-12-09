@@ -72,6 +72,9 @@ dependencies {
 // MySQL JDBC 드라이버
 	implementation 'com.mysql:mysql-connector-j'
 
+
+	implementation 'org.apache.poi:poi:5.2.3'
+	implementation 'org.apache.poi:poi-ooxml:5.2.3'
 // MSSQL JDBC 드라이버
 //	implementation 'com.microsoft.sqlserver:mssql-jdbc:12.6.0.jre11'
 

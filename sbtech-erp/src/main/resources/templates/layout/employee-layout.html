@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ERP 사원 시스템</title>
+
+    <link rel="stylesheet" th:href="@{/css/employee/employee.css}"/>
+
+    <th:block th:if="${pageName == 'employee-dashboard'}">
+        <link rel="stylesheet" th:href="@{/css/employee/employee-dashboard.css}"/>
+    </th:block>
+
+    <th:block th:if="${pageName == 'employee-task'}">
+        <link rel="stylesheet" th:href="@{/css/employee/employee-task.css}"/>
+    </th:block>
+
+    <th:block th:if="${pageName == 'employee-order'}">
+        <link rel="stylesheet" th:href="@{/css/employee/employee-order.css}"/>
+    </th:block>
+
+    <th:block th:if="${pageName == 'employee-report'}">
+        <link rel="stylesheet" th:href="@{/css/employee/employee-report.css}"/>
+    </th:block>
+</head>
+
+<body>
+
+<div class="sidebar" id="sidebar">
+
+    <div class="toggle-sidebar-btn" id="toggleBtn">☰</div>
+
+    <h2 class="logo"><span>ERP</span> System</h2>
+
+    <ul class="menu">
+
+        <li class="menu-item">
+            <a th:href="@{/web/employee}">
+                <span class="text">대시보드</span>
+            </a>
+        </li>
+
+        <li class="menu-item has-sub">
+            <a class="toggle-btn">
+                <span class="text">내 업무</span>
+                <span class="arrow">▶</span>
+            </a>
+            <ul class="submenu">
+                <li><a th:href="@{/web/employee/task}">업무 목록</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-item has-sub">
+            <a class="toggle-btn">
+                <span class="text">내 주문</span>
+                <span class="arrow">▶</span>
+            </a>
+            <ul class="submenu">
+                <li><a th:href="@{/web/employee/order}">주문 현황</a></li>
+            </ul>
+        </li>
+
+        <li class="menu-item">
+            <a href="#" onclick="downloadTaskExcel()">업무 보고서 다운로드</a>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a th:href="@{/web/login}" class="logout-btn">로그아웃</a>
+        </li>
+
+    </ul>
+</div>
+
+<div class="content">
+    <th:block th:replace="~{${content} :: content}"></th:block>
+</div>
+
+<script>
+    document.querySelectorAll(".has-sub .toggle-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+            const submenu = btn.nextElementSibling;
+            const arrow = btn.querySelector(".arrow");
+            submenu.style.display = submenu.style.display === "block" ? "none" : "block";
+            arrow.textContent = arrow.textContent === "▶" ? "▼" : "▶";
+        });
+    });
+
+    document.getElementById("toggleBtn").addEventListener("click", () => {
+        document.getElementById("sidebar").classList.toggle("collapsed");
+    });
+
+
+        function downloadTaskExcel() {
+        const token = localStorage.getItem("accessToken");
+
+        fetch("/erp/api/v1/task/excel", {
+        method: "GET",
+        headers: {
+        "Authorization": `Bearer ${token}`
+    }
+    })
+        .then(res => res.blob())
+        .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "my_tasks.xlsx"; // 다운로드 파일명
+        a.click();
+        a.remove();
+    })
+        .catch(err => {
+        console.error(err);
+        alert("보고서 다운로드 실패 ❌");
+    });
+    }
+</script>
+</script>
+
+</body>
+</html>

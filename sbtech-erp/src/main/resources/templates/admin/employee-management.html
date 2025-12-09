@@ -7,6 +7,51 @@
         <button class="add-employee-btn" id="openCreateModal">신규 사원 등록</button>
     </div>
 
+    <div id="createModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <h2>신규 사원 등록</h2>
+
+            <label>이름</label>
+            <input type="text" id="empName" />
+
+            <label>아이디</label>
+            <input type="text" id="empLoginId" />
+
+            <label>비밀번호</label>
+            <input type="password" id="empPassword" />
+
+            <label>부서</label>
+            <select id="empDept"></select>
+
+            <label>직무</label>
+            <select id="empPosition"></select>
+
+            <label>직급</label>
+            <select id="empRank">
+                <option>인턴</option>
+                <option>사원</option>
+                <option>주임</option>
+                <option>대리</option>
+                <option>과장</option>
+                <option>차장</option>
+                <option>부장</option>
+                <option>이사</option>
+            </select>
+
+            <label>권한</label>
+            <select id="empRole">
+                <option>사용자</option>
+                <option>관리자</option>
+            </select>
+
+            <div class="modal-actions">
+                <button id="createEmployeeBtn">등록</button>
+                <button id="closeCreateModal">닫기</button>
+            </div>
+        </div>
+    </div>
+
+
     <div class="section-card">
         <h3>재직중 사원 목록</h3>
         <table class="table" id="employeeTable">
@@ -76,6 +121,7 @@
                             <td>${emp.departmentName}</td>
                             <td>${emp.positionName}</td>
                             <td>${emp.rank}</td>
+                            <td>${emp.systemRole}</td>
                             <td>
                                 <span class="badge ${emp.employeeStatus === '재직' ? 'badge-success' : 'badge-secondary'}">
                                     ${emp.employeeStatus}
@@ -162,6 +208,67 @@
 
             return res.json();
         }
+
+        document.getElementById("openCreateModal").addEventListener("click", async () => {
+            document.getElementById("createModal").style.display = "block";
+
+            // 부서, 직무 데이터 로드
+            const dept = await apiGet('/erp/api/v1/department');
+            const pos = await apiGet('/erp/api/v1/position');
+
+            document.getElementById("empDept").innerHTML =
+                dept.map(d => `<option value="${d.id}">${d.name}</option>`).join("");
+
+            document.getElementById("empPosition").innerHTML =
+                pos.map(p => `<option value="${p.id}">${p.name}</option>`).join("");
+        });
+
+        document.getElementById("closeCreateModal").addEventListener("click", () => {
+            document.getElementById("createModal").style.display = "none";
+        });
+
+        async function apiPost(url, body) {
+            const res = await fetch(url, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!res.ok) {
+                const errorText = await res.text();
+                alert("등록 실패: " + errorText);
+                return;
+            }
+
+            return res.json();
+        }
+
+        document.getElementById("createEmployeeBtn").addEventListener("click", async () => {
+            const body = {
+                name: document.getElementById("empName").value,
+                loginId: document.getElementById("empLoginId").value,
+                password: document.getElementById("empPassword").value,
+                departmentId: Number(document.getElementById("empDept").value),
+                positionId: Number(document.getElementById("empPosition").value),
+                rank: document.getElementById("empRank").value,
+                systemRole: document.getElementById("empRole").value
+            };
+
+            console.log("Register Request:", body);
+
+            const result = await apiPost("/erp/api/v1/admin/employee/register", body);
+
+            if (result) {
+                alert("신규 사원 등록 완료!");
+                document.getElementById("createModal").style.display = "none";
+                await loadEmployees();
+                await loadPendingEmployees();
+            }
+        });
+
 
         // ✅ 승인 버튼 이벤트 바인딩
         document.addEventListener("click", async (e) => {

@@ -7,6 +7,7 @@ import com.sbtech.erp.employee.adapter.in.dto.AdminEmployeeCreateReq;
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import com.sbtech.erp.employee.application.port.out.EmployeeRepository;
 import com.sbtech.erp.employee.domain.model.Employee;
+import com.sbtech.erp.employee.domain.model.EmployeeStatus;
 import com.sbtech.erp.employee.domain.model.Password;
 
 import com.sbtech.erp.employee.domain.model.Rank;
@@ -59,7 +60,7 @@ public class EmployeeService implements EmployeeUseCase {
     @Override
     public Employee createByAdmin(AdminEmployeeCreateReq req) {
 
-        return Employee.createFull(
+        Employee newEmployee = Employee.createFull(
                 null,
                 req.name(),
                 req.loginId(),
@@ -68,8 +69,10 @@ public class EmployeeService implements EmployeeUseCase {
                 Rank.from(req.rank()),
                 departmentUseCase.findById(req.departmentId()),
                 SystemRole.from(req.systemRole()),
-                null
+                EmployeeStatus.ACTIVE
         );
+
+        return employeeRepository.save(newEmployee);
     }
 
     @Override

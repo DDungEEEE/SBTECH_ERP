@@ -92,9 +92,9 @@ public class Task {
 
     // 상태 변경
     public Task changeStatus(TaskStatus newStatus) {
-        if (!this.status.canTransitionTo(newStatus)) {
-            throw new CustomException(ErrorCode.INVALID_STATUS_CHANGE_ERROR);
-        }
+//        if (!this.status.canTransitionTo(newStatus)) {
+//            throw new CustomException(ErrorCode.INVALID_STATUS_CHANGE_ERROR);
+//        }
         return new Task(this.id, this.title, this.description, newStatus, this.priority,
                 this.assignee, this.createdBy, this.startDate, this.dueDate, this.completedAt);
     }

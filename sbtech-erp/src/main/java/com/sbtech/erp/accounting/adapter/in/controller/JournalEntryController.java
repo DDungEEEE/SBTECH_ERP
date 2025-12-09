@@ -1,19 +1,25 @@
 package com.sbtech.erp.accounting.adapter.in.controller;
 
 
+import com.sbtech.erp.JournalExcelService;
 import com.sbtech.erp.accounting.adapter.in.dto.CreateJournalEntryReq;
 import com.sbtech.erp.accounting.adapter.in.dto.CreateLedgerAccountReq;
+import com.sbtech.erp.accounting.adapter.in.dto.JournalEntryResponse;
 import com.sbtech.erp.accounting.application.port.in.JournalEntryUseCase;
 import com.sbtech.erp.accounting.application.port.in.LedgerAccountUseCase;
+import com.sbtech.erp.accounting.application.port.out.JournalEntryRepository;
 import com.sbtech.erp.accounting.domain.model.JournalEntry;
 import com.sbtech.erp.accounting.domain.model.LedgerAccount;
 import com.sbtech.erp.security.user.EmployeeUserDetails;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,6 +29,8 @@ public class JournalEntryController {
 
     private final LedgerAccountUseCase ledgerAccountUseCase;
     private final JournalEntryUseCase journalEntryUseCase;
+    private final JournalEntryRepository journalEntryRepository;
+    private final JournalExcelService journalExcelService;
 
     @Operation(
             summary = "분개전표 생성",
@@ -52,13 +60,32 @@ public class JournalEntryController {
         return journalEntryUseCase.create(req, createById);
     }
 
+    @GetMapping("/excel")
+    public void downloadJournalExcel(HttpServletResponse response) throws IOException {
+
+        XSSFWorkbook workbook = journalExcelService.generateJournalExcel();
+
+        response.setContentType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=journal_report.xlsx"
+        );
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
+    }
+
+
     @Operation(
             summary = "분개전표 단건 조회",
             description = "특정 분개전표 ID로 상세 조회한다."
     )
     @GetMapping
-    public List<LedgerAccount> findAll() {
-        return ledgerAccountUseCase.findAll();
+    public List<JournalEntryResponse> findAll() {
+
+        return journalEntryRepository.findAllDto();
     }
 
     @Operation(

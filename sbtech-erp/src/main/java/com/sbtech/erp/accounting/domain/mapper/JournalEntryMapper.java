@@ -1,5 +1,6 @@
 package com.sbtech.erp.accounting.domain.mapper;
 
+import com.sbtech.erp.accounting.adapter.in.dto.JournalEntryResponse;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalEntryEntity;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalLineEntity;
 import com.sbtech.erp.accounting.domain.code.PostingStatus;
@@ -35,6 +36,18 @@ public class JournalEntryMapper {
                 entity.getDescription(),
                 entity.getStatus(),   // 이미 Enum이니까 그대로
                 lines
+        );
+    }
+
+    public static JournalEntryResponse toResponse(JournalEntryEntity entity) {
+        return new JournalEntryResponse(
+                entity.getId(),
+                entity.getEntryDate(),
+                entity.getDescription(),
+                entity.getCreatedBy().getName(),    // 🔥 작성자 포함
+                entity.getLines().stream()
+                        .map(JournalLineMapper::toResponse)
+                        .toList()
         );
     }
 }

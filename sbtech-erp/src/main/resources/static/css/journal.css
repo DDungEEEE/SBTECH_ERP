@@ -96,6 +96,23 @@ th { background: #f9fafb; font-weight: 600; }
     font-size: 14px;
 }
 
+.line-table {
+    width: 100%;
+    margin-top: 10px;
+    border-collapse: collapse;
+}
+.line-table td, .line-table th {
+    padding: 6px;
+    border-bottom: 1px solid #ddd;
+}
+
+.sum-box {
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    margin: 10px 0;
+}
+
 .btn-save { background: #2563eb; color: white; }
 .btn-save:hover { background:#1d4ed8; }
 

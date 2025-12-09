@@ -2,6 +2,7 @@ package com.sbtech.erp.web;
 
 import com.sbtech.erp.employee.application.port.in.EmployeeUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,8 +15,17 @@ public class MainController {
 
 
     @GetMapping("/employee")
-    public String employeeList() {
-        return "employee/employee-dashboard";
+    public String employeeDashboard(Model model) {
+        model.addAttribute("content", "employee/employee-dashboard");
+        model.addAttribute("pageName", "employee-dashboard");
+        return "layout/employee-layout";
+    }
+
+    @GetMapping("/employee/test")
+    public String employeeTestDashboard(Model model) {
+        model.addAttribute("content", "employee/employee-test-dashboard");
+        model.addAttribute("pageName", "employee-dashboard");
+        return "layout/employee-layout";
     }
 
     @GetMapping("/admin/employee-management")
@@ -59,12 +69,22 @@ public class MainController {
     @GetMapping("/admin")
     public String adminDashBoard(Model model) {
         model.addAttribute("content", "admin/admin-dashboard");
+        model.addAttribute("pageName", "dashboard");
         return "layout/admin-layout";
     }
 
-    @GetMapping("/task")
-    public String taskList() {
-        return "task/task";
+    @GetMapping("/employee/task")
+    public String taskList(Model model) {
+        model.addAttribute("content", "employee/employee-task");
+        model.addAttribute("pageName", "employee-task");
+        return "layout/employee-layout";
+    }
+
+    @GetMapping("/employee/order")
+    public String getOrderList(Model model){
+        model.addAttribute("content", "employee/employee-order");
+        model.addAttribute("pageName", "employee-order");
+        return "layout/employee-layout";
     }
 
     @GetMapping("/report")

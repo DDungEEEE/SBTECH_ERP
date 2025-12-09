@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
+
+    <!-- 🔷 페이지 제목 + 검색 -->
+    <div class="topbar">
+        <h1>사원 대시보드</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="검색..." class="search-box"/>
+        </div>
+    </div>
+
+    <!-- 🔷 통계 카드 (빈 상태) -->
+    <div class="stats">
+
+        <div class="card">
+            <div class="card-title">내 담당 매출</div>
+            <div class="card-value">₩0</div>
+            <div class="card-sub">데이터 없음</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">내 주문 수</div>
+            <div class="card-value">0건</div>
+            <div class="card-sub">데이터 없음</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">진행 중 업무</div>
+            <div class="card-value">0건</div>
+            <div class="card-sub">데이터 없음</div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">업무 완료율</div>
+            <div class="card-value">0%</div>
+            <div class="card-sub">데이터 없음</div>
+        </div>
+
+    </div>
+
+    <!-- 🔷 대시보드 GRID -->
+    <div class="dashboard-grid">
+
+        <!-- 📊 차트 (빈 데이터) -->
+        <div class="chart dashboard-chart">
+            <h3 class="section-title">월별 실적 추이</h3>
+            <div style="text-align:center; padding:40px; color:#999;">
+                아직 데이터가 없습니다.
+            </div>
+            <canvas id="myChart" style="display:none;"></canvas>
+        </div>
+
+        <!-- ⚡ 빠른 액세스 -->
+        <div class="quick-access dashboard-quick">
+            <h3 class="section-title">빠른 액세스</h3>
+            <button>내 업무 보기</button>
+            <button>보고서 작성</button>
+            <button>내 주문 보기</button>
+        </div>
+
+        <!-- 📋 최근 업무 -->
+        <div class="table-container dashboard-tasks">
+            <h3 class="section-title">최근 업무</h3>
+            <div style="padding:20px; text-align:center; color:#777;">
+                등록된 업무가 없습니다.
+            </div>
+        </div>
+
+        <!-- 🛒 최근 주문 -->
+        <div class="table-container dashboard-orders">
+            <h3 class="section-title">최근 주문</h3>
+            <div style="padding:20px; text-align:center; color:#777;">
+                등록된 주문이 없습니다.
+            </div>
+        </div>
+
+    </div>
+
+</th:block>
+</html>

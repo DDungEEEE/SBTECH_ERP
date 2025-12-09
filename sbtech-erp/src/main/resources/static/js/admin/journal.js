@@ -1,40 +1,93 @@
-// ✅ 계정 목록
-const accounts = [
-    "현금", "보통예금", "외상매출금", "외상매입금", "상품", "매출", "매출원가",
-    "급여", "통신비", "차량유지비", "임차료", "감가상각비", "전기세", "수도세"
-];
+const API_URL = "/erp/api/v1/journal-entry";
+const ACCOUNT_API = "/erp/api/v1/ledger-accounts";
+const TOKEN = localStorage.getItem("accessToken");
 
-// ✅ 랜덤 직원
-const employees = ["김민수", "박하늘", "최예준", "이도윤", "한서아", "정유진"];
+let journalData = [];
+let ledgerAccounts = []; // 🔥 계정과목 목록 저장
 
-// ✅ 랜덤 날짜
-function randomRecentDate() {
-    const today = new Date();
-    const d = new Date(today - Math.random() * 30 * 24 * 60 * 60 * 1000);
-    return d.toISOString().split("T")[0];
-}
-
-// ✅ 초기 전표 데이터
-let journalData = Array.from({length: 20}, (_, i) => ({
-    date: randomRecentDate(),
-    no: `JV-${1000 + i}`,
-    acc: accounts[Math.floor(Math.random() * accounts.length)],
-    type: Math.random() < 0.5 ? "DEBIT" : "CREDIT",
-    amount: (Math.floor(Math.random() * 50) + 1) * 10000,
-    user: employees[Math.floor(Math.random() * employees.length)]
-}));
-
-// ✅ 화면 로드
-document.addEventListener("DOMContentLoaded", () => {
-    loadAccounts();
+// ===============================
+// 📌 화면 로드시 자동 실행
+// ===============================
+document.addEventListener("DOMContentLoaded", async () => {
+    await loadAccountsFromAPI();
+    await loadJournalEntries();
     renderJournal();
 });
 
-function loadAccounts() {
-    const sel = document.getElementById("accountSelect");
-    accounts.forEach(a => sel.innerHTML += `<option value="${a}">${a}</option>`);
+
+// ===============================
+// 📌 1. 전표 전체 조회 API
+// ===============================
+async function loadJournalEntries() {
+    const res = await fetch(API_URL, {
+        headers: { "Authorization": "Bearer " + TOKEN }
+    });
+
+    if (!res.ok) {
+        alert("전표 데이터를 불러오지 못했습니다 ❌");
+        return;
+    }
+
+    journalData = await res.json();
 }
 
+
+// ===============================
+// 📌 2. 계정과목 목록 API
+// ===============================
+async function loadAccountsFromAPI() {
+    const res = await fetch(ACCOUNT_API, {
+        headers: { "Authorization": "Bearer " + TOKEN }
+    });
+
+    const body = await res.json();
+    ledgerAccounts = body.data; // 🔥 서버 응답 구조 반영
+}
+
+
+// ===============================
+// 📌 3. 전표 테이블 렌더링
+// ===============================
+function renderJournal(list = journalData) {
+    const table = document.getElementById("journalTable");
+    table.innerHTML = "";
+
+    list.forEach(e => {
+        e.lines.forEach(line => {
+            table.innerHTML += `
+                <tr>
+                    <td>${e.entryDate}</td>
+                    <td>JV-${String(e.id).padStart(4, "0")}</td>
+                    <td>${line.accountName}</td>
+                    <td>${line.debit > 0 ? line.debit.toLocaleString() : "-"}</td>
+                    <td>${line.credit > 0 ? line.credit.toLocaleString() : "-"}</td>
+                    <td>${(line.debit + line.credit).toLocaleString()}원</td>
+                    <td>${e.writerName || "-"}</td>
+                </tr>
+            `;
+        });
+    });
+}
+
+
+// ===============================
+// 📌 4. 검색 기능
+// ===============================
+function searchJournal(keyword) {
+    keyword = keyword.trim();
+
+    const filtered = journalData.filter(e =>
+        e.description.includes(keyword) ||
+        e.lines.some(l => l.accountName.includes(keyword))
+    );
+
+    renderJournal(filtered);
+}
+
+
+// ===============================
+// 📌 5. 모달 열기 / 닫기
+// ===============================
 function openJournalModal() {
     document.getElementById("journalModal").classList.add("show");
 }
@@ -42,50 +95,94 @@ function closeJournalModal() {
     document.getElementById("journalModal").classList.remove("show");
 }
 
-// ✅ 랜더링
-function renderJournal(list = journalData) {
-    const table = document.getElementById("journalTable");
-    table.innerHTML = "";
 
-    list.sort((a,b)=> new Date(b.date)-new Date(a.date)).forEach(j => {
-        table.innerHTML += `
-        <tr>
-            <td>${j.date}</td>
-            <td>${j.no}</td>
-            <td>${j.acc}</td>
-            <td>${j.type === "DEBIT" ? j.amount.toLocaleString() : "-"}</td>
-            <td>${j.type === "CREDIT" ? j.amount.toLocaleString() : "-"}</td>
-            <td>${j.amount.toLocaleString()}원</td>
-            <td>${j.user}</td>
-        </tr>`;
-    });
+// ===============================
+// 📌 6. 라인 추가 버튼
+// ===============================
+function addLineRow() {
+    const tbody = document.getElementById("lineTableBody");
+
+    tbody.insertAdjacentHTML("beforeend", `
+      <tr>
+        <td>
+            <select class="acc-select">
+                ${ledgerAccounts.map(a => `<option value="${a.id}">${a.name}</option>`).join("")}
+            </select>
+        </td>
+        <td><input class="debit-input" type="number" min="0" oninput="calcSum()"></td>
+        <td><input class="credit-input" type="number" min="0" oninput="calcSum()"></td>
+        <td><button onclick="this.closest('tr').remove(); calcSum()">❌</button></td>
+      </tr>
+    `);
+
+    calcSum();
 }
 
-// ✅ 저장
-function saveJournal() {
-    const acc = document.getElementById("accountSelect").value;
-    const type = document.getElementById("typeSelect").value;
-    const amount = document.getElementById("amountInput").value;
 
-    if (!acc || !amount) {
-        return alert("계정과 금액을 입력하세요!");
+// ===============================
+// 📌 7. 차변/대변 합계 계산
+// ===============================
+function calcSum() {
+    let d = 0, c = 0;
+
+    document.querySelectorAll(".debit-input").forEach(i => d += Number(i.value || 0));
+    document.querySelectorAll(".credit-input").forEach(i => c += Number(i.value || 0));
+
+    document.getElementById("sumDebit").innerText = d.toLocaleString();
+    document.getElementById("sumCredit").innerText = c.toLocaleString();
+}
+
+
+// ===============================
+// 📌 8. 전표 저장 API 요청
+// ===============================
+async function saveJournal() {
+
+    const desc = document.getElementById("entryDesc").value;
+    const date = document.getElementById("entryDate").value;
+
+    if (!desc || !date) return alert("전표 설명 및 날짜를 입력하세요");
+
+    let lines = [];
+    document.querySelectorAll("#lineTableBody tr").forEach(tr => {
+        const accId = tr.querySelector(".acc-select").value;
+        const debit = tr.querySelector(".debit-input").value;
+        const credit = tr.querySelector(".credit-input").value;
+
+        lines.push({
+            accountId: Number(accId),
+            debit: Number(debit),
+            credit: Number(credit)
+        });
+    });
+
+    if (lines.length === 0)
+        return alert("최소 1개의 라인을 추가해야 합니다.");
+
+    const payload = {
+        entryDate: date,
+        description: desc,
+        lines: lines
+    };
+
+    console.log("📤 전송 데이터:", payload);
+
+    const res = await fetch(API_URL, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": "Bearer " + TOKEN
+        },
+        body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+        alert("전표 저장 실패 ❌");
+        return;
     }
 
-    journalData.unshift({
-        date: new Date().toISOString().split("T")[0],
-        no: `JV-${1000 + journalData.length}`,
-        acc, type,
-        amount: Number(amount),
-        user: employees[Math.floor(Math.random() * employees.length)]
-    });
-
+    alert("전표 저장 완료 ✅");
     closeJournalModal();
+    await loadJournalEntries();
     renderJournal();
-    alert("전표 등록 완료 ✅");
-}
-
-// ✅ 검색
-function searchJournal(keyword) {
-    const filtered = journalData.filter(j => j.acc.includes(keyword) || j.no.includes(keyword));
-    renderJournal(filtered);
 }

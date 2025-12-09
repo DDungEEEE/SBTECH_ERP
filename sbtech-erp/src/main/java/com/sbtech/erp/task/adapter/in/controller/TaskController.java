@@ -1,5 +1,6 @@
 package com.sbtech.erp.task.adapter.in.controller;
 
+import com.sbtech.erp.TaskExcelService;
 import com.sbtech.erp.common.code.SuccessCode;
 import com.sbtech.erp.common.response.SuccessResponse;
 import com.sbtech.erp.permission.domain.role.model.SystemRole;
@@ -16,12 +17,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Tag(name = "업무 관리 컨트롤러")
@@ -30,6 +34,7 @@ import java.util.List;
 @RequestMapping(path = "/erp/api/v1/task")
 public class TaskController {
     private final TaskUseCase taskUseCase;
+    private final TaskExcelService taskExcelService;
 
     @Operation(
             summary = "업무 생성",
@@ -55,6 +60,24 @@ public class TaskController {
         );
     }
 
+    @GetMapping("/excel")
+    public void downloadExcel(HttpServletResponse response,
+                              @AuthenticationPrincipal EmployeeUserDetails user) throws IOException {
+
+        XSSFWorkbook workbook = taskExcelService.createTaskExcel(user.getEmployeeEntity().getId());
+
+        response.setContentType(
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        );
+        response.setHeader(
+                "Content-Disposition",
+                "attachment; filename=my_tasks.xlsx"
+        );
+
+        workbook.write(response.getOutputStream());
+        workbook.close();
+    }
+
 
     @Operation(
             summary = "내 업무 조회",
@@ -64,7 +87,7 @@ public class TaskController {
                     - 응답은 `TaskResponse` 리스트 형태로 반환됩니다.
                     """)
     @GetMapping("/me")
-    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
+//    @PreAuthorize("hasAnyRole('EMPLOYEE', 'ADMIN')")
     public ResponseEntity<List<TaskResponse>> getMyTasks(
             @AuthenticationPrincipal EmployeeUserDetails employee
     ) {
@@ -101,7 +124,7 @@ public class TaskController {
             @ApiResponse(responseCode = "404", description = "업무를 찾을 수 없음")
     })
     @PatchMapping("/{taskId}/status")
-    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
+//    @PreAuthorize("hasAnyRole('ADMIN', 'EMPLOYEE')")
     public ResponseEntity<SuccessResponse<TaskResponse>> changeTaskStatus(
             @Parameter(description = "업무 ID", example = "10")
             @PathVariable Long taskId,

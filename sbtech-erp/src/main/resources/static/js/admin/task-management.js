@@ -3,28 +3,45 @@ document.addEventListener("DOMContentLoaded", () => {
     loadEmployees();
 });
 
-/* ✅ LocalDate 배열 → yyyy-MM-dd 변환 */
+/* ✅ 공통 GET (SuccessResponse<T> 래핑 처리) */
+async function apiGet(url) {
+    const res = await fetch(url, {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem("accessToken")
+        }
+    });
+
+    if (res.status === 401) {
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        window.location.href = "/web/login";
+        return [];
+    }
+
+    const json = await res.json();
+    return json.data ?? json;  // SuccessResponse<T> or 배열 둘 다 대응
+}
+
+/* ✅ LocalDate([yyyy,mm,dd]) → yyyy-MM-dd */
 function formatDate(dateArray) {
     if (!dateArray) return "-";
     return `${dateArray[0]}-${String(dateArray[1]).padStart(2, '0')}-${String(dateArray[2]).padStart(2, '0')}`;
 }
 
-/* ✅ 상태 Badge 변환 */
+/* ✅ 상태 문자열(대기/진행 중/완료) → 뱃지 HTML */
 function statusBadge(status) {
-    if (status === "대기") return `<span class="status PENDING">대기</span>`;
-    if (status === "진행 중") return `<span class="status IN_PROGRESS">진행중</span>`;
-    if (status === "완료") return `<span class="status DONE">완료</span>`;
-    return `<span class="status">${status}</span>`;
+    let css = "";
+
+    if (status === "대기") css = "waiting";
+    else if (status === "진행 중") css = "in-progress";
+    else if (status === "완료") css = "done";
+
+    return `<span class="status ${css}">${status}</span>`;
 }
 
 /* ✅ 업무 리스트 조회 */
 async function loadTasks() {
-    const token = localStorage.getItem("accessToken");
-    const res = await fetch(`/erp/api/v1/task`, {
-        headers: { "Authorization": "Bearer " + token }
-    });
-
-    const tasks = await res.json(); // ← 배열 그대로
+    const tasks = await apiGet(`/erp/api/v1/task`);
+    if (!tasks) return;
 
     const taskTable = document.querySelector("#taskTable");
     taskTable.innerHTML = "";
@@ -32,6 +49,8 @@ async function loadTasks() {
     let pending = 0, inProgress = 0, done = 0;
 
     tasks.forEach(t => {
+
+        // 🔹 한글 상태 기준으로 카운트
         if (t.status === "대기") pending++;
         else if (t.status === "진행 중") inProgress++;
         else if (t.status === "완료") done++;
@@ -53,12 +72,9 @@ async function loadTasks() {
 
 /* ✅ 담당자 목록 불러오기 */
 async function loadEmployees() {
-    const token = localStorage.getItem("accessToken");
-    const res = await fetch(`/erp/api/v1/employee/list/user?status=ACTIVE`, {
-        headers: { "Authorization": "Bearer " + token }
-    });
+    const employees = await apiGet(`/erp/api/v1/employee/list/user?status=ACTIVE`);
+    if (!employees) return;
 
-    const employees = await res.json();
     const select = document.getElementById("assigneeSelect");
     select.innerHTML = `<option value="">사원 선택</option>`;
 
@@ -77,8 +93,7 @@ async function assignTask() {
         assigneeId: document.getElementById("assigneeSelect").value,
         startDate: new Date().toISOString().slice(0, 10),
         dueDate: document.getElementById("dueDate").value,
-        status: document.getElementById("statusSelect").value,
-        priority: "MEDIUM"
+        priority: "MEDIUM"   // ⚠️ 필요 없으면 이것도 삭제 가능
     };
 
     const res = await fetch(`/erp/api/v1/task`, {
@@ -98,8 +113,7 @@ async function assignTask() {
         alert("업무 배정 실패 ❌");
     }
 }
-
-/* ✅ 모달 */
+/* ✅ 모달 제어 */
 function openTaskModal() {
     document.getElementById("taskModal").classList.add("show");
 }

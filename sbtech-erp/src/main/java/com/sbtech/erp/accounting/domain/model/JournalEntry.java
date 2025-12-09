@@ -24,6 +24,7 @@ public class JournalEntry {
 
     private final List<JournalLine> lines; // 분개 항목 List
 
+
     public static JournalEntry createNew(LocalDate date, String description) {
         if (date == null) throw new IllegalArgumentException("전표 날짜는 필수");
         if (description == null || description.isBlank()) throw new IllegalArgumentException("설명 필수");

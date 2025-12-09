@@ -1,0 +1,118 @@
+/* 🌙 공통 ERP 레이아웃 스타일 */
+
+/* 전체 배경 */
+body {
+    margin: 0;
+    display: flex;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f5f7fa;
+}
+
+/* 사이드바 */
+.sidebar {
+    width: 240px;
+    transition: width 0.3s;
+    background-color: #1e2a3a;
+
+    /* 🔥 수정된 부분 (두 줄 추가!) */
+    min-height: 100vh;
+    height: auto;
+
+    padding-top: 20px;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+.sidebar.collapsed {
+    width: 60px;
+}
+
+/* 사이드바 메뉴 */
+.menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.menu-item > a {
+    display: flex;
+    justify-content: flex-start;   /* 다시 왼쪽 정렬 */
+    align-items: center;
+    gap: 8px;                      /* 글자와 아이콘 간격 */
+    padding: 12px 25px;
+    font-size: 15px;
+    color: #b8c7ce;
+    text-decoration: none;
+    transition: 0.2s;
+}
+.menu-item:hover > a,
+.menu-item.active > a {
+    background-color: #4f83ff;
+    color: white;
+    border-radius: 4px;
+}
+
+/* Collapse 시 텍스트 숨김 */
+.sidebar.collapsed .menu-item > a span.text {
+    display: none;
+}
+
+
+
+.sidebar.collapsed .arrow {
+    display: none;
+}
+
+/* 서브메뉴 */
+.submenu {
+    display: none;
+    background: #273447;
+}
+
+.submenu li a {
+    padding: 10px 35px;
+    display: block;
+    text-decoration: none;
+    color: #cdd9e5;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.submenu li a:hover {
+    background-color: #4f83ff;
+    color: white;
+}
+
+/* 본문 */
+.content {
+    flex: 1;
+    padding: 25px;
+
+    /* 🔥 여기 추가해야 사이드바와 높이가 동일하게 늘어남 */
+    min-height: 100vh;
+}
+/* 로그아웃 버튼 */
+.logout-btn {
+    margin-top: auto;
+    padding: 12px 20px;
+    color: #cbd5e1;
+    text-decoration: none;
+    display: block;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    background-color: #2563eb;
+    color: white;
+    border-radius: 6px;
+}
+
+/* 사이드바 토글 버튼 */
+.toggle-sidebar-btn {
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+    padding: 10px 15px;
+    display: inline-block;
+}

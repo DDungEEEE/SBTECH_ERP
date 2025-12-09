@@ -52,6 +52,7 @@ public class JournalEntryService implements JournalEntryUseCase {
         return journalEntry;
     }
 
+
     @Override
     public List<JournalEntry> getAll() {
         return repository.findAll();

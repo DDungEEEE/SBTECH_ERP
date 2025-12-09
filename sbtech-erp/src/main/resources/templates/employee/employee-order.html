@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="content">
+
+    <h1 class="page-title">내 주문</h1>
+
+    <!-- 🔹 검색 + 날짜 필터 -->
+    <div class="order-filters">
+        <input type="text" id="searchInput" placeholder="거래처 이름 검색 (예: 수원점)" />
+
+        <div class="date-range">
+            <input type="date" id="startDate" />
+            <span>~</span>
+            <input type="date" id="endDate" />
+        </div>
+
+        <button class="quick-btn" data-type="today">최근 1일</button>
+        <button class="quick-btn" data-type="week">최근 1주일</button>
+        <button class="quick-btn" data-type="month">최근 1개월</button>
+        <button class="quick-btn" data-type="3month">최근 3개월</button>
+    </div>
+
+    <!-- 🔹 주문 목록 -->
+    <div class="order-list-container">
+        <div class="order-title">
+            주문 목록 (총 <span id="orderCount">0</span>건)
+        </div>
+
+        <table class="order-table">
+            <thead>
+            <tr>
+                <th>주문번호</th>
+                <th>고객사</th>
+                <th>상품</th>
+                <th>금액</th>
+                <th>날짜</th>
+                <th>상태</th>
+            </tr>
+            </thead>
+            <tbody id="orderBody"></tbody>
+        </table>
+    </div>
+
+    <!-- 🔹 JS (가라 데이터 + 화면 렌더링) -->
+    <script>
+        let originalOrders = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+
+            // ============================================
+            // 🔹 가라 주문 데이터 (더미)
+            // ============================================
+            originalOrders = [
+                { no: "ORD-145", store: "배터리프렌즈 수원점", product: "DF1000 10개", amount: 500000, date: "2025-11-01", status: "완료" },
+                { no: "ORD-152", store: "배터리프렌즈 창포점", product: "산업용배터리 20개", amount: 7900000, date: "2025-10-20", status: "진행중" },
+                { no: "ORD-164", store: "배터리프렌즈 전포점", product: "ESS모듈 30개", amount: 15000000, date: "2025-10-22", status: "완료" },
+                { no: "ORD-168", store: "배터리프렌즈 수원점", product: "배터리팩 40개", amount: 600000, date: "2025-10-25", status: "완료" },
+                { no: "ORD-169", store: "배터리프렌즈 목포점", product: "ESS모듈 50개", amount: 11300000, date: "2025-10-20", status: "대기" },
+                { no: "ORD-178", store: "배터리프렌즈 광명점", product: "DF1000 20개", amount: 5500000, date: "2025-10-27", status: "대기" },
+                { no: "ORD-181", store: "배터리프렌즈 판교점", product: "배터리팩 30개", amount: 8800000, date: "2025-10-18", status: "완료" },
+                { no: "ORD-184", store: "배터리프렌즈 목포점", product: "충전모듈 40개", amount: 2500000, date: "2025-10-26", status: "완료" },
+                { no: "ORD-185", store: "배터리프렌즈 수원점", product: "XF1200 20개", amount: 11400000, date: "2025-10-25", status: "완료" }
+            ];
+
+            renderOrders(originalOrders);
+
+            document.getElementById("searchInput").addEventListener("input", applyFilters);
+            document.getElementById("startDate").addEventListener("change", applyFilters);
+            document.getElementById("endDate").addEventListener("change", applyFilters);
+
+            document.querySelectorAll(".quick-btn").forEach(btn => {
+                btn.addEventListener("click", () => quickFilter(btn.dataset.type));
+            });
+        });
+
+        // ============================================
+        // 🔹 필터 적용
+        // ============================================
+        function applyFilters() {
+            const keyword = document.getElementById("searchInput").value.toLowerCase();
+            const start = document.getElementById("startDate").value;
+            const end = document.getElementById("endDate").value;
+
+            let filtered = originalOrders.filter(o =>
+                o.store.toLowerCase().includes(keyword)
+            );
+
+            if (start) {
+                filtered = filtered.filter(o => new Date(o.date) >= new Date(start));
+            }
+            if (end) {
+                filtered = filtered.filter(o => new Date(o.date) <= new Date(end));
+            }
+
+            renderOrders(filtered);
+        }
+
+        // ============================================
+        // 🔹 최근 날짜 버튼 필터
+        // ============================================
+        function quickFilter(type) {
+            const today = new Date();
+            let startDate = new Date();
+
+            if (type === "today") {
+                startDate.setDate(today.getDate() - 1);
+            } else if (type === "week") {
+                startDate.setDate(today.getDate() - 7);
+            } else if (type === "month") {
+                startDate.setMonth(today.getMonth() - 1);
+            } else if (type === "3month") {
+                startDate.setMonth(today.getMonth() - 3);
+            }
+
+            document.getElementById("startDate").value = formatDate(startDate);
+            document.getElementById("endDate").value = formatDate(today);
+
+            applyFilters();
+        }
+
+        function formatDate(date) {
+            const y = date.getFullYear();
+            const m = String(date.getMonth() + 1).padStart(2, "0");
+            const d = String(date.getDate()).padStart(2, "0");
+            return `${y}-${m}-${d}`;
+        }
+
+        // ============================================
+        // 🔹 테이블 렌더링
+        // ============================================
+        function renderOrders(list) {
+            const tbody = document.getElementById("orderBody");
+            tbody.innerHTML = "";
+
+            list.forEach(o => {
+                tbody.innerHTML += `
+                <tr>
+                    <td>${o.no}</td>
+                    <td>${o.store}</td>
+                    <td>${o.product}</td>
+                    <td>₩${o.amount.toLocaleString()}</td>
+                    <td>${o.date}</td>
+                    <td>${statusBadge(o.status)}</td>
+                </tr>
+            `;
+            });
+
+            document.getElementById("orderCount").innerText = list.length;
+        }
+
+        // ============================================
+        // 🔹 상태 뱃지
+        // ============================================
+        function statusBadge(status) {
+            const cls =
+                status === "완료" ? "done" :
+                    status === "진행중" ? "progress" :
+                        "waiting";
+
+            return `<span class="badge ${cls}">${status}</span>`;
+        }
+    </script>
+
+</th:block>
+</html>

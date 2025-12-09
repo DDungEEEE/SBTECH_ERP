@@ -1,10 +1,12 @@
 package com.sbtech.erp.products.domain.mapper;
 
+import com.sbtech.erp.employee.adapter.out.persistence.entity.EmployeeEntity;
 import com.sbtech.erp.products.adapter.out.persistence.entity.ProductEntity;
 import com.sbtech.erp.products.domain.model.Product;
 
 public class ProductMapper {
 
+    /** 🔄 Entity → Domain */
     public static Product toDomain(ProductEntity entity) {
         if (entity == null) return null;
 
@@ -14,11 +16,14 @@ public class ProductMapper {
                 entity.getDescription(),
                 entity.getPrice(),
                 entity.getStockQuantity(),
-                entity.getStatus()
+                entity.getStatus(),
+                entity.getCategory(),
+                entity.getMinimumStock()
         );
     }
 
-    public static ProductEntity toEntity(Product domain) {
+    /** 🔄 Domain → Entity */
+    public static ProductEntity toEntity(Product domain, EmployeeEntity createBy) {
         if (domain == null) return null;
 
         return ProductEntity.reconstruct(
@@ -27,7 +32,10 @@ public class ProductMapper {
                 domain.getDescription(),
                 domain.getPrice(),
                 domain.getStockQuantity(),
-                domain.getStatus()
+                domain.getStatus(),
+                domain.getCategory(),
+                domain.getMinimumStock(),
+                createBy
         );
     }
 }

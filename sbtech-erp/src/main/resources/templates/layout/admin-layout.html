@@ -14,14 +14,17 @@
 
         .sidebar {
             width: 240px;
-            transition: width 0.3s;
             background-color: #1e2a3a;
-            height: 100vh;
-            padding-top: 20px;
-            color: #ffffff;
-            overflow: hidden;
-        }
 
+            position: sticky;
+            top: 0;
+
+            min-height: 100vh;    /* 🔹 전체 화면보다 작지 않게 */
+            height: auto;         /* 🔹 콘텐츠가 길면 자동으로 늘어남 */
+
+            display: flex;
+            flex-direction: column;
+        }
         .sidebar.collapsed {
             width: 60px;
         }
@@ -175,8 +178,8 @@
         <li class="menu-item has-sub">
             <a class="toggle-btn"><span class="text">회계 관리</span> <span class="arrow">▶</span></a>
             <ul class="submenu">
-                <li><a href="/admin/accounting">회계 대시보드</a></li>
                 <li><a th:href="@{/web/admin/journal}">전표 관리</a></li>
+                <li><a href="#" onclick="downloadJournalExcel()">보고서 다운로드</a></li>
             </ul>
         </li>
 
@@ -219,10 +222,34 @@
     toggleBtn.addEventListener("click", () => {
         sidebar.classList.toggle("collapsed");
     });
+
+
+</script>
+<script>
+    function downloadJournalExcel() {
+        const token = localStorage.getItem("accessToken");
+
+        fetch("/erp/api/v1/journal-entry/excel", {
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+            .then(res => res.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = "journal_report.xlsx";   // 🔥 파일명
+                document.body.appendChild(a);
+                a.click();
+                a.remove();
+            });
+    }
 </script>
 
-<script th:if="${pageName == 'employee-management'}"
-        src="/js/admin/employee-management.js">
-</script>
+<!--<script th:if="${pageName == 'employee-management'}"-->
+<!--        src="/js/admin/employee-management.js">-->
+<!--</script>-->
 </body>
 </html>

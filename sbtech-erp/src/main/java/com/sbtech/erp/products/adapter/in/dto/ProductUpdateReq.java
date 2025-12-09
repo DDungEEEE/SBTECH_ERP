@@ -6,6 +6,8 @@ public record ProductUpdateReq(
         String description,
         Integer price,
         Integer stockQuantity,
-        String status
+        String status,
+        String category,
+        Integer minimumStock
 ) {
 }

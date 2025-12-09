@@ -1,5 +1,6 @@
 package com.sbtech.erp.accounting.adapter.out.persistence;
 
+import com.sbtech.erp.accounting.adapter.in.dto.JournalEntryResponse;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalEntryEntity;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.JournalLineEntity;
 import com.sbtech.erp.accounting.adapter.out.persistence.entity.LedgerAccountEntity;
@@ -107,4 +108,13 @@ public class JournalEntryRepositoryAdapter implements JournalEntryRepository {
                 ))
                 .toList();
     }
+
+    @Override
+    public List<JournalEntryResponse> findAllDto() {
+        return jpaRepository.findAll().stream()
+                .map(JournalEntryMapper::toResponse)
+                .toList();
+    }
+
+
 }
